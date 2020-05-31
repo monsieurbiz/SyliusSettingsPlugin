@@ -56,7 +56,9 @@ To Be Defined
 
 ## Contributing
 
-You can open an issue or a Pull Request if you want! 😘  
+You can find a way to run the plugin without effort in the file [DEVELOPMENT.md](./DEVELOPMENT.md).
+
+Then you can open an issue or a Pull Request if you want! 😘  
 Thank you!
 
 ## License
