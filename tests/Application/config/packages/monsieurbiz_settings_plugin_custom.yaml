@@ -1,0 +1,8 @@
+monsieurbiz_sylius_settings:
+    plugins:
+        -
+            vendor: monsieurbiz
+            plugin: sylius-alert-message-plugin
+        -
+            vendor: monsieurbiz
+            plugin: sylius-rich-editor-plugin

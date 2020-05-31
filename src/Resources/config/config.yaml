@@ -1,4 +1,2 @@
 imports:
     - { resource: "sylius/resources.yaml" }
-
-monsieurbiz_sylius_settings: []
