@@ -1,0 +1,5 @@
+sylius_resource:
+    resources:
+        monsieurbiz_settings.setting:
+            classes:
+                model: MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\Setting

@@ -1,0 +1,6 @@
+monsieurbiz:
+    settings:
+        menu:
+            admin:
+                configuration:
+                    settings: Settings

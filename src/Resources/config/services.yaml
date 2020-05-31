@@ -1,0 +1,21 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    _instanceof:
+        Sylius\Bundle\ResourceBundle\Controller\ResourceController:
+            autowire: false
+        Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType:
+            autowire: false
+        Sylius\Component\Resource\Model\ResourceInterface:
+            autowire: false
+
+    MonsieurBiz\SyliusSettingsPlugin\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+    MonsieurBiz\SyliusSettingsPlugin\Menu\AdminMenuListener:
+        tags:
+            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
