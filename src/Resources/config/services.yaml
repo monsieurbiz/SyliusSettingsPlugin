@@ -19,3 +19,6 @@ services:
     MonsieurBiz\SyliusSettingsPlugin\Menu\AdminMenuListener:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
+
+    monsieurbiz.settings_registry:
+        class: MonsieurBiz\SyliusSettingsPlugin\Settings\Metadata\Registry

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin;
 
+use MonsieurBiz\SyliusSettingsPlugin\DependencyInjection\InstantiateSettingsPass;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -34,5 +36,14 @@ final class MonsieurBizSyliusSettingsPlugin extends Bundle
             }
         }
         return $this->containerExtension ?: null;
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+        $container->addCompilerPass(new InstantiateSettingsPass());
     }
 }
