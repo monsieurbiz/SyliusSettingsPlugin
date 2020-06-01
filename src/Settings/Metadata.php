@@ -97,6 +97,26 @@ final class Metadata implements MetadataInterface
     /**
      * {@inheritdoc}
      */
+    public function getClass(string $name): string
+    {
+        if (!$this->hasClass($name)) {
+            throw new \InvalidArgumentException(sprintf('Class "%s" is not configured for resource "%s".', $name, $this->getAlias()));
+        }
+
+        return $this->parameters['classes'][$name];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasClass(string $name): bool
+    {
+        return isset($this->parameters['classes'][$name]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getServiceId(string $serviceName): string
     {
         return sprintf('%s.%s.%s', $this->applicationName, $serviceName, $this->alias($this->name));

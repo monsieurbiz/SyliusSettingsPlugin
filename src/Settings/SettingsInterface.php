@@ -6,6 +6,7 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 
 interface SettingsInterface
 {
+    public function __construct(Metadata $metadata);
     public function getVendorName(): string;
     public function getVendorUrl(): ?string;
     public function getPluginName(): string;

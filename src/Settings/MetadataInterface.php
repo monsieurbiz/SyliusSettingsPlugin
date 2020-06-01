@@ -13,5 +13,7 @@ interface MetadataInterface
     public function getParameter(string $name);
     public function hasParameter(string $name): bool;
     public function getParameters(): array;
+    public function getClass(string $name): string;
+    public function hasClass(string $name): bool;
     public function getServiceId(string $serviceName): string;
 }

@@ -34,15 +34,32 @@ final class InstantiateSettingsPass implements CompilerPassInterface
 
             $id = $metadata->getServiceId('settings');
 
-            // TODO Add dynamism to the class by using "classes" in parameters
-            $container->setDefinition($id, new Definition(Settings::class, [
+            $class = $metadata->getClass('settings');
+            $this->validateSettingsResource($class);
+
+            $container->setDefinition($id, new Definition($class, [
                 $this->getMetadataDefinition($metadata),
             ]));
 
-            $container->addAliases([
+            $aliases = [
                 SettingsInterface::class . ' $' . $metadata->getName() . 'Settings' => $id,
                 Settings::class . ' $' . $metadata->getName() . 'Settings' => $id,
-            ]);
+            ];
+            if ($class !== Settings::class) {
+                $aliases[$class . ' $' . $metadata->getName() . 'Settings'] = $id;
+            }
+            $container->addAliases($aliases);
+        }
+    }
+
+    private function validateSettingsResource(string $class): void
+    {
+        if (!in_array(SettingsInterface::class, class_implements($class), true)) {
+            throw new InvalidArgumentException(sprintf(
+                'Class "%s" must implement "%s" to be registered as a Settings resource.',
+                $class,
+                SettingsInterface::class
+            ));
         }
     }
 

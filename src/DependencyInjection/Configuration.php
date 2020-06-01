@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\DependencyInjection;
 
+use MonsieurBiz\SyliusSettingsPlugin\Form\SettingsType;
+use MonsieurBiz\SyliusSettingsPlugin\Settings\Settings;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -43,6 +45,13 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('vendor_name')->isRequired()->cannotBeEmpty()->end()
                             ->scalarNode('vendor_url')->defaultNull()->end()
                             ->scalarNode('plugin_name')->isRequired()->cannotBeEmpty()->end()
+                            ->arrayNode('classes')
+                                ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->scalarNode('settings')->defaultValue(Settings::class)->end()
+                                    ->scalarNode('form')->defaultValue(SettingsType::class)->end()
+                                ->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()

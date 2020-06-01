@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 
-final class Settings implements SettingsInterface
+class Settings implements SettingsInterface
 {
 
     /**
