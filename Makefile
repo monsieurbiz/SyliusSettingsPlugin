@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 SHELL=/bin/bash
 SYMFONY=cd tests/Application && symfony
-COMPOSER=composer
+COMPOSER=${SYMFONY} composer
 CONSOLE=${SYMFONY} console
 DOCKER-COMPOSE=docker-compose
 YARN=cd tests/Application && yarn
@@ -27,6 +27,7 @@ dependencies: vendor node_modules ## Setup the dependencies
 
 .php-version: .php-version.dist
 	cp .php-version.dist .php-version
+	(cd tests/Application && ln -sf ../../.php-version .php-version)
 
 vendor: composer.lock ## Install the PHP dependencies using composer
 	${COMPOSER} install --prefer-source
