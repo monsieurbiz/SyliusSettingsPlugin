@@ -23,13 +23,14 @@ final class InstantiateSettingsPass implements CompilerPassInterface
     {
         try {
             $plugins = $container->getParameter('monsieurbiz.settings.config.plugins');
-            $registry = $container->findDefinition('monsieurbiz.settings_registry');
+            $registry = $container->findDefinition('monsieurbiz.settings.registry');
+            $metadataRegistry = $container->findDefinition('monsieurbiz.settings.metadata_registry');
         } catch (InvalidArgumentException $exception) {
             return;
         }
 
         foreach ($plugins as $alias => $configuration) {
-            $registry->addMethodCall('addFromAliasAndConfiguration', [$alias, $configuration]);
+            $metadataRegistry->addMethodCall('addFromAliasAndConfiguration', [$alias, $configuration]);
             $metadata = Metadata::fromAliasAndConfiguration($alias, $configuration);
 
             $id = $metadata->getServiceId('settings');
@@ -49,6 +50,8 @@ final class InstantiateSettingsPass implements CompilerPassInterface
                 $aliases[$class . ' $' . $metadata->getName() . 'Settings'] = $id;
             }
             $container->addAliases($aliases);
+
+            $registry->addMethodCall('addSettingsInstance', [new Reference($id)]);
         }
     }
 
@@ -72,7 +75,7 @@ final class InstantiateSettingsPass implements CompilerPassInterface
     {
         $metadataDefinition = new Definition(Metadata::class);
         $metadataDefinition
-            ->setFactory([new Reference('monsieurbiz.settings_registry'), 'get'])
+            ->setFactory([new Reference('monsieurbiz.settings.metadata_registry'), 'get'])
             ->setArguments([$metadata->getAlias()])
         ;
         return $metadataDefinition;

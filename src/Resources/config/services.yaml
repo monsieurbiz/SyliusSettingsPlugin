@@ -20,5 +20,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
 
-    monsieurbiz.settings_registry:
+    monsieurbiz.settings.metadata_registry:
         class: MonsieurBiz\SyliusSettingsPlugin\Settings\Metadata\Registry
+
+    MonsieurBiz\SyliusSettingsPlugin\Settings\Metadata\RegistryInterface: '@monsieurbiz.settings.metadata_registry'
+
+    monsieurbiz.settings.registry:
+        class: MonsieurBiz\SyliusSettingsPlugin\Settings\Registry
+    
+    MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface: '@monsieurbiz.settings.registry' 

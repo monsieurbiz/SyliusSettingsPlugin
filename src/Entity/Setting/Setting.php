@@ -17,7 +17,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity
  * @ORM\Table(name="mbiz_settings_setting")
  */
-final class Setting implements ResourceInterface
+class Setting implements ResourceInterface
 {
     use TimestampableTrait;
 
