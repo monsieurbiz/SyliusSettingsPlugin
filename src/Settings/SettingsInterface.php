@@ -12,6 +12,7 @@ interface SettingsInterface
     public function getVendorUrl(): ?string;
     public function getPluginName(): string;
     public function getDescription(): string;
+    public function getIcon(): string;
 //    public function getForm(): SettingsTypeInterface;
 //    public function getConfig($path, ?ChannelInterface $channel = null, ?string $localeCode = null);
 }

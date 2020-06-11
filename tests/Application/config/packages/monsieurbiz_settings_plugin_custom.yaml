@@ -5,6 +5,7 @@ monsieurbiz_sylius_settings:
             vendor_url: https://monsieurbiz.com/
             plugin_name: Alert Message
             description: This plugins is amazing
+            icon: podcast
             classes:
                 settings: MonsieurBiz\SyliusSettingsPlugin\Settings\Settings
 #            form: '@MonsieurBiz\SyliusSettingsPlugin\Menu\AdminMenuListener'

@@ -47,6 +47,11 @@ class Settings implements SettingsInterface
         return $this->metadata->getParameter('description');
     }
 
+    public function getIcon(): string
+    {
+        return $this->metadata->getParameter('icon');
+    }
+
 //    public function getForm(): SettingsTypeInterface;
 //    public function getConfig($path, ?ChannelInterface $channel = null, ?string $localeCode = null);
 }
