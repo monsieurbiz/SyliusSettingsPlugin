@@ -7,9 +7,11 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 interface SettingsInterface
 {
     public function __construct(Metadata $metadata);
+    public function getAlias(): string;
     public function getVendorName(): string;
     public function getVendorUrl(): ?string;
     public function getPluginName(): string;
+    public function getDescription(): string;
 //    public function getForm(): SettingsTypeInterface;
 //    public function getConfig($path, ?ChannelInterface $channel = null, ?string $localeCode = null);
 }

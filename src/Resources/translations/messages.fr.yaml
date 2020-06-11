@@ -4,3 +4,9 @@ monsieurbiz:
             admin:
                 configuration:
                     settings: Réglages
+        ui:
+            settings:
+                title: Réglages
+                subtitle: Gérez tous vos plugins au même endroit
+            card:
+                by: par %vendorName%

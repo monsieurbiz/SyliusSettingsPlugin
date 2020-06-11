@@ -22,6 +22,11 @@ class Settings implements SettingsInterface
         $this->metadata = $metadata;
     }
 
+    public function getAlias(): string
+    {
+        return $this->metadata->getAlias();
+    }
+
     public function getVendorName(): string
     {
         return $this->metadata->getParameter('vendor_name');
@@ -35,6 +40,11 @@ class Settings implements SettingsInterface
     public function getPluginName(): string
     {
         return $this->metadata->getParameter('plugin_name');
+    }
+
+    public function getDescription(): string
+    {
+        return $this->metadata->getParameter('description');
     }
 
 //    public function getForm(): SettingsTypeInterface;

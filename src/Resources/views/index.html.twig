@@ -1,0 +1,33 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+
+{% import '@SyliusUi/Macro/headers.html.twig' as headers %}
+
+{% block title %}{{ 'monsieurbiz.settings.ui.settings.title'|trans }} {{ parent() }}{% endblock %}
+
+{% block content %}
+
+    <div class="ui stackable grid">
+        <div class="twelve wide column">
+            {{ headers.default('monsieurbiz.settings.ui.settings.title'|trans, 'cogs', 'monsieurbiz.settings.ui.settings.subtitle'|trans) }}
+        </div>
+    </div>
+
+    <div class="ui cards">
+        {% for card in settings %}
+        <div class="card">
+            <div class="content">
+                <div class="header">
+                    <i class="icon question"></i> {{ card.pluginName }}
+                </div>
+                <div class="meta">
+                    {{ 'monsieurbiz.settings.ui.card.by'|trans({'%vendorName%': card.vendorName}) }}
+                </div>
+                <div class="description">
+                    {{ card.description }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

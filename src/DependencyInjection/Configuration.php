@@ -45,6 +45,7 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('vendor_name')->isRequired()->cannotBeEmpty()->end()
                             ->scalarNode('vendor_url')->defaultNull()->end()
                             ->scalarNode('plugin_name')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('description')->isRequired()->cannotBeEmpty()->end()
                             ->arrayNode('classes')
                                 ->addDefaultsIfNotSet()
                                 ->children()
