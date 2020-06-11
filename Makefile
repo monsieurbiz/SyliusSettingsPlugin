@@ -67,6 +67,9 @@ sylius.fixtures: ## Run the fixtures
 platform: .php-version up ## Setup the platform tools
 .PHONY: platform
 
+docker.pull: ## Pull the docker images
+	cd tests/Application && ${DOCKER-COMPOSE} pull
+
 docker.up: ## Start the docker containers
 	cd tests/Application && ${DOCKER-COMPOSE} up -d
 .PHONY: docker.up
