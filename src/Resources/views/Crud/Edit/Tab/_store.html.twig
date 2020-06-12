@@ -1,0 +1,7 @@
+{% set channel = item.extra('channel') %}
+<div class="ui tab" data-tab="channel_{{ channel.code }}">
+    <h3 class="ui top attached header">{{ channel.name }}</h3>
+    <div class="ui attached segment">
+        {{ form_row(form['channel_' ~ channel.id]) }}
+    </div>
+</div>

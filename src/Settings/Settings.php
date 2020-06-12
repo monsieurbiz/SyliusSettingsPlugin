@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 
+use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
+use MonsieurBiz\SyliusSettingsPlugin\Form\AbstractSettingsType;
+
 class Settings implements SettingsInterface
 {
 
@@ -52,6 +55,16 @@ class Settings implements SettingsInterface
         return $this->metadata->getParameter('icon');
     }
 
-//    public function getForm(): SettingsTypeInterface;
-//    public function getConfig($path, ?ChannelInterface $channel = null, ?string $localeCode = null);
+    /**
+     * @return string
+     * @throws SettingsException
+     */
+    public function getFormClass(): string
+    {
+        $className = $this->metadata->getClass('form');
+        if (!in_array(AbstractSettingsType::class, class_parents($className))) {
+            throw new SettingsException(sprintf('Class %s should extend %s', $className, AbstractSettingsType::class));
+        }
+        return $className;
+    }
 }

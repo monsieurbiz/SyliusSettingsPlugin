@@ -5,8 +5,11 @@ monsieurbiz:
                 configuration:
                     settings: Réglages
         ui:
+            by_default: Par défaut
             settings:
                 title: Réglages
                 subtitle: Gérez tous vos plugins au même endroit
+            settings_of:
+                title: Réglage de %pluginName%
             card:
                 by: par %vendorName%

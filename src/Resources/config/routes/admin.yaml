@@ -2,3 +2,8 @@ monsieurbiz_sylius_settings_admin_index:
     path: settings
     controller: MonsieurBiz\SyliusSettingsPlugin\Controller\SettingsController::indexAction
     methods: ['GET']
+
+monsieurbiz_sylius_settings_admin_edit:
+    path: settings/edit/{alias}
+    controller: MonsieurBiz\SyliusSettingsPlugin\Controller\SettingsController::formAction
+    methods: ['GET', 'POST']

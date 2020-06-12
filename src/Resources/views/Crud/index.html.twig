@@ -11,10 +11,10 @@
             {{ headers.default('monsieurbiz.settings.ui.settings.title'|trans, 'cogs', 'monsieurbiz.settings.ui.settings.subtitle'|trans) }}
         </div>
     </div>
-
+    <div class="ui hidden divider"></div>
     <div class="ui cards">
         {% for card in settings %}
-        <a class="card olive" href="#">
+        <a class="card olive" href="{{ path('monsieurbiz_sylius_settings_admin_edit', {'alias': card.alias}) }}">
             <div class="content">
                 <div class="header">
                     <i class="icon {{ card.icon }}"></i> {{ card.pluginName }}

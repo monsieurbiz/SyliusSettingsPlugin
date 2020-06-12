@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 
+use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
+
 interface SettingsInterface
 {
     public function __construct(Metadata $metadata);
@@ -13,6 +15,9 @@ interface SettingsInterface
     public function getPluginName(): string;
     public function getDescription(): string;
     public function getIcon(): string;
-//    public function getForm(): SettingsTypeInterface;
-//    public function getConfig($path, ?ChannelInterface $channel = null, ?string $localeCode = null);
+
+    /**
+     * @throws SettingsException
+     */
+    public function getFormClass(): string;
 }

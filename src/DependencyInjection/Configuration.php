@@ -51,7 +51,7 @@ final class Configuration implements ConfigurationInterface
                                 ->addDefaultsIfNotSet()
                                 ->children()
                                     ->scalarNode('settings')->defaultValue(Settings::class)->end()
-                                    ->scalarNode('form')->defaultValue(SettingsType::class)->end()
+                                    ->scalarNode('form')->isRequired()->cannotBeEmpty()->end()
                                 ->end()
                             ->end()
                         ->end()

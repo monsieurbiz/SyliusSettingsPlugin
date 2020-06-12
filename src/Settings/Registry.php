@@ -34,12 +34,7 @@ final class Registry implements RegistryInterface
      */
     public function hasSettingsInstance(SettingsInterface $settings): bool
     {
-        foreach ($this->settings as $settingsToCompare) {
-            if ($settings->getAlias() === $settingsToCompare->getAlias()) {
-                return true;
-            }
-        }
-        return false;
+        return !(null === $this->getByAlias($settings->getAlias()));
     }
 
     /**
@@ -48,5 +43,28 @@ final class Registry implements RegistryInterface
     public function getAllSettings(): array
     {
         return $this->settings;
+    }
+
+    /**
+     * @param string $alias
+     *
+     * @return SettingsInterface|null
+     */
+    public function getByAlias(string $alias): ?SettingsInterface
+    {
+        foreach ($this->settings as $settings) {
+            if ($settings->getAlias() === $alias) {
+                return $settings;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->settings);
     }
 }

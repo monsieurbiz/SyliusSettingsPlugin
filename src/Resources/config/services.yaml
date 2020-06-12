@@ -16,9 +16,17 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
+    MonsieurBiz\SyliusSettingsPlugin\Form\:
+        resource: '../../Form'
+        tags: ['form.type']
+
     MonsieurBiz\SyliusSettingsPlugin\Menu\AdminMenuListener:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
+
+    MonsieurBiz\SyliusSettingsPlugin\Menu\SettingsFormMenuBuilder:
+        tags:
+            - { name: knp_menu.menu_builder, method: createMenu, alias: monsieurbiz.settings.admin.update.form }
 
     monsieurbiz.settings.metadata_registry:
         class: MonsieurBiz\SyliusSettingsPlugin\Settings\Metadata\Registry
@@ -27,5 +35,5 @@ services:
 
     monsieurbiz.settings.registry:
         class: MonsieurBiz\SyliusSettingsPlugin\Settings\Registry
-    
+
     MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface: '@monsieurbiz.settings.registry' 
