@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MonsieurBiz\SyliusSettingsPlugin\Menu;
 
 use Knp\Menu\Util\MenuManipulator;
+use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
 final class AdminMenuListener
@@ -15,13 +16,20 @@ final class AdminMenuListener
     private MenuManipulator $manipulator;
 
     /**
+     * @var RegistryInterface
+     */
+    private RegistryInterface $settingsRegistry;
+
+    /**
      * AdminMenuListener constructor.
      *
      * @param MenuManipulator $manipulator
+     * @param RegistryInterface $settingsRegistry
      */
-    public function __construct(MenuManipulator $manipulator)
+    public function __construct(MenuManipulator $manipulator, RegistryInterface $settingsRegistry)
     {
         $this->manipulator = $manipulator;
+        $this->settingsRegistry = $settingsRegistry;
     }
 
     /**
@@ -29,13 +37,15 @@ final class AdminMenuListener
      */
     public function addAdminMenuItems(MenuBuilderEvent $event): void
     {
-        $menu = $event->getMenu();
-        $configurationMenu = $menu->getChild('configuration');
-        $settings = $configurationMenu->addChild('monsieurbiz_settings', ['route' => 'monsieurbiz_sylius_settings_admin_index']);
-        $settings
-            ->setLabel('monsieurbiz.settings.menu.admin.configuration.settings')
-            ->setLabelAttribute('icon', 'cog')
-        ;
-        $this->manipulator->moveChildToPosition($configurationMenu, $settings, 1);
+        if ($this->settingsRegistry->count()) {
+            $menu = $event->getMenu();
+            $configurationMenu = $menu->getChild('configuration');
+            $settings = $configurationMenu->addChild('monsieurbiz_settings', ['route' => 'monsieurbiz_sylius_settings_admin_index']);
+            $settings
+                ->setLabel('monsieurbiz.settings.menu.admin.configuration.settings')
+                ->setLabelAttribute('icon', 'cog')
+            ;
+            $this->manipulator->moveChildToPosition($configurationMenu, $settings, 1);
+        }
     }
 }
