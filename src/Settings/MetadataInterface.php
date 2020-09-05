@@ -8,8 +8,8 @@ interface MetadataInterface
 {
     public static function fromAliasAndConfiguration(string $alias, array $parameters): self;
     public function getAlias(): string;
-    public function getApplicationName(): string;
-    public function getName(): string;
+    public function getApplicationName(bool $aliased = false): string;
+    public function getName(bool $aliased = false): string;
     public function getParameter(string $name);
     public function hasParameter(string $name): bool;
     public function getParameters(): array;

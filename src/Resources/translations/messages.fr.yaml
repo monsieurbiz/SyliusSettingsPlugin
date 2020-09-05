@@ -13,3 +13,8 @@ monsieurbiz:
                 title: Réglage de %pluginName%
             card:
                 by: par %vendorName%
+            use_default_value: Utiliser la valeur par défaut
+            form:
+                title:
+                    sylius_default_values: Valeurs par défaut de Sylius
+                    channel_default_values: Valeurs par défaut de %channelName%

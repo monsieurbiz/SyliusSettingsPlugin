@@ -47,23 +47,23 @@ final class Metadata implements MetadataInterface
      */
     public function getAlias(): string
     {
-        return $this->applicationName . '.' . $this->alias($this->name);
+        return $this->getApplicationName(true) . '.' . $this->getName(true);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getApplicationName(): string
+    public function getApplicationName(bool $aliased = false): string
     {
-        return $this->applicationName;
+        return $aliased ? $this->alias($this->applicationName) : $this->applicationName;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
+    public function getName(bool $aliased = false): string
     {
-        return $this->name;
+        return $aliased ? $this->alias($this->name) : $this->name;
     }
 
     /**

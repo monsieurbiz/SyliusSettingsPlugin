@@ -21,6 +21,7 @@ final class InstantiateSettingsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        // Get required parameters and definitions in order to populate the DI
         try {
             $plugins = $container->getParameter('monsieurbiz.settings.config.plugins');
             $registry = $container->findDefinition('monsieurbiz.settings.registry');
@@ -40,6 +41,7 @@ final class InstantiateSettingsPass implements CompilerPassInterface
 
             $container->setDefinition($id, new Definition($class, [
                 $this->getMetadataDefinition($metadata),
+                $container->findDefinition('monsieurbiz_settings.repository.setting'),
             ]));
 
             $aliases = [

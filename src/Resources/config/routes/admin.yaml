@@ -6,4 +6,9 @@ monsieurbiz_sylius_settings_admin_index:
 monsieurbiz_sylius_settings_admin_edit:
     path: settings/edit/{alias}
     controller: MonsieurBiz\SyliusSettingsPlugin\Controller\SettingsController::formAction
-    methods: ['GET', 'POST']
+    methods: ['GET']
+
+monsieurbiz_sylius_settings_admin_edit_post:
+    path: settings/edit/{alias}
+    controller: MonsieurBiz\SyliusSettingsPlugin\Controller\SettingsController::formAction
+    methods: ['PUT']

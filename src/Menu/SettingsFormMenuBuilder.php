@@ -9,6 +9,7 @@ use Knp\Menu\ItemInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class SettingsFormMenuBuilder
 {
@@ -21,17 +22,26 @@ final class SettingsFormMenuBuilder
      * @var ChannelRepositoryInterface
      */
     private ChannelRepositoryInterface $channelRepository;
+    /**
+     * @var RepositoryInterface
+     */
+    private RepositoryInterface $localeRepository;
 
     /**
      * SettingsFormMenuBuilder constructor.
      *
      * @param FactoryInterface $factory
      * @param ChannelRepositoryInterface $channelRepository
+     * @param RepositoryInterface $localeRepository
      */
-    public function __construct(FactoryInterface $factory, ChannelRepositoryInterface $channelRepository)
-    {
+    public function __construct(
+        FactoryInterface $factory,
+        ChannelRepositoryInterface $channelRepository,
+        RepositoryInterface $localeRepository
+    ) {
         $this->factory = $factory;
         $this->channelRepository = $channelRepository;
+        $this->localeRepository = $localeRepository;
     }
 
     /**
@@ -52,6 +62,7 @@ final class SettingsFormMenuBuilder
             ->setAttribute('template', '@MonsieurBizSyliusSettingsPlugin/Crud/Edit/Tab/_default.html.twig')
             ->setLabel('monsieurbiz.settings.ui.by_default')
             ->setCurrent(true)
+            ->setExtra('locales', $this->localeRepository->findAll())
         ;
 
         /** @var ChannelInterface $channel */
@@ -61,6 +72,7 @@ final class SettingsFormMenuBuilder
                 ->setAttribute('template', '@MonsieurBizSyliusSettingsPlugin/Crud/Edit/Tab/_store.html.twig')
                 ->setLabel($channel->getName())
                 ->setExtra('channel', $channel)
+                ->setExtra('locales', $channel->getLocales())
             ;
         }
 

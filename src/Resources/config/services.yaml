@@ -20,6 +20,12 @@ services:
         resource: '../../Form'
         tags: ['form.type']
 
+    MonsieurBiz\SyliusSettingsPlugin\Processor\:
+        resource: '../../Processor'
+
+    MonsieurBiz\SyliusSettingsPlugin\Factory\Form\:
+        resource: '../../Factory/Form'
+
     MonsieurBiz\SyliusSettingsPlugin\Menu\AdminMenuListener:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }

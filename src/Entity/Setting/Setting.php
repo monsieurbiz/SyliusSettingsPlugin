@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace MonsieurBiz\SyliusSettingsPlugin\Entity\Setting;
 
 use DateTimeInterface;
+use LogicException;
 use Sylius\Component\Core\Model\ChannelInterface;
-use Sylius\Component\Locale\Model\LocaleInterface;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity
  * @ORM\Table(name="mbiz_settings_setting")
  */
-class Setting implements ResourceInterface
+class Setting implements SettingInterface
 {
     use TimestampableTrait;
 
@@ -57,7 +56,7 @@ class Setting implements ResourceInterface
 
     /**
      * @var string|null
-     * @ORM\Column(name="locale_code", type="string", length=5)
+     * @ORM\Column(name="locale_code", type="string", length=5, nullable=true)
      */
     private ?string $localeCode;
 
@@ -69,7 +68,7 @@ class Setting implements ResourceInterface
 
     /**
      * @var string|null
-     * @ORM\Column(name="text_type", type="text", length=65535, nullable=true)
+     * @ORM\Column(name="text_value", type="text", length=65535, nullable=true)
      */
     private ?string $textValue;
 
@@ -144,6 +143,20 @@ class Setting implements ResourceInterface
     }
 
     /**
+     * @param $value
+     *
+     * @return void
+     */
+    public function setValue($value): void
+    {
+        if (null === $this->getStorageType()) {
+            throw new LogicException("The storage type MUST be defined before setting the value using " . __METHOD__ . ".");
+        }
+        $setter = 'set' . $this->getStorageType() . 'value';
+        $this->$setter($value);
+    }
+
+    /**
      * @return string|null
      */
     public function getVendor(): ?string
@@ -210,6 +223,22 @@ class Setting implements ResourceInterface
     /**
      * @return string|null
      */
+    public function getLocaleCode(): ?string
+    {
+        return $this->localeCode;
+    }
+
+    /**
+     * @param string|null $localeCode
+     */
+    public function setLocaleCode(?string $localeCode): void
+    {
+        $this->localeCode = $localeCode;
+    }
+
+    /**
+     * @return string|null
+     */
     public function getStorageType(): ?string
     {
         return $this->storageType;
@@ -221,6 +250,41 @@ class Setting implements ResourceInterface
     public function setStorageType(?string $storageType): void
     {
         $this->storageType = $storageType;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return void
+     *
+     * @throws LogicException
+     */
+    public function setStorageTypeFromValue($value): void
+    {
+        switch (true) {
+            case is_string($value):
+                $type = SettingInterface::STORAGE_TYPE_TEXT;
+                break;
+            case is_bool($value):
+                $type = SettingInterface::STORAGE_TYPE_BOOLEAN;
+                break;
+            case is_integer($value):
+                $type = SettingInterface::STORAGE_TYPE_INTEGER;
+                break;
+            case is_float($value):
+                $type = SettingInterface::STORAGE_TYPE_FLOAT;
+                break;
+            case $value instanceof \DateTime:
+                $type = SettingInterface::STORAGE_TYPE_DATETIME;
+                break;
+            case is_array($value):
+                $type = SettingInterface::STORAGE_TYPE_JSON;
+                break;
+            default:
+                throw new LogicException('Impossible to match the type of the value.');
+        }
+
+        $this->setStorageType($type);
     }
 
     /**
