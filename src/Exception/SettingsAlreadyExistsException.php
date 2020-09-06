@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Exception;
 
-class SettingsAlreadyExistsException extends SettingsException
+final class SettingsAlreadyExistsException extends SettingsException
 {
     public function __construct(SettingsInterface $settings)
     {

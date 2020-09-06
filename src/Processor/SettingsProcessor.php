@@ -17,7 +17,7 @@ use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-class SettingsProcessor implements SettingsProcessorInterface
+final class SettingsProcessor implements SettingsProcessorInterface
 {
     /**
      * @var ChannelRepositoryInterface

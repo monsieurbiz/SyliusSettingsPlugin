@@ -17,7 +17,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class MainSettingsType extends AbstractType implements MainSettingsTypeInterface
+final class MainSettingsType extends AbstractType implements MainSettingsTypeInterface
 {
     /**
      * @var ChannelRepositoryInterface

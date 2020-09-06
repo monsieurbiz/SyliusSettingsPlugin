@@ -9,7 +9,7 @@ use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 
-class SettingFactory implements SettingFactoryInterface
+final class SettingFactory implements SettingFactoryInterface
 {
     /**
      * @var string
