@@ -19,3 +19,10 @@ sylius_theme:
             scan_depth: 1
             directories:
                 - "%kernel.project_dir%/themes"
+
+sylius_ui:
+    events:
+        sylius.shop.layout.before_body:
+            blocks:
+                demo_message:
+                    template: '/views/message.html.twig'

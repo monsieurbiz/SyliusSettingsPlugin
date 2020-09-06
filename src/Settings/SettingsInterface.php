@@ -6,7 +6,7 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 
 use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
-use Sylius\Component\Core\Model\ChannelInterface;
+use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 
 interface SettingsInterface
@@ -26,6 +26,6 @@ interface SettingsInterface
      */
     public function getFormClass(): string;
 
-    public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?LocaleInterface $locale = null): array;
+    public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false): array;
     public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?LocaleInterface $locale = null): array;
 }

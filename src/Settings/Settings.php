@@ -9,7 +9,7 @@ use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\SettingInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
 use MonsieurBiz\SyliusSettingsPlugin\Form\AbstractSettingsType;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
-use Sylius\Component\Core\Model\ChannelInterface;
+use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 
 final class Settings implements SettingsInterface
@@ -107,23 +107,28 @@ final class Settings implements SettingsInterface
 
     /**
      * @param ChannelInterface|null $channel
-     * @param LocaleInterface $locale
+     * @param string|null $localeCode
+     *
+     * @param bool $withDefault
      *
      * @return array
      */
-    public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?LocaleInterface $locale = null): array
+    public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false): array
     {
         $channelIdentifier = null === $channel ? '___' . self::DEFAULT_KEY : $channel->getCode();
-        $localeIdentifier = null === $locale ? '___' . self::DEFAULT_KEY : $locale->getCode();
+        $localeIdentifier = null === $localeCode ? '___' . self::DEFAULT_KEY : $localeCode;
         if (null === $settings = $this->getCachedSettingsByChannelAndLocale($channelIdentifier, $localeIdentifier)) {
-            $allSettings = $this->settingRepository->findAllByChannelAndLocaleWithDefault(
+            $findAllByChannelAndLocale = $withDefault ? 'findAllByChannelAndLocaleWithDefault' : 'findAllByChannelAndLocale';
+            $allSettings = $this->settingRepository->$findAllByChannelAndLocale(
                 $this->metadata->getApplicationName(),
                 $this->metadata->getName(true),
                 $channel,
-                $locale
+                $localeCode
             );
             $settings = [];
             /** @var SettingInterface $setting */
+            // If we have the default values as well, the order is primordial.
+            // We will store the default first, so the no default values will override the default if needed.
             foreach ($allSettings as $setting) {
                 $settings[$setting->getPath()] = $setting;
             }
@@ -140,7 +145,7 @@ final class Settings implements SettingsInterface
      */
     public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?LocaleInterface $locale = null): array
     {
-        $allSettings = $this->getSettingsByChannelAndLocale($channel, $locale);
+        $allSettings = $this->getSettingsByChannelAndLocale($channel, null === $locale ? null : $locale->getCode());
         $settingsValues = [];
         /** @var SettingInterface $setting */
         foreach ($allSettings as $setting) {

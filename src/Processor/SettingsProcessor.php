@@ -98,7 +98,7 @@ final class SettingsProcessor implements SettingsProcessorInterface
 
         $actualSettings = $settings->getSettingsByChannelAndLocale(
             $channel,
-            $locale
+            $localeCode
         );
 
         // Manage defaults, and remove actual settings with "use default value" checked
@@ -109,9 +109,7 @@ final class SettingsProcessor implements SettingsProcessorInterface
                     if (isset($actualSettings[$matches['key']])) {
                         $this->em->remove($actualSettings[$matches['key']]);
                     }
-                    if (isset($data[$matches['key']])) {
-                        unset($data[$matches['key']]);
-                    }
+                    unset($data[$matches['key']]);
                 }
                 unset($data[$key]);
             }
