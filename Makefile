@@ -83,7 +83,7 @@ docker.down: ## Stop and remove the docker containers
 .PHONY: docker.down
 
 server.start: ## Run the local webserver using Symfony
-	${SYMFONY} local:proxy:domain:attach sylius
+	${SYMFONY} local:proxy:domain:attach settings
 	${SYMFONY} local:server:start -d
 
 server.stop: ## Stop the local webserver
