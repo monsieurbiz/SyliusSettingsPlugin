@@ -18,11 +18,19 @@
 
 This plugin gives the ability to have Plugins oriented settings in your favorite e-commerce platform, Sylius.
 
+![image-20200910235337253](/Users/jacques/Sites/plugins/SyliusSettingsPlugin/docs/images/screenshot01.png)
+
 ## Installation
 
-⚠️ This plugin is not released yet.
+**⚠️ This plugin is not released yet.**
 
-To Be Defined
+⚙️ To Be Defined
+
+A few steps to start:
+
+- Edit the `config/bundles.php` (`MonsieurBiz\SyliusSettingsPlugin\MonsieurBizSyliusSettingsPlugin::class => ['all' => true],`).
+- Copy the config (`cp -Rv vendor/monsieurbiz/sylius-settings-plugin/recipes/1.0-dev/config/ config/`).
+- Continue to "[How it works](#how-it-works)".
 
 <!--
 
@@ -46,7 +54,12 @@ To Be Defined
 
 ## How it works
 
-To Be Defined
+⚙️ To Be Defined.
+
+As a good start you can have a look to:
+
+- The [configuration file](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/tests/Application/config/packages/monsieurbiz_settings_plugin_custom.yaml) to add your own settings.
+- The [form with your own fields](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/tests/Application/src/Form/SettingsType.php).
 
 ## Testing
 
