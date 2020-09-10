@@ -61,6 +61,18 @@ As a good start you can have a look to:
 - The [configuration file](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/tests/Application/config/packages/monsieurbiz_settings_plugin_custom.yaml) to add your own settings.
 - The [form with your own fields](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/tests/Application/src/Form/SettingsType.php).
 
+Then you can get your settings using a twig function: `setting()`.  
+Have a look to [this example](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/tests/Application/templates/views/message.html.twig).
+
+You can also use the DI to get your Settings, as example with the settings in the test Application `app.default`:
+
+```bash
+$ ./bin/console debug:container | grep app.settings.default
+  MonsieurBiz\SyliusSettingsPlugin\Settings\Settings $defaultSettings                    alias for "app.settings.default"
+  MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface $defaultSettings           alias for "app.settings.default"
+  app.settings.default                                                                   MonsieurBiz\SyliusSettingsPlugin\Settings\Settings
+```
+
 ## Testing
 
 To Be Defined
