@@ -30,6 +30,8 @@ A few steps to start:
 
 - Edit the `config/bundles.php` (`MonsieurBiz\SyliusSettingsPlugin\MonsieurBizSyliusSettingsPlugin::class => ['all' => true],`).
 - Copy the config (`cp -Rv vendor/monsieurbiz/sylius-settings-plugin/recipes/1.0-dev/config/ config/`).
+- Run the diff in your migrations (`./bin/console doctrine:migration:diff`).
+- Execute the migrations (`./bin/console doctrine:migration:migrate`).
 - Continue to "[How it works](#how-it-works)".
 
 <!--
