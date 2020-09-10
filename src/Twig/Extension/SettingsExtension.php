@@ -6,6 +6,7 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Twig\Extension;
 
 use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Core\Context\ShopperContext;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
@@ -42,20 +43,28 @@ final class SettingsExtension extends AbstractExtension implements ExtensionInte
     public function getFunctions()
     {
         return [
-            new TwigFunction('setting', [$this, 'getSettingValue']),
+            new TwigFunction('setting', [$this, 'getSettingValue'], [
+                'needs_context' => true,
+            ]),
         ];
     }
 
-    public function getSettingValue(string $alias, string $path)
+    /**
+     * @param array $context
+     * @param string $alias
+     * @param string $path
+     *
+     * @return mixed
+     */
+    public function getSettingValue(array $context, string $alias, string $path)
     {
-        if ($settingsInstance = $this->settingsRegistry->getByAlias($alias)) {
-            $settings = $settingsInstance->getSettingsByChannelAndLocale(
-                $this->channelContext->getChannel(),
-                $this->localeContext->getLocaleCode(),
-                true
-            );
-            if (isset($settings[$path])) {
-                return $settings[$path]->getValue();
+        if (isset($context['sylius']) && $context['sylius'] instanceof ShopperContext) {
+            if ($settingsInstance = $this->settingsRegistry->getByAlias($alias)) {
+                return $settingsInstance->getCurrentValue(
+                    $context['sylius']->getChannel(),
+                    $context['sylius']->getLocaleCode(),
+                    $path
+                );
             }
         }
         return null;

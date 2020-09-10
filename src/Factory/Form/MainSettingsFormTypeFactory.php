@@ -49,6 +49,7 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
     }
 
     /**
+     * @param SettingsInterface $settings
      * @param string $type
      * @param array $options
      *
@@ -64,6 +65,8 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
     }
 
     /**
+     * @param SettingsInterface $settings
+     *
      * @return array
      */
     private function getInitialFormData(SettingsInterface $settings): array
@@ -74,7 +77,7 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
 
         /** @var LocaleInterface $locale */
         foreach ($this->localeRepository->findAll() as $locale) {
-            $data[Settings::DEFAULT_KEY . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale(null, $locale);
+            $data[Settings::DEFAULT_KEY . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale(null, $locale->getCode());
         }
 
         /** @var ChannelInterface $channel */
@@ -82,7 +85,7 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
             $data['channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY] = $settings->getSettingsValuesByChannelAndLocale($channel);
 
             foreach ($channel->getLocales() as $locale) {
-                $data['channel-' . $channel->getId() . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale($channel, $locale);
+                $data['channel-' . $channel->getId() . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale($channel, $locale->getCode());
             }
         }
 

@@ -27,5 +27,7 @@ interface SettingsInterface
     public function getFormClass(): string;
 
     public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false): array;
-    public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?LocaleInterface $locale = null): array;
+    public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null): array;
+
+    public function getCurrentValue(ChannelInterface $channel, string $localeCode, string $path);
 }

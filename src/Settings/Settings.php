@@ -32,6 +32,11 @@ final class Settings implements SettingsInterface
     private ?array $settingsByChannelAndLocale;
 
     /**
+     * @var array|null
+     */
+    private ?array $settingsByChannelAndLocaleWithDefault;
+
+    /**
      * Settings constructor.
      *
      * @param Metadata $metadata
@@ -94,15 +99,24 @@ final class Settings implements SettingsInterface
         return $className;
     }
 
-    private function getCachedSettingsByChannelAndLocale(string $channelIdentifier, string $localeIdentifier): ?array
+    /**
+     * @param string $channelIdentifier
+     * @param string $localeIdentifier
+     * @param bool $withDefault
+     *
+     * @return array|null
+     */
+    private function getCachedSettingsByChannelAndLocale(string $channelIdentifier, string $localeIdentifier, bool $withDefault): ?array
     {
-        if (!isset($this->settingsByChannelAndLocale[$channelIdentifier])) {
-            $this->settingsByChannelAndLocale[$channelIdentifier] = [];
+        // With default?
+        $varName = $withDefault ? 'settingsByChannelAndLocaleWithDefault' : 'settingsByChannelAndLocale';
+        if (!isset($this->{$varName}[$channelIdentifier])) {
+            $this->{$varName}[$channelIdentifier] = [];
             return null;
-        } elseif (!isset($this->settingsByChannelAndLocale[$channelIdentifier][$localeIdentifier])) {
+        } elseif (!isset($this->{$varName}[$channelIdentifier][$localeIdentifier])) {
             return null;
         }
-        return $this->settingsByChannelAndLocale[$channelIdentifier][$localeIdentifier];
+        return $this->{$varName}[$channelIdentifier][$localeIdentifier];
     }
 
     /**
@@ -117,9 +131,9 @@ final class Settings implements SettingsInterface
     {
         $channelIdentifier = null === $channel ? '___' . self::DEFAULT_KEY : $channel->getCode();
         $localeIdentifier = null === $localeCode ? '___' . self::DEFAULT_KEY : $localeCode;
-        if (null === $settings = $this->getCachedSettingsByChannelAndLocale($channelIdentifier, $localeIdentifier)) {
-            $findAllByChannelAndLocale = $withDefault ? 'findAllByChannelAndLocaleWithDefault' : 'findAllByChannelAndLocale';
-            $allSettings = $this->settingRepository->$findAllByChannelAndLocale(
+        if (null === $settings = $this->getCachedSettingsByChannelAndLocale($channelIdentifier, $localeIdentifier, $withDefault)) {
+            $findAllByChannelAndLocaleMethod = $withDefault ? 'findAllByChannelAndLocaleWithDefault' : 'findAllByChannelAndLocale';
+            $allSettings = $this->settingRepository->{$findAllByChannelAndLocaleMethod}(
                 $this->metadata->getApplicationName(),
                 $this->metadata->getName(true),
                 $channel,
@@ -132,20 +146,24 @@ final class Settings implements SettingsInterface
             foreach ($allSettings as $setting) {
                 $settings[$setting->getPath()] = $setting;
             }
-            $this->settingsByChannelAndLocale[$channelIdentifier][$localeIdentifier] = $settings;
+            if ($withDefault) {
+                $this->settingsByChannelAndLocaleWithDefault[$channelIdentifier][$localeIdentifier] = $settings;
+            } else {
+                $this->settingsByChannelAndLocale[$channelIdentifier][$localeIdentifier] = $settings;
+            }
         }
         return $settings;
     }
 
     /**
      * @param ChannelInterface|null $channel
-     * @param LocaleInterface $locale
+     * @param string|null $localeCode
      *
      * @return array
      */
-    public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?LocaleInterface $locale = null): array
+    public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null): array
     {
-        $allSettings = $this->getSettingsByChannelAndLocale($channel, null === $locale ? null : $locale->getCode());
+        $allSettings = $this->getSettingsByChannelAndLocale($channel, $localeCode);
         $settingsValues = [];
         /** @var SettingInterface $setting */
         foreach ($allSettings as $setting) {
@@ -153,4 +171,21 @@ final class Settings implements SettingsInterface
         }
         return $settingsValues;
     }
+
+    /**
+     * @param ChannelInterface $channel
+     * @param string $localeCode
+     * @param string $path
+     *
+     * @return mixed
+     */
+    public function getCurrentValue(ChannelInterface $channel, string $localeCode, string $path)
+    {
+        $settings = $this->getSettingsByChannelAndLocale($channel, $localeCode, true);
+        if (isset($settings[$path])) {
+            return $settings[$path]->getValue();
+        }
+        return null;
+    }
+
 }
