@@ -42,11 +42,11 @@ final class SettingsExtension extends AbstractExtension implements ExtensionInte
     public function getFunctions()
     {
         return [
-            new TwigFunction('setting', [$this, 'getSetting']),
+            new TwigFunction('setting', [$this, 'getSettingValue']),
         ];
     }
 
-    public function getSetting(string $alias, string $path)
+    public function getSettingValue(string $alias, string $path)
     {
         if ($settingsInstance = $this->settingsRegistry->getByAlias($alias)) {
             $settings = $settingsInstance->getSettingsByChannelAndLocale(
