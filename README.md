@@ -18,7 +18,7 @@
 
 This plugin gives the ability to have Plugins oriented settings in your favorite e-commerce platform, Sylius.
 
-![image-20200910235337253](/Users/jacques/Sites/plugins/SyliusSettingsPlugin/docs/images/screenshot01.png)
+![Screenshot of the admin panel in Settings section](/docs/images/screenshot01.png)
 
 ## Installation
 
