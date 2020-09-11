@@ -74,9 +74,25 @@ final class SettingRepository extends EntityRepository implements SettingReposit
             ;
         }
 
-        // The order is primordial! Default first in the results.
-        $queryBuilder->addOrderBy('o.localeCode', 'ASC');
-        $queryBuilder->addOrderBy('o.channel', 'ASC');
+        // The order is primordial! Default first in the results, correct value last
+        $queryBuilder->addSelect(<<<EXPR
+            CASE WHEN
+                o.channel IS NOT NULL
+                THEN
+                    (CASE WHEN
+                        o.localeCode IS NULL
+                        THEN 2
+                        ELSE 1
+                    END)
+                ELSE
+                    (CASE WHEN
+                        o.localeCode IS NULL
+                        THEN 4
+                        ELSE 3
+                    END)
+            END AS value_position
+        EXPR);
+        $queryBuilder->addOrderBy('value_position', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
     }
