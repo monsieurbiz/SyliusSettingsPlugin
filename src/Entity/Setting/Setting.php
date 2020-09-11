@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MonsieurBiz\SyliusSettingsPlugin\Entity\Setting;
 
 use DateTimeInterface;
+use JsonSerializable;
 use LogicException;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -274,10 +275,11 @@ class Setting implements SettingInterface
             case is_float($value):
                 $type = SettingInterface::STORAGE_TYPE_FLOAT;
                 break;
-            case $value instanceof \DateTime:
+            case $value instanceof DateTimeInterface:
                 $type = SettingInterface::STORAGE_TYPE_DATETIME;
                 break;
             case is_array($value):
+            case $value instanceof JsonSerializable:
                 $type = SettingInterface::STORAGE_TYPE_JSON;
                 break;
             default:

@@ -7,6 +7,7 @@
     "require": {
         "php": "~7.4",
         "ext-mbstring": "*",
+        "ext-json": "*",
         "sylius/sylius": "^1.7"
     },
     "require-dev": {
