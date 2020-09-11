@@ -144,6 +144,9 @@ final class Settings implements SettingsInterface
             // If we have the default values as well, the order is primordial.
             // We will store the default first, so the no default values will override the default if needed.
             foreach ($allSettings as $setting) {
+                if (is_array($setting)) {
+                    $setting = current($setting);
+                }
                 $settings[$setting->getPath()] = $setting;
             }
             if ($withDefault) {
