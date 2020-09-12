@@ -28,11 +28,16 @@ This plugin gives the ability to have Plugins oriented settings in your favorite
 
 A few steps to start:
 
+- Require the plugin via composer (`composer require monsieurbiz/sylius-settings-plugin="@rc" --no-scripts`).
 - Edit the `config/bundles.php` (`MonsieurBiz\SyliusSettingsPlugin\MonsieurBizSyliusSettingsPlugin::class => ['all' => true],`).
 - Copy the config (`cp -Rv vendor/monsieurbiz/sylius-settings-plugin/recipes/1.0-dev/config/ config/`).
 - Run the diff in your migrations (`./bin/console doctrine:migration:diff`).
 - Execute the migrations (`./bin/console doctrine:migration:migrate`).
 - Continue to "[How it works](#how-it-works)".
+
+Note: you may encounter an error during the installation via composer if you let it run the scripts.  
+Copy the configuration files and rerun the `composer require`, it should work. This is due to the use of other plugins in the DI.
+The configuration is then required to run any console command.
 
 <!--
 
