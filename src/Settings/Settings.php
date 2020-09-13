@@ -140,31 +140,52 @@ final class Settings implements SettingsInterface
      */
     public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false): array
     {
-        $channelIdentifier = null === $channel ? '___' . self::DEFAULT_KEY : $channel->getCode();
+        $channelIdentifier = null === $channel ? '___' . self::DEFAULT_KEY : (string) $channel->getCode();
         $localeIdentifier = null === $localeCode ? '___' . self::DEFAULT_KEY : $localeCode;
+
         if (null === $settings = $this->getCachedSettingsByChannelAndLocale($channelIdentifier, $localeIdentifier, $withDefault)) {
-            $findAllByChannelAndLocaleMethod = $withDefault ? 'findAllByChannelAndLocaleWithDefault' : 'findAllByChannelAndLocale';
-            $allSettings = $this->settingRepository->{$findAllByChannelAndLocaleMethod}(
-                $this->metadata->getApplicationName(),
-                $this->metadata->getName(true),
-                $channel,
-                $localeCode
-            );
-            $settings = [];
-            /** @var SettingInterface $setting */
-            // If we have the default values as well, the order is primordial.
-            // We will store the default first, so the no default values will override the default if needed.
-            foreach ($allSettings as $setting) {
-                if (\is_array($setting)) {
-                    $setting = current($setting);
-                }
-                $settings[$setting->getPath()] = $setting;
-            }
             if ($withDefault) {
+                $settings = $this->stackSettings(
+                    $this->settingRepository->findAllByChannelAndLocaleWithDefault(
+                        $this->metadata->getApplicationName(),
+                        $this->metadata->getName(true),
+                        $channel,
+                        $localeCode
+                    )
+                );
                 $this->settingsByChannelAndLocaleWithDefault[$channelIdentifier][$localeIdentifier] = $settings;
             } else {
+                $settings = $this->stackSettings(
+                    $this->settingRepository->findAllByChannelAndLocale(
+                        $this->metadata->getApplicationName(),
+                        $this->metadata->getName(true),
+                        $channel,
+                        $localeCode
+                    )
+                );
                 $this->settingsByChannelAndLocale[$channelIdentifier][$localeIdentifier] = $settings;
             }
+        }
+
+        return $settings;
+    }
+
+    /**
+     * @param array $allSettings
+     *
+     * @return array
+     */
+    private function stackSettings(array $allSettings): array
+    {
+        $settings = [];
+        /** @var SettingInterface $setting */
+        // If we have the default values as well, the order is primordial.
+        // We will store the default first, so the no default values will override the default if needed.
+        foreach ($allSettings as $setting) {
+            if (\is_array($setting)) {
+                $setting = current($setting);
+            }
+            $settings[$setting->getPath()] = $setting;
         }
 
         return $settings;
