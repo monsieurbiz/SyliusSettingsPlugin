@@ -50,6 +50,15 @@ final class SettingsProcessor implements SettingsProcessorInterface
      */
     private SettingFactoryInterface $settingFactory;
 
+    /**
+     * SettingsProcessor constructor.
+     *
+     * @param ChannelRepositoryInterface $channelRepository
+     * @param RepositoryInterface $localeRepository
+     * @param SettingRepositoryInterface $settingRepository
+     * @param EntityManagerInterface $em
+     * @param SettingFactoryInterface $settingFactory
+     */
     public function __construct(
         ChannelRepositoryInterface $channelRepository,
         RepositoryInterface $localeRepository,
@@ -64,6 +73,10 @@ final class SettingsProcessor implements SettingsProcessorInterface
         $this->settingFactory = $settingFactory;
     }
 
+    /**
+     * @param SettingsInterface $settings
+     * @param array $data
+     */
     public function processData(SettingsInterface $settings, array $data): void
     {
         foreach ($data as $settingsIdentifier => $settingsData) {
@@ -76,21 +89,27 @@ final class SettingsProcessor implements SettingsProcessorInterface
                     $this->saveSettings($settings, null, null, $settingsData);
                     break;
                 // Default website + locale
-                case preg_match(sprintf('`^%1$s-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
+                case 1 === preg_match(sprintf('`^%1$s-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
                     $this->saveSettings($settings, null, $matches['localeCode'], $settingsData);
                     break;
                 // Website + default locale
-                case preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-%1$s$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
+                case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-%1$s$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
                     $this->saveSettings($settings, (int) $matches['channelId'], null, $settingsData);
                     break;
                 // Website + locale
-                case preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
+                case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
                     $this->saveSettings($settings, (int) $matches['channelId'], $matches['localeCode'], $settingsData);
                     break;
             }
         }
     }
 
+    /**
+     * @param SettingsInterface $settings
+     * @param int|null $channelId
+     * @param string|null $localeCode
+     * @param array $data
+     */
     private function saveSettings(SettingsInterface $settings, ?int $channelId, ?string $localeCode, array $data): void
     {
         /** @var ChannelInterface|null $channel */
@@ -104,38 +123,54 @@ final class SettingsProcessor implements SettingsProcessorInterface
             $localeCode
         );
 
+        $this->removeUnusedSettings($data, $actualSettings);
+        $this->saveNewAndExistingSettings($data, $actualSettings, $settings, $channel, $locale);
+
+        $this->em->flush();
+    }
+
+    /**
+     * @param array $data
+     * @param array $settings
+     */
+    private function removeUnusedSettings(array &$data, array $settings): void
+    {
         // Manage defaults, and remove actual settings with "use default value" checked
         foreach ($data as $key => $value) {
-            // Is a "use default value"?
-            if (preg_match(sprintf('`^(?P<key>.*)(?:___%1$s)$`', Settings::DEFAULT_KEY), $key, $matches)) {
-                if ($data[$key]) {
-                    if (isset($actualSettings[$matches['key']])) {
-                        $this->em->remove($actualSettings[$matches['key']]);
+            // Is the setting a "use default value"?
+            if (1 === preg_match(sprintf('`^(?P<key>.*)(?:___%1$s)$`', Settings::DEFAULT_KEY), $key, $matches)) {
+                if (true === $data[$key]) {
+                    if (isset($settings[$matches['key']])) {
+                        $this->em->remove($settings[$matches['key']]);
                     }
                     unset($data[$matches['key']]);
                 }
                 unset($data[$key]);
             }
         }
+    }
 
-        // Save the others
+    /**
+     * @param array $data
+     * @param array $actualSettings
+     * @param SettingsInterface $settings
+     * @param ChannelInterface|null $channel
+     * @param LocaleInterface|null $locale
+     */
+    private function saveNewAndExistingSettings(array $data, array $actualSettings, SettingsInterface $settings, ?ChannelInterface $channel, ?LocaleInterface $locale): void
+    {
         foreach ($data as $key => $value) {
             if (isset($actualSettings[$key])) {
                 $setting = $actualSettings[$key];
                 $setting->setValue($value);
-            } else {
-                if (null !== $value) {
-                    $setting = $this->settingFactory->createNewFromGlobalSettings($settings, $channel, $locale);
-                    $setting->setPath($key);
-                    $setting->setStorageTypeFromValue($value);
-                    $setting->setValue($value);
-                }
-            }
-            if (isset($setting)) {
+                $this->em->persist($setting);
+            } elseif (null !== $value) {
+                $setting = $this->settingFactory->createNewFromGlobalSettings($settings, $channel, $locale);
+                $setting->setPath($key);
+                $setting->setStorageTypeFromValue($value);
+                $setting->setValue($value);
                 $this->em->persist($setting);
             }
         }
-
-        $this->em->flush();
     }
 }
