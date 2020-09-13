@@ -284,23 +284,39 @@ class Setting implements SettingInterface
      */
     private function getTypeFromValue($value): string
     {
-        switch (true) {
-            case \is_string($value):
-                return SettingInterface::STORAGE_TYPE_TEXT;
-            case \is_bool($value):
-                return SettingInterface::STORAGE_TYPE_BOOLEAN;
-            case \is_int($value):
-                return SettingInterface::STORAGE_TYPE_INTEGER;
-            case \is_float($value):
+        $types = [
+            'double' => function(): string {
                 return SettingInterface::STORAGE_TYPE_FLOAT;
-            case $value instanceof DateTimeInterface:
-                return SettingInterface::STORAGE_TYPE_DATETIME;
-            case \is_array($value):
-            case $value instanceof JsonSerializable:
+            },
+            'array' => function(): string {
                 return SettingInterface::STORAGE_TYPE_JSON;
-            default:
+            },
+            'object' => function(object $value): string {
+                if ($value instanceof DateTimeInterface) {
+                    return SettingInterface::STORAGE_TYPE_DATETIME;
+                }
+                if ($value instanceof JsonSerializable) {
+                    return SettingInterface::STORAGE_TYPE_JSON;
+                }
                 throw new LogicException('Impossible to match the type of the value.');
+            },
+            'string' => function(): string {
+                return SettingInterface::STORAGE_TYPE_TEXT;
+            },
+            'boolean' => function(): string {
+                return SettingInterface::STORAGE_TYPE_BOOLEAN;
+            },
+            'integer' => function(): string {
+                return SettingInterface::STORAGE_TYPE_INTEGER;
+            },
+        ];
+
+        $type = \gettype($value);
+        if (!isset($types[$type])) {
+            throw new LogicException('Impossible to match the type of the value.');
         }
+
+        return $types[$type]($value);
     }
 
     /**
