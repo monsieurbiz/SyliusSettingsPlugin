@@ -17,7 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         php: [7.4]
-        prefer: [lowest, stable]
 
     steps:
       - uses: actions/checkout@v2
@@ -30,8 +29,8 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: /home/runner/.composer/cache
-          key: composer-php.${{ matrix.php }}-prefer.${{ matrix.prefer }}-${{ github.sha }}
-          restore-keys: composer-php.${{ matrix.php }}-prefer.${{ matrix.prefer }}-
+          key: composer-php.${{ matrix.php }}-prefer.stable-${{ github.sha }}
+          restore-keys: composer-php.${{ matrix.php }}-prefer.stable-
 
       - name: Install symfony CLI
         run: |
@@ -45,7 +44,7 @@ jobs:
         run: composer config -g github-oauth.github.com ${{ github.token }}
 
       - name: Update dependencies
-        run: composer update --prefer-${{ matrix.prefer }} --prefer-dist --no-progress --no-suggest --no-scripts
+        run: composer update --prefer-stable --prefer-dist --no-progress --no-suggest --no-scripts
 
       - name: PHP CS Fixer
         run: make test.phpcs
