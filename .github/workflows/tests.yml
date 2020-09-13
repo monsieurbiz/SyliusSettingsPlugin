@@ -77,6 +77,10 @@ jobs:
         mariadb_version: [10.4.14]
 
     steps:
+      - name: Setup some envs
+        run: |
+          echo ::set-env name=DATABASE_URL::mysql://root@127.0.0.1/sylius?serverVersion=mariadb-${{ matrix.mariadb_version }}
+
       - name: Switch PHP
         run: |
           sudo update-alternatives --set php /usr/bin/php${{ matrix.php }}
