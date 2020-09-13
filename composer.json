@@ -34,6 +34,9 @@
             "App\\": "tests/Application/src/"
         }
     },
+    "scripts": {
+        "phpcs": "php-cs-fixer fix --using-cache=false"
+    },
     "extra": {
         "symfony": {
             "require": "^4.4"

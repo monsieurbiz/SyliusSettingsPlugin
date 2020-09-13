@@ -46,6 +46,15 @@ node_modules: tests/Application/node_modules ## Install the Node dependencies us
 tests/Application/node_modules: yarn.install
 
 ###
+### TESTS
+### ¯¯¯¯¯
+test.phpcs: ## Run PHP CS Fixer in dry-run
+	${COMPOSER} run -- phpcs --dry-run -v
+
+test.phpcs.fix: ## Run PHP CS Fixer and fix issues if possible
+	${COMPOSER} run -- phpcs -v
+
+###
 ### SYLIUS
 ### ¯¯¯¯¯¯
 
