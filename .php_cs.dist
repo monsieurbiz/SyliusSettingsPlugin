@@ -48,6 +48,9 @@ return PhpCsFixer\Config::create()
         ],
         'explicit_indirect_variable' => true,
         'fully_qualified_strict_types' => true,
+        'function_declaration' => [
+            'closure_function_spacing' => 'none',
+        ],
         'header_comment' => [
             'header' => $header,
             'location' => 'after_open',
