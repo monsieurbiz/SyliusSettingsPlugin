@@ -20,7 +20,8 @@
         "symfony/intl": "^4.4",
         "symfony/web-profiler-bundle": "^4.4",
         "symfony/web-server-bundle": "^4.4",
-        "lchrusciel/api-test-case": "^3.0"
+        "lchrusciel/api-test-case": "^3.0",
+        "friendsofphp/php-cs-fixer": "^2.16.1"
     },
     "prefer-stable": true,
     "autoload": {
