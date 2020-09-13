@@ -75,7 +75,7 @@ jobs:
       matrix:
         php: [7.4]
         sylius: [1.7]
-        mariadb_version: [10.4]
+        mariadb_version: [10.4.14]
 
     steps:
       - name: Switch PHP

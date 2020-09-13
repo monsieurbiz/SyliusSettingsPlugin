@@ -1,7 +1,7 @@
 version: '3.8'
 services:
     database:
-        image: monsieurbiz/mariadb:10.2
+        image: mariadb:10.4.14
         container_name: monsieurbiz_sylius_settings_plugin_database
         ports:
             - 3306
