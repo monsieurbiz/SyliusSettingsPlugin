@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\DependencyInjection;
@@ -7,7 +16,6 @@ namespace MonsieurBiz\SyliusSettingsPlugin\DependencyInjection;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Metadata;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Settings;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
-use Sylius\Component\Product\Generator\SlugGenerator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -17,9 +25,9 @@ use Symfony\Component\DependencyInjection\Reference;
 final class InstantiateSettingsPass implements CompilerPassInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         // Get required parameters and definitions in order to populate the DI
         try {
@@ -48,7 +56,7 @@ final class InstantiateSettingsPass implements CompilerPassInterface
                 SettingsInterface::class . ' $' . $metadata->getName() . 'Settings' => $id,
                 Settings::class . ' $' . $metadata->getName() . 'Settings' => $id,
             ];
-            if ($class !== Settings::class) {
+            if (Settings::class !== $class) {
                 $aliases[$class . ' $' . $metadata->getName() . 'Settings'] = $id;
             }
             $container->addAliases($aliases);
@@ -59,12 +67,8 @@ final class InstantiateSettingsPass implements CompilerPassInterface
 
     private function validateSettingsResource(string $class): void
     {
-        if (!in_array(SettingsInterface::class, class_implements($class), true)) {
-            throw new InvalidArgumentException(sprintf(
-                'Class "%s" must implement "%s" to be registered as a Settings resource.',
-                $class,
-                SettingsInterface::class
-            ));
+        if (!\in_array(SettingsInterface::class, class_implements($class), true)) {
+            throw new InvalidArgumentException(sprintf('Class "%s" must implement "%s" to be registered as a Settings resource.', $class, SettingsInterface::class));
         }
     }
 
@@ -80,6 +84,7 @@ final class InstantiateSettingsPass implements CompilerPassInterface
             ->setFactory([new Reference('monsieurbiz.settings.metadata_registry'), 'get'])
             ->setArguments([$metadata->getAlias()])
         ;
+
         return $metadataDefinition;
     }
 }

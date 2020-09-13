@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Form;
@@ -14,7 +23,7 @@ abstract class AbstractSettingsType extends AbstractType implements SettingsType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired([
             'settings',
@@ -46,6 +55,7 @@ abstract class AbstractSettingsType extends AbstractType implements SettingsType
                 'required' => true,
             ]);
         }
+
         return $this;
     }
 

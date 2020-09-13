@@ -1,20 +1,26 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Processor;
 
 use Doctrine\ORM\EntityManagerInterface;
-use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\SettingInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Factory\SettingFactoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Settings;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
-use Sylius\Component\Locale\Converter\LocaleConverter;
 use Sylius\Component\Locale\Model\LocaleInterface;
-use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class SettingsProcessor implements SettingsProcessorInterface
@@ -61,7 +67,7 @@ final class SettingsProcessor implements SettingsProcessorInterface
     public function processData(SettingsInterface $settings, array $data): void
     {
         foreach ($data as $settingsIdentifier => $settingsData) {
-            if (!is_array($settingsData)) {
+            if (!\is_array($settingsData)) {
                 continue;
             }
             switch (true) {
@@ -69,17 +75,14 @@ final class SettingsProcessor implements SettingsProcessorInterface
                 case sprintf('%1$s-%1$s', Settings::DEFAULT_KEY) === $settingsIdentifier:
                     $this->saveSettings($settings, null, null, $settingsData);
                     break;
-
                 // Default website + locale
                 case preg_match(sprintf('`^%1$s-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
                     $this->saveSettings($settings, null, $matches['localeCode'], $settingsData);
                     break;
-
                 // Website + default locale
                 case preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-%1$s$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
                     $this->saveSettings($settings, (int) $matches['channelId'], null, $settingsData);
                     break;
-
                 // Website + locale
                 case preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
                     $this->saveSettings($settings, (int) $matches['channelId'], $matches['localeCode'], $settingsData);
@@ -121,7 +124,7 @@ final class SettingsProcessor implements SettingsProcessorInterface
                 $setting = $actualSettings[$key];
                 $setting->setValue($value);
             } else {
-                if (!is_null($value)) {
+                if (null !== $value) {
                     $setting = $this->settingFactory->createNewFromGlobalSettings($settings, $channel, $locale);
                     $setting->setPath($key);
                     $setting->setStorageTypeFromValue($value);

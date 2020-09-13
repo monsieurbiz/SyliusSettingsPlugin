@@ -1,16 +1,23 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 
-use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\Setting;
 use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\SettingInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
 use MonsieurBiz\SyliusSettingsPlugin\Form\AbstractSettingsType;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use Sylius\Component\Channel\Model\ChannelInterface;
-use Sylius\Component\Locale\Model\LocaleInterface;
 
 final class Settings implements SettingsInterface
 {
@@ -87,15 +94,17 @@ final class Settings implements SettingsInterface
     }
 
     /**
-     * @return string
      * @throws SettingsException
+     *
+     * @return string
      */
     public function getFormClass(): string
     {
         $className = $this->metadata->getClass('form');
-        if (!in_array(AbstractSettingsType::class, class_parents($className))) {
+        if (!\in_array(AbstractSettingsType::class, class_parents($className), true)) {
             throw new SettingsException(sprintf('Class %s should extend %s', $className, AbstractSettingsType::class));
         }
+
         return $className;
     }
 
@@ -112,17 +121,19 @@ final class Settings implements SettingsInterface
         $varName = $withDefault ? 'settingsByChannelAndLocaleWithDefault' : 'settingsByChannelAndLocale';
         if (!isset($this->{$varName}[$channelIdentifier])) {
             $this->{$varName}[$channelIdentifier] = [];
-            return null;
-        } elseif (!isset($this->{$varName}[$channelIdentifier][$localeIdentifier])) {
+
             return null;
         }
+        if (!isset($this->{$varName}[$channelIdentifier][$localeIdentifier])) {
+            return null;
+        }
+
         return $this->{$varName}[$channelIdentifier][$localeIdentifier];
     }
 
     /**
      * @param ChannelInterface|null $channel
      * @param string|null $localeCode
-     *
      * @param bool $withDefault
      *
      * @return array
@@ -144,7 +155,7 @@ final class Settings implements SettingsInterface
             // If we have the default values as well, the order is primordial.
             // We will store the default first, so the no default values will override the default if needed.
             foreach ($allSettings as $setting) {
-                if (is_array($setting)) {
+                if (\is_array($setting)) {
                     $setting = current($setting);
                 }
                 $settings[$setting->getPath()] = $setting;
@@ -155,6 +166,7 @@ final class Settings implements SettingsInterface
                 $this->settingsByChannelAndLocale[$channelIdentifier][$localeIdentifier] = $settings;
             }
         }
+
         return $settings;
     }
 
@@ -172,6 +184,7 @@ final class Settings implements SettingsInterface
         foreach ($allSettings as $setting) {
             $settingsValues[$setting->getPath()] = $setting->getValue();
         }
+
         return $settingsValues;
     }
 
@@ -188,7 +201,7 @@ final class Settings implements SettingsInterface
         if (isset($settings[$path])) {
             return $settings[$path]->getValue();
         }
+
         return null;
     }
-
 }

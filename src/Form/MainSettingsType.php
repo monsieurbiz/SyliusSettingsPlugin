@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Form;
@@ -43,61 +52,48 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
         $this->localeRepository = $localeRepository;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired([
             'settings',
         ])->setAllowedTypes('settings', [SettingsInterface::class]);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $settings = $options['settings'];
         $data = $options['data'];
         $builder->add(
             $key = Settings::DEFAULT_KEY . '-' . Settings::DEFAULT_KEY, $settings->getFormClass(), [
-            'settings' => $settings,
-            'channel' => null,
-            'label' => false,
-            'show_default_checkboxes' => false,
-            'data' => $data[$key] ?? null,
-            'constraints' => [
-                new Assert\Valid(),
-            ],
-        ]);
-
-        /** @var LocaleInterface $locale */
-        foreach ($this->localeRepository->findAll() as $locale) {
-            $builder->add(
-                $key = Settings::DEFAULT_KEY . '-' . $locale->getCode(), $settings->getFormClass(), [
                 'settings' => $settings,
                 'channel' => null,
                 'label' => false,
-                'show_default_checkboxes' => true,
+                'show_default_checkboxes' => false,
                 'data' => $data[$key] ?? null,
                 'constraints' => [
                     new Assert\Valid(),
                 ],
             ]);
+
+        /** @var LocaleInterface $locale */
+        foreach ($this->localeRepository->findAll() as $locale) {
+            $builder->add(
+                $key = Settings::DEFAULT_KEY . '-' . $locale->getCode(), $settings->getFormClass(), [
+                    'settings' => $settings,
+                    'channel' => null,
+                    'label' => false,
+                    'show_default_checkboxes' => true,
+                    'data' => $data[$key] ?? null,
+                    'constraints' => [
+                        new Assert\Valid(),
+                    ],
+                ]);
         }
 
         /** @var ChannelInterface $channel */
         foreach ($this->channelRepository->findAll() as $channel) {
             $builder->add(
                 $key = 'channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY, $settings->getFormClass(), [
-                'settings' => $settings,
-                'channel' => $channel,
-                'label' => false,
-                'show_default_checkboxes' => true,
-                'data' => $data[$key] ?? null,
-                'constraints' => [
-                    new Assert\Valid(),
-                ],
-            ]);
-
-            foreach ($channel->getLocales() as $locale) {
-                $builder->add(
-                    $key = 'channel-' . $channel->getId() . '-' . $locale->getCode(), $settings->getFormClass(), [
                     'settings' => $settings,
                     'channel' => $channel,
                     'label' => false,
@@ -107,10 +103,23 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
                         new Assert\Valid(),
                     ],
                 ]);
+
+            foreach ($channel->getLocales() as $locale) {
+                $builder->add(
+                    $key = 'channel-' . $channel->getId() . '-' . $locale->getCode(), $settings->getFormClass(), [
+                        'settings' => $settings,
+                        'channel' => $channel,
+                        'label' => false,
+                        'show_default_checkboxes' => true,
+                        'data' => $data[$key] ?? null,
+                        'constraints' => [
+                            new Assert\Valid(),
+                        ],
+                    ]);
             }
         }
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
             // Disable fields without value
             // and Enable default checkboxes
         });
