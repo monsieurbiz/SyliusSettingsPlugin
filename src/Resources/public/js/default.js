@@ -6,20 +6,38 @@
         case 'mbiz-default':
           (function (component) {
             const relatedId = component.dataset.relatedId;
-            const relatedField = document.getElementById(relatedId);
+            const relatedInput = document.getElementById(relatedId);
             if (component.checked) {
-              relatedField.disabled = 'disabled';
+              relatedInput.disabled = 'disabled';
             }
             component.addEventListener('change', function (e) {
               if (!e.target.checked) {
-                relatedField.disabled = '';
+                relatedInput.disabled = '';
                 window.setTimeout(function () {
-                  relatedField.focus();
+                  relatedInput.focus();
                 }, 100);
               } else {
-                relatedField.disabled = 'disabled';
+                relatedInput.disabled = 'disabled';
               }
             });
+
+            // Reorganize the two fields
+            if (component.dataset.reorganize) {
+              var valueField = relatedInput.closest('.field');
+              var defaultField = component.closest('.field');
+              var fieldsContainer = document.createElement('div');
+              var grid = document.createElement('div');
+
+              valueField.parentNode.insertBefore(fieldsContainer, valueField);
+              fieldsContainer.appendChild(grid);
+              grid.appendChild(valueField);
+              grid.appendChild(defaultField);
+
+              fieldsContainer.className = 'field';
+              grid.className = 'ui grid';
+              valueField.className = 'field twelve wide column';
+              defaultField.className = 'field four wide column';
+            }
           })(component);
           break;
         default:

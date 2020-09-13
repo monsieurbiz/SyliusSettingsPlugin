@@ -2,10 +2,11 @@
 
 {% block default_checkbox_row -%}
     <div class="{% if required %}required {% endif %}field{% if (not compound or force_error|default(false)) and not valid %} error{% endif %}">
-        <div class="ui toggle checkbox">
+        <div class="ui checkbox form mini">
             {{- form_widget(form, {'attr': {
                 'data-component': 'mbiz-default',
-                'data-related-id': form.parent.children[form.vars.related_form_child.name].vars.id
+                'data-related-id': form.parent.children[form.vars.related_form_child.name].vars.id,
+                'data-reorganize': '1'
             }}) -}}
             {{- form_label(form) -}}
             {{- form_errors(form) -}}
