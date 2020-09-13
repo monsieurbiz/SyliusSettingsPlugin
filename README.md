@@ -10,13 +10,11 @@
 
 <h1 align="center">Settings for Sylius</h1>
 
-<!--
 [![Settings Plugin license](https://img.shields.io/github/license/monsieurbiz/SyliusSettingsPlugin?public)](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/LICENSE)
-![Tests](https://github.com/monsieurbiz/SyliusSettingsPlugin/workflows/CI/badge.svg)
+![Tests](https://github.com/monsieurbiz/SyliusSettingsPlugin/workflows/Tests/badge.svg)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/monsieurbiz/SyliusSettingsPlugin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/monsieurbiz/SyliusSettingsPlugin/?branch=master)
--->
 
-This plugin gives the ability to have Plugins oriented settings in your favorite e-commerce platform, Sylius.
+This plugin gives you the ability to have Plugins oriented settings in your favorite e-commerce platform, Sylius.
 
 ![Screenshot of the admin panel in Settings section](/docs/images/screenshot01.png)
 
