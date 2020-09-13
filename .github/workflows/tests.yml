@@ -9,7 +9,7 @@ on:
 
 jobs:
 
-  php:
+  tests:
 
     runs-on: ubuntu-latest
 
@@ -17,7 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         php: [7.4]
-        prefer: [lowest, stable]
 
     steps:
       - uses: actions/checkout@v2
@@ -30,8 +29,8 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: /home/runner/.composer/cache
-          key: composer-php.${{ matrix.php }}-prefer.${{ matrix.prefer }}-${{ github.sha }}
-          restore-keys: composer-php.${{ matrix.php }}-prefer.${{ matrix.prefer }}-
+          key: composer-php.${{ matrix.php }}-prefer.stable-${{ github.sha }}
+          restore-keys: composer-php.${{ matrix.php }}-prefer.stable-
 
       - name: Install symfony CLI
         run: |
@@ -45,10 +44,20 @@ jobs:
         run: composer config -g github-oauth.github.com ${{ github.token }}
 
       - name: Update dependencies
-        run: composer update --prefer-${{ matrix.prefer }} --prefer-dist --no-progress --no-suggest --no-scripts
+        run: composer update --prefer-stable --prefer-dist --no-progress --no-suggest --no-scripts
 
       - name: PHP CS Fixer
         run: make test.phpcs
+
+      - name: Lint container
+        run: make test.container
+
+      - name: Lint twig
+        run: make test.twig
+
+      - name: Lint Yaml
+        run: make test.yaml
+        
 #      - name: PHPunit
 #        run: ./vendor/bin/phpunit
 
@@ -65,9 +74,13 @@ jobs:
       matrix:
         php: [7.4]
         sylius: [1.7]
-        mariadb_version: [10.4]
+        mariadb_version: [10.4.14]
 
     steps:
+      - name: Setup some envs
+        run: |
+          echo ::set-env name=DATABASE_URL::mysql://root@127.0.0.1/sylius?serverVersion=mariadb-${{ matrix.mariadb_version }}
+
       - name: Switch PHP
         run: |
           sudo update-alternatives --set php /usr/bin/php${{ matrix.php }}
@@ -141,6 +154,7 @@ jobs:
         run: |
           php bin/console doctrine:migr:diff -vvv
           php bin/console doctrine:migr:migr -n
+          php bin/console doctrine:schema:validate
 
       - name: Install Sylius
         working-directory: ./sylius
