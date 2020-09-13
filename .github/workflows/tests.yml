@@ -1,0 +1,144 @@
+name: Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+  schedule:
+    - cron:  '0 0 * * *'
+
+jobs:
+
+  php:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [7.4]
+        prefer: [lowest, stable]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Switch PHP
+        run: |
+          sudo update-alternatives --set php /usr/bin/php${{ matrix.php }}
+          php -v
+
+      - uses: actions/cache@v1
+        with:
+          path: /home/runner/.composer/cache
+          key: composer-php.${{ matrix.php }}-prefer.${{ matrix.prefer }}-${{ github.sha }}
+          restore-keys: composer-php.${{ matrix.php }}-prefer.${{ matrix.prefer }}-
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Composer Github Auth
+        run: composer config -g github-oauth.github.com ${{ github.token }}
+
+      - name: Update dependencies
+        run: composer update --prefer-${{ matrix.prefer }} --prefer-dist --no-progress --no-suggest --no-scripts
+
+#      - name: PHPunit
+#        run: ./vendor/bin/phpunit
+
+
+  sylius:
+
+    runs-on: ubuntu-latest
+
+    env:
+      SYMFONY_ENDPOINT: http://127.0.0.1/
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [7.4]
+        sylius: [1.7]
+        mariadb_version: [10.4]
+
+    steps:
+      - name: Switch PHP
+        run: |
+          sudo update-alternatives --set php /usr/bin/php${{ matrix.php }}
+          php -v
+
+      - name: Setup timezone
+        run: |
+          echo "date.timezone=UTC" >> /tmp/timezone.ini; \
+          sudo mv /tmp/timezone.ini /etc/php/${{ matrix.php }}/cli/conf.d/timezone.ini
+
+      - uses: actions/checkout@v2
+        with:
+          path: plugin
+
+      # Run the server at the start so it can download the recipes!
+      - name: Run standalone symfony flex server
+        run: |
+          echo ${{ github.token }} | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          docker run --rm --name flex -d -v $PWD/plugin/recipe:/var/www/flex/var/repo/private/monsieurbiz/sylius-settings-plugin -p 80:80 docker.pkg.github.com/monsieurbiz/docker/symfony-flex-server:latest contrib official
+          docker ps
+
+      - uses: actions/cache@v1
+        with:
+          path: /home/runner/.composer/cache
+          key: composer-php.${{ matrix.php }}-sylius.${{ matrix.sylius }}.0-${{ github.sha }}
+          restore-keys: composer-php.${{ matrix.php }}-sylius.${{ matrix.sylius }}.0-
+
+      - name: Composer Github Auth
+        run: composer config -g github-oauth.github.com ${{ github.token }}
+
+      - name: Install Sylius-Standard
+        run: |
+          composer create-project --prefer-dist --no-scripts --no-progress sylius/sylius-standard sylius "~${{ matrix.sylius }}.0"
+
+      - name: Init database
+        working-directory: ./sylius
+        run: |
+          php bin/console doctrine:database:create --if-not-exists
+          php bin/console doctrine:migr:migr -n
+
+      - name: Add path repository
+        working-directory: ./sylius
+        run: |
+          composer config repositories.plugin '{"type": "path", "url": "../plugin/"}'
+
+      - name: Allow contrib recipes
+        working-directory: ./sylius
+        run: composer config extra.symfony.allow-contrib true
+
+      - name: Allow unsecure localhost flex server
+        working-directory: ./sylius
+        run: composer config secure-http false
+
+      - name: Install plugin
+        working-directory: ./sylius
+        run: |
+          composer config platform.php ${{ matrix.php }}
+          cp -Rv ../plugin/recipes/dev/config/* ./config/
+          composer require monsieurbiz/sylius-settings-plugin="*@dev"
+
+      - name: Show flex server logs
+        run: docker logs --tail 100 flex
+
+      - name: Update database schema
+        working-directory: ./sylius
+        run: |
+          php bin/console doctrine:migr:diff -vvv
+          php bin/console doctrine:migr:migr -n
+
+      - name: Install Sylius
+        working-directory: ./sylius
+        run: php bin/console sylius:install -n
+
+    services:
+
+      mariadb:
+        image: mariadb:${{ matrix.mariadb_version }}
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
