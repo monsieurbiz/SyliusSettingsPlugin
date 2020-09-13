@@ -48,11 +48,24 @@ tests/Application/node_modules: yarn.install
 ###
 ### TESTS
 ### ¯¯¯¯¯
+
 test.phpcs: ## Run PHP CS Fixer in dry-run
 	${COMPOSER} run -- phpcs --dry-run -v
 
 test.phpcs.fix: ## Run PHP CS Fixer and fix issues if possible
 	${COMPOSER} run -- phpcs -v
+
+test.container: ## Lint the symfony container
+	${CONSOLE} lint:container
+
+test.yaml: ## Lint the symfony Yaml files
+	${CONSOLE} lint:yaml ../../recipes ../../src/Resources/config
+
+test.schema: ## Validate MySQL Schema
+	${CONSOLE} doctrine:schema:validate
+
+test.twig: ## Validate Twig templates
+	${CONSOLE} lint:twig -e prod --no-debug templates/ ../../src/Resources/views/
 
 ###
 ### SYLIUS
