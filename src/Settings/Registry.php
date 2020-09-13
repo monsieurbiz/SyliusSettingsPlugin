@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
@@ -8,7 +17,6 @@ use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsAlreadyExistsException;
 
 final class Registry implements RegistryInterface
 {
-
     /**
      * @var array
      */
@@ -57,6 +65,7 @@ final class Registry implements RegistryInterface
                 return $settings;
             }
         }
+
         return null;
     }
 
@@ -65,6 +74,6 @@ final class Registry implements RegistryInterface
      */
     public function count(): int
     {
-        return count($this->settings);
+        return \count($this->settings);
     }
 }

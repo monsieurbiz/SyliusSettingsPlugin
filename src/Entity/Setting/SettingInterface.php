@@ -1,28 +1,31 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Entity\Setting;
 
 use DateTimeInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
-use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Resource\Model\TimestampableTrait;
-use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 interface SettingInterface extends ResourceInterface
 {
-
-    const STORAGE_TYPE_TEXT = 'text';
-    const STORAGE_TYPE_BOOLEAN = 'boolean';
-    const STORAGE_TYPE_INTEGER = 'integer';
-    const STORAGE_TYPE_FLOAT = 'float';
-    const STORAGE_TYPE_DATETIME = 'datetime';
-    const STORAGE_TYPE_DATE = 'date';
-    const STORAGE_TYPE_JSON = 'json';
+    public const STORAGE_TYPE_TEXT = 'text';
+    public const STORAGE_TYPE_BOOLEAN = 'boolean';
+    public const STORAGE_TYPE_INTEGER = 'integer';
+    public const STORAGE_TYPE_FLOAT = 'float';
+    public const STORAGE_TYPE_DATETIME = 'datetime';
+    public const STORAGE_TYPE_DATE = 'date';
+    public const STORAGE_TYPE_JSON = 'json';
 
     public function getId(): ?int;
 

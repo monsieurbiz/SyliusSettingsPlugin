@@ -1,17 +1,26 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Entity\Setting;
 
 use DateTimeInterface;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use JsonSerializable;
 use LogicException;
 use Sylius\Component\Core\Model\ChannelInterface;
-use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -140,7 +149,8 @@ class Setting implements SettingInterface
             return null;
         }
         $getter = 'get' . $this->getStorageType() . 'value';
-        return $this->$getter();
+
+        return $this->{$getter}();
     }
 
     /**
@@ -151,10 +161,10 @@ class Setting implements SettingInterface
     public function setValue($value): void
     {
         if (null === $this->getStorageType()) {
-            throw new LogicException("The storage type MUST be defined before setting the value using " . __METHOD__ . ".");
+            throw new LogicException('The storage type MUST be defined before setting the value using ' . __METHOD__ . '.');
         }
         $setter = 'set' . $this->getStorageType() . 'value';
-        $this->$setter($value);
+        $this->{$setter}($value);
     }
 
     /**
@@ -256,29 +266,29 @@ class Setting implements SettingInterface
     /**
      * @param mixed $value
      *
-     * @return void
-     *
      * @throws LogicException
+     *
+     * @return void
      */
     public function setStorageTypeFromValue($value): void
     {
         switch (true) {
-            case is_string($value):
+            case \is_string($value):
                 $type = SettingInterface::STORAGE_TYPE_TEXT;
                 break;
-            case is_bool($value):
+            case \is_bool($value):
                 $type = SettingInterface::STORAGE_TYPE_BOOLEAN;
                 break;
-            case is_integer($value):
+            case \is_int($value):
                 $type = SettingInterface::STORAGE_TYPE_INTEGER;
                 break;
-            case is_float($value):
+            case \is_float($value):
                 $type = SettingInterface::STORAGE_TYPE_FLOAT;
                 break;
             case $value instanceof DateTimeInterface:
                 $type = SettingInterface::STORAGE_TYPE_DATETIME;
                 break;
-            case is_array($value):
+            case \is_array($value):
             case $value instanceof JsonSerializable:
                 $type = SettingInterface::STORAGE_TYPE_JSON;
                 break;

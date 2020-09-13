@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Twig\Extension;
@@ -8,7 +17,6 @@ use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Context\ShopperContext;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
-use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\ExtensionInterface;
 use Twig\TwigFunction;
@@ -67,6 +75,7 @@ final class SettingsExtension extends AbstractExtension implements ExtensionInte
                 );
             }
         }
+
         return null;
     }
 }

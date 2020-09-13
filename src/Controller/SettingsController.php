@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
+ *
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Controller;
@@ -7,16 +16,12 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Controller;
 use MonsieurBiz\SyliusSettingsPlugin\Factory\Form\MainSettingsFormTypeFactoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Form\MainSettingsType;
 use MonsieurBiz\SyliusSettingsPlugin\Processor\SettingsProcessorInterface;
-use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class SettingsController extends AbstractController
 {
@@ -76,6 +81,7 @@ final class SettingsController extends AbstractController
             $data = $form->getData();
             $this->settingsProcessor->processData($settings, $data);
             $this->addFlash('success', 'monsieurbiz.settings.settings_successfully_saved');
+
             return $this->redirectToRoute('monsieurbiz_sylius_settings_admin_edit', [
                 'alias' => $settings->getAlias(),
             ]);
