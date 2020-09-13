@@ -48,13 +48,14 @@ final class AdminMenuListener
     {
         if ($this->settingsRegistry->count()) {
             $menu = $event->getMenu();
-            $configurationMenu = $menu->getChild('configuration');
-            $settings = $configurationMenu->addChild('monsieurbiz_settings', ['route' => 'monsieurbiz_sylius_settings_admin_index']);
-            $settings
-                ->setLabel('monsieurbiz.settings.menu.admin.configuration.settings')
-                ->setLabelAttribute('icon', 'cog')
-            ;
-            $this->manipulator->moveChildToPosition($configurationMenu, $settings, 1);
+            if (null !== ($configurationMenu = $menu->getChild('configuration'))) {
+                $settings = $configurationMenu->addChild('monsieurbiz_settings', ['route' => 'monsieurbiz_sylius_settings_admin_index']);
+                $settings
+                    ->setLabel('monsieurbiz.settings.menu.admin.configuration.settings')
+                    ->setLabelAttribute('icon', 'cog')
+                ;
+                $this->manipulator->moveChildToPosition($configurationMenu, $settings, 1);
+            }
         }
     }
 }
