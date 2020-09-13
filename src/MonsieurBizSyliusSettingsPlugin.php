@@ -37,9 +37,6 @@ final class MonsieurBizSyliusSettingsPlugin extends Bundle
             $this->containerExtension = false;
             $extension = $this->createContainerExtension();
             if (null !== $extension) {
-                if (!$extension instanceof ExtensionInterface) {
-                    throw new LogicException(sprintf('Extension %s must implement %s.', \get_class($extension), ExtensionInterface::class));
-                }
                 $this->containerExtension = $extension;
             }
         }
