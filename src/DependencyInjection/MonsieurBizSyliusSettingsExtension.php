@@ -25,7 +25,8 @@ final class MonsieurBizSyliusSettingsExtension extends Extension
      */
     public function load(array $config, ContainerBuilder $container): void
     {
-        $config = $this->processConfiguration($this->getConfiguration([], $container), $config);
+        $configuration = $this->getConfiguration([], $container);
+        $config = $this->processConfiguration(/** @scrutinizer ignore-type */ $configuration, $config);
         $container->setParameter('monsieurbiz.settings.config.plugins', $config['plugins']);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));

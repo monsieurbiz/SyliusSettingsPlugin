@@ -21,8 +21,6 @@ use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -52,6 +50,9 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
         $this->localeRepository = $localeRepository;
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired([
@@ -59,6 +60,10 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
         ])->setAllowedTypes('settings', [SettingsInterface::class]);
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $settings = $options['settings'];
@@ -118,11 +123,6 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
                     ]);
             }
         }
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
-            // Disable fields without value
-            // and Enable default checkboxes
-        });
     }
 
     /**
