@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace MonsieurBiz\SyliusSettingsPlugin\Processor;
 
 use Doctrine\ORM\EntityManagerInterface;
+use LogicException;
 use MonsieurBiz\SyliusSettingsPlugin\Factory\SettingFactoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Settings;
@@ -83,24 +84,37 @@ final class SettingsProcessor implements SettingsProcessorInterface
             if (!\is_array($settingsData)) {
                 continue;
             }
-            switch (true) {
-                // Default website + Default locale
-                case sprintf('%1$s-%1$s', Settings::DEFAULT_KEY) === $settingsIdentifier:
-                    $this->saveSettings($settings, null, null, $settingsData);
-                    break;
-                // Default website + locale
-                case 1 === preg_match(sprintf('`^%1$s-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
-                    $this->saveSettings($settings, null, $matches['localeCode'], $settingsData);
-                    break;
-                // Website + default locale
-                case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-%1$s$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
-                    $this->saveSettings($settings, (int) $matches['channelId'], null, $settingsData);
-                    break;
-                // Website + locale
-                case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingsIdentifier, $matches):
-                    $this->saveSettings($settings, (int) $matches['channelId'], $matches['localeCode'], $settingsData);
-                    break;
-            }
+            [$channelId, $localeCode] = $this->getChannelIdAndLocaleCodeFromSettingKey($settingsIdentifier);
+            $this->saveSettings($settings, $channelId, $localeCode, $settingsData);
+        }
+    }
+
+    /**
+     * @param $settingKey
+     *
+     * @return array
+     */
+    private function getChannelIdAndLocaleCodeFromSettingKey($settingKey): array
+    {
+        switch (true) {
+            // Default website + Default locale
+            case sprintf('%1$s-%1$s', Settings::DEFAULT_KEY) === $settingKey:
+                return [null, null];
+                break;
+            // Default website + locale
+            case 1 === preg_match(sprintf('`^%1$s-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingKey, $matches):
+                return [null, $matches['localeCode']];
+                break;
+            // Website + default locale
+            case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-%1$s$`', Settings::DEFAULT_KEY), $settingKey, $matches):
+                return [(int) $matches['channelId'], null];
+                break;
+            // Website + locale
+            case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingKey, $matches):
+                return [(int) $matches['channelId'], $matches['localeCode']];
+                break;
+            default:
+                throw new LogicException("Format of the setting's key is incorrect.");
         }
     }
 
