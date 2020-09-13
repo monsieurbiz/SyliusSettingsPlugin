@@ -3,6 +3,14 @@ build:
         directories:
             - ~/.composer
     environment:
+        rabbitmq: false
+        mysql: false
+        postgresql: false
+        mongodb: false
+        elasticsearch: false
+        redis: false
+        memcached: false
+        neo4j: false
         php:
             version: 7.4.3
             # Thanks to https://github.com/mundschenk-at/avatar-privacy/blob/546a362d67c555ebc4cd0d9806c1511a6b95894b/.scrutinizer.yml#L29
