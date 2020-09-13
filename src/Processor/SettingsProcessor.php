@@ -100,19 +100,15 @@ final class SettingsProcessor implements SettingsProcessorInterface
             // Default website + Default locale
             case sprintf('%1$s-%1$s', Settings::DEFAULT_KEY) === $settingKey:
                 return [null, null];
-                break;
             // Default website + locale
             case 1 === preg_match(sprintf('`^%1$s-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingKey, $matches):
                 return [null, $matches['localeCode']];
-                break;
             // Website + default locale
             case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-%1$s$`', Settings::DEFAULT_KEY), $settingKey, $matches):
                 return [(int) $matches['channelId'], null];
-                break;
             // Website + locale
             case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingKey, $matches):
                 return [(int) $matches['channelId'], $matches['localeCode']];
-                break;
             default:
                 throw new LogicException("Format of the setting's key is incorrect.");
         }

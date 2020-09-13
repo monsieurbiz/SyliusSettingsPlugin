@@ -287,23 +287,17 @@ class Setting implements SettingInterface
         switch (true) {
             case \is_string($value):
                 return SettingInterface::STORAGE_TYPE_TEXT;
-                break;
             case \is_bool($value):
                 return SettingInterface::STORAGE_TYPE_BOOLEAN;
-                break;
             case \is_int($value):
                 return SettingInterface::STORAGE_TYPE_INTEGER;
-                break;
             case \is_float($value):
                 return SettingInterface::STORAGE_TYPE_FLOAT;
-                break;
             case $value instanceof DateTimeInterface:
                 return SettingInterface::STORAGE_TYPE_DATETIME;
-                break;
             case \is_array($value):
             case $value instanceof JsonSerializable:
                 return SettingInterface::STORAGE_TYPE_JSON;
-                break;
             default:
                 throw new LogicException('Impossible to match the type of the value.');
         }
