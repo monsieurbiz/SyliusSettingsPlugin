@@ -80,6 +80,8 @@ $ ./bin/console debug:container | grep app.settings.default
   app.settings.default                                                                   MonsieurBiz\SyliusSettingsPlugin\Settings\Settings
 ```
 
+Note: the "Settings" menu won't appear until you have at least one setting.
+
 ## Testing
 
 To Be Defined
