@@ -33,6 +33,11 @@ jobs:
           key: composer-php.${{ matrix.php }}-prefer.${{ matrix.prefer }}-${{ github.sha }}
           restore-keys: composer-php.${{ matrix.php }}-prefer.${{ matrix.prefer }}-
 
+      - name: Install symfony CLI
+        run: |
+          curl https://get.symfony.com/cli/installer | bash
+          echo "::add-path::${HOME}/.symfony/bin"
+
       - name: Validate composer.json
         run: composer validate --strict
 
@@ -89,6 +94,11 @@ jobs:
           path: /home/runner/.composer/cache
           key: composer-php.${{ matrix.php }}-sylius.${{ matrix.sylius }}.0-${{ github.sha }}
           restore-keys: composer-php.${{ matrix.php }}-sylius.${{ matrix.sylius }}.0-
+
+      - name: Install symfony CLI
+        run: |
+          curl https://get.symfony.com/cli/installer | bash
+          echo "::add-path::${HOME}/.symfony/bin"
 
       - name: Composer Github Auth
         run: composer config -g github-oauth.github.com ${{ github.token }}
