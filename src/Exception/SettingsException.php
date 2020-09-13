@@ -15,6 +15,6 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Exception;
 
 use Exception;
 
-final class SettingsException extends Exception
+class SettingsException extends Exception
 {
 }

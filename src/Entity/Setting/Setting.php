@@ -272,31 +272,35 @@ class Setting implements SettingInterface
      */
     public function setStorageTypeFromValue($value): void
     {
+        $this->setStorageType(
+            $this->getTypeFromValue($value)
+        );
+    }
+
+    /**
+     * @param $value
+     *
+     * @return string
+     */
+    private function getTypeFromValue($value): string
+    {
         switch (true) {
             case \is_string($value):
-                $type = SettingInterface::STORAGE_TYPE_TEXT;
-                break;
+                return SettingInterface::STORAGE_TYPE_TEXT;
             case \is_bool($value):
-                $type = SettingInterface::STORAGE_TYPE_BOOLEAN;
-                break;
+                return SettingInterface::STORAGE_TYPE_BOOLEAN;
             case \is_int($value):
-                $type = SettingInterface::STORAGE_TYPE_INTEGER;
-                break;
+                return SettingInterface::STORAGE_TYPE_INTEGER;
             case \is_float($value):
-                $type = SettingInterface::STORAGE_TYPE_FLOAT;
-                break;
+                return SettingInterface::STORAGE_TYPE_FLOAT;
             case $value instanceof DateTimeInterface:
-                $type = SettingInterface::STORAGE_TYPE_DATETIME;
-                break;
+                return SettingInterface::STORAGE_TYPE_DATETIME;
             case \is_array($value):
             case $value instanceof JsonSerializable:
-                $type = SettingInterface::STORAGE_TYPE_JSON;
-                break;
+                return SettingInterface::STORAGE_TYPE_JSON;
             default:
                 throw new LogicException('Impossible to match the type of the value.');
         }
-
-        $this->setStorageType($type);
     }
 
     /**
