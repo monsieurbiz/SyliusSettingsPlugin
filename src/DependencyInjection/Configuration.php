@@ -43,8 +43,9 @@ final class Configuration implements ConfigurationInterface
      */
     private function addPlugins(ArrayNodeDefinition $rootNode): void
     {
+        /** @scrutinizer ignore-call */
         $rootNode
-            ->children()
+                ->children()
                 ->arrayNode('plugins')
                     ->useAttributeAsKey('name', false)
                     ->defaultValue([])
