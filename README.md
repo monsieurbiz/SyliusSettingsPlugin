@@ -6,7 +6,11 @@
     <a href="https://sylius.com" target="_blank">
         <img src="https://demo.sylius.com/assets/shop/img/logo.png" width="200px" />
     </a>
+    <br/>
+    <img src="https://monsieurbiz.com/assets/images/sylius_badge_extension-artisan.png" width="100">
 </p>
+
+
 
 <h1 align="center">Settings for Sylius</h1>
 
