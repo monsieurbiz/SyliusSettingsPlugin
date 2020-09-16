@@ -33,7 +33,7 @@ vendor: composer.lock ## Install the PHP dependencies using composer
 	${COMPOSER} install --prefer-source
 
 composer.lock: composer.json
-	${COMPOSER} update
+	${COMPOSER} update --prefer-source
 
 yarn.install: tests/Application/yarn.lock
 
