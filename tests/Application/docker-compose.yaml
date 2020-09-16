@@ -2,7 +2,6 @@ version: '3.8'
 services:
     database:
         image: mariadb:10.4.14
-        container_name: monsieurbiz_sylius_settings_plugin_database
         ports:
             - 3306
         environment:
@@ -12,7 +11,6 @@ services:
             - database:/var/lib/mysql
     mailer:
         image: monsieurbiz/mailcatcher
-        container_name: monsieurbiz_sylius_settings_plugin_mailer
         ports:
             - 1025
             - 1080
