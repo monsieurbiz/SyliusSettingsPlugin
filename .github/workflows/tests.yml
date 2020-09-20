@@ -49,15 +49,15 @@ jobs:
       - name: PHP CS Fixer
         run: make test.phpcs
 
-      - name: Lint container
-        run: make test.container
+#      - name: Lint container
+#        run: make test.container
 
       - name: Lint twig
         run: make test.twig
 
       - name: Lint Yaml
         run: make test.yaml
-        
+
 #      - name: PHPunit
 #        run: ./vendor/bin/phpunit
 
@@ -73,7 +73,7 @@ jobs:
       fail-fast: false
       matrix:
         php: [7.4]
-        sylius: [1.7]
+        sylius: [1.7, 1.8]
         mariadb_version: [10.4.14]
 
     steps:
