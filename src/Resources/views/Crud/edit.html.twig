@@ -18,6 +18,11 @@
                 </div>
             </h1>
         </div>
+        <div class="middle aligned column">
+            <div class="ui right floated buttons">
+                {{ sylius_template_event([settings.alias ~ '.settings.admin.update.actions', 'monsieurbiz.settings.admin.update.actions'], _context) }}
+            </div>
+        </div>
     </div>
 
     {{ sylius_template_event('monsieurbiz.settings.admin.update', _context) }}
