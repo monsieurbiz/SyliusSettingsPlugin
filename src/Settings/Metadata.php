@@ -144,4 +144,13 @@ final class Metadata implements MetadataInterface
     {
         return strtolower(preg_replace('`([A-Z])`', '_\1', lcfirst($string)));
     }
+
+    public function useLocales(): bool
+    {
+        if (!$this->hasParameter('use_locales')) {
+            return true;
+        }
+
+        return (bool) $this->getParameter('use_locales');
+    }
 }

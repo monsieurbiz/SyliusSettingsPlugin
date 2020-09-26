@@ -71,6 +71,7 @@ final class SettingsFormMenuBuilder
             ->setAttribute('template', '@MonsieurBizSyliusSettingsPlugin/Crud/Edit/Tab/_default.html.twig')
             ->setLabel('monsieurbiz.settings.ui.by_default')
             ->setCurrent(true)
+            ->setExtra('settings', $options['settings'])
             ->setExtra('locales', $this->localeRepository->findAll())
         ;
 
@@ -80,6 +81,7 @@ final class SettingsFormMenuBuilder
                 ->addChild('channel_' . $channel->getCode())
                 ->setAttribute('template', '@MonsieurBizSyliusSettingsPlugin/Crud/Edit/Tab/_store.html.twig')
                 ->setLabel($channel->getName())
+                ->setExtra('settings', $options['settings'])
                 ->setExtra('channel', $channel)
                 ->setExtra('locales', $channel->getLocales())
             ;

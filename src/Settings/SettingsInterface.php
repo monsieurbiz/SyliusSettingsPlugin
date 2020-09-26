@@ -44,5 +44,7 @@ interface SettingsInterface
 
     public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null): array;
 
-    public function getCurrentValue(ChannelInterface $channel, string $localeCode, string $path);
+    public function getCurrentValue(?ChannelInterface $channel, ?string $localeCode, string $path);
+
+    public function showLocalesInForm(): bool;
 }

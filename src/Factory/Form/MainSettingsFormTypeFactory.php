@@ -83,17 +83,21 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
             Settings::DEFAULT_KEY . '-' . Settings::DEFAULT_KEY => $settings->getSettingsValuesByChannelAndLocale(),
         ];
 
-        /** @var LocaleInterface $locale */
-        foreach ($this->localeRepository->findAll() as $locale) {
-            $data[Settings::DEFAULT_KEY . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale(null, $locale->getCode());
+        if ($settings->showLocalesInForm()) {
+            /** @var LocaleInterface $locale */
+            foreach ($this->localeRepository->findAll() as $locale) {
+                $data[Settings::DEFAULT_KEY . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale(null, $locale->getCode());
+            }
         }
 
         /** @var ChannelInterface $channel */
         foreach ($this->channelRepository->findAll() as $channel) {
             $data['channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY] = $settings->getSettingsValuesByChannelAndLocale($channel);
 
-            foreach ($channel->getLocales() as $locale) {
-                $data['channel-' . $channel->getId() . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale($channel, $locale->getCode());
+            if ($settings->showLocalesInForm()) {
+                foreach ($channel->getLocales() as $locale) {
+                    $data['channel-' . $channel->getId() . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale($channel, $locale->getCode());
+                }
             }
         }
 

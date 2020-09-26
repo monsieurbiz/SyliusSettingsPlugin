@@ -6,5 +6,6 @@ monsieurbiz_sylius_settings:
             plugin_name: Current App
             description: Platform's settings
             icon: bullseye
+            use_locales: true
             classes:
                 form: App\Form\SettingsType

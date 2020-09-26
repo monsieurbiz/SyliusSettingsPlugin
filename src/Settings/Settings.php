@@ -210,13 +210,13 @@ final class Settings implements SettingsInterface
     }
 
     /**
-     * @param ChannelInterface $channel
-     * @param string $localeCode
+     * @param ChannelInterface|null $channel
+     * @param string|null $localeCode
      * @param string $path
      *
      * @return mixed
      */
-    public function getCurrentValue(ChannelInterface $channel, string $localeCode, string $path)
+    public function getCurrentValue(?ChannelInterface $channel, ?string $localeCode, string $path)
     {
         $settings = $this->getSettingsByChannelAndLocale($channel, $localeCode, true);
         if (isset($settings[$path])) {
@@ -224,5 +224,10 @@ final class Settings implements SettingsInterface
         }
 
         return null;
+    }
+
+    public function showLocalesInForm(): bool
+    {
+        return $this->metadata->useLocales();
     }
 }
