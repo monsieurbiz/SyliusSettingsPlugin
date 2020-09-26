@@ -34,4 +34,6 @@ interface MetadataInterface
     public function hasClass(string $name): bool;
 
     public function getServiceId(string $serviceName): string;
+
+    public function useLocales(): bool;
 }

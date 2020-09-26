@@ -56,6 +56,7 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('plugin_name')->isRequired()->cannotBeEmpty()->end()
                             ->scalarNode('description')->isRequired()->cannotBeEmpty()->end()
                             ->scalarNode('icon')->isRequired()->cannotBeEmpty()->end()
+                            ->booleanNode('use_locales')->end()
                             ->arrayNode('classes')
                                 ->addDefaultsIfNotSet()
                                 ->children()

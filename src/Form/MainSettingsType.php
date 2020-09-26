@@ -80,19 +80,21 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
                 ],
             ]);
 
-        /** @var LocaleInterface $locale */
-        foreach ($this->localeRepository->findAll() as $locale) {
-            $builder->add(
-                $key = Settings::DEFAULT_KEY . '-' . $locale->getCode(), $settings->getFormClass(), [
-                    'settings' => $settings,
-                    'channel' => null,
-                    'label' => false,
-                    'show_default_checkboxes' => true,
-                    'data' => $data[$key] ?? null,
-                    'constraints' => [
-                        new Assert\Valid(),
-                    ],
-                ]);
+        if ($settings->showLocalesInForm()) {
+            /** @var LocaleInterface $locale */
+            foreach ($this->localeRepository->findAll() as $locale) {
+                $builder->add(
+                    $key = Settings::DEFAULT_KEY . '-' . $locale->getCode(), $settings->getFormClass(), [
+                        'settings' => $settings,
+                        'channel' => null,
+                        'label' => false,
+                        'show_default_checkboxes' => true,
+                        'data' => $data[$key] ?? null,
+                        'constraints' => [
+                            new Assert\Valid(),
+                        ],
+                    ]);
+            }
         }
 
         /** @var ChannelInterface $channel */
@@ -109,18 +111,20 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
                     ],
                 ]);
 
-            foreach ($channel->getLocales() as $locale) {
-                $builder->add(
-                    $key = 'channel-' . $channel->getId() . '-' . $locale->getCode(), $settings->getFormClass(), [
-                        'settings' => $settings,
-                        'channel' => $channel,
-                        'label' => false,
-                        'show_default_checkboxes' => true,
-                        'data' => $data[$key] ?? null,
-                        'constraints' => [
-                            new Assert\Valid(),
-                        ],
-                    ]);
+            if ($settings->showLocalesInForm()) {
+                foreach ($channel->getLocales() as $locale) {
+                    $builder->add(
+                        $key = 'channel-' . $channel->getId() . '-' . $locale->getCode(), $settings->getFormClass(), [
+                            'settings' => $settings,
+                            'channel' => $channel,
+                            'label' => false,
+                            'show_default_checkboxes' => true,
+                            'data' => $data[$key] ?? null,
+                            'constraints' => [
+                                new Assert\Valid(),
+                            ],
+                        ]);
+                }
             }
         }
     }
