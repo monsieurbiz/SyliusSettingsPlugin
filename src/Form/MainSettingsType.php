@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Form;
 
+use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Settings;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
@@ -63,6 +64,8 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
+     *
+     * @throws SettingsException
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -80,6 +83,35 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
                 ],
             ]);
 
+        $this->addDefaultLocales($builder, $settings, $data);
+
+        /** @var ChannelInterface $channel */
+        foreach ($this->channelRepository->findAll() as $channel) {
+            $builder->add(
+                $key = 'channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY, $settings->getFormClass(), [
+                    'settings' => $settings,
+                    'channel' => $channel,
+                    'label' => false,
+                    'show_default_checkboxes' => true,
+                    'data' => $data[$key] ?? null,
+                    'constraints' => [
+                        new Assert\Valid(),
+                    ],
+                ]);
+
+            $this->addChannelLocales($builder, $settings, $channel, $data);
+        }
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param SettingsInterface $settings
+     * @param array $data
+     *
+     * @throws SettingsException
+     */
+    private function addDefaultLocales(FormBuilderInterface $builder, SettingsInterface $settings, array $data): void
+    {
         if ($settings->showLocalesInForm()) {
             /** @var LocaleInterface $locale */
             foreach ($this->localeRepository->findAll() as $locale) {
@@ -96,35 +128,31 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
                     ]);
             }
         }
+    }
 
-        /** @var ChannelInterface $channel */
-        foreach ($this->channelRepository->findAll() as $channel) {
-            $builder->add(
-                $key = 'channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY, $settings->getFormClass(), [
-                    'settings' => $settings,
-                    'channel' => $channel,
-                    'label' => false,
-                    'show_default_checkboxes' => true,
-                    'data' => $data[$key] ?? null,
-                    'constraints' => [
-                        new Assert\Valid(),
-                    ],
-                ]);
-
-            if ($settings->showLocalesInForm()) {
-                foreach ($channel->getLocales() as $locale) {
-                    $builder->add(
-                        $key = 'channel-' . $channel->getId() . '-' . $locale->getCode(), $settings->getFormClass(), [
-                            'settings' => $settings,
-                            'channel' => $channel,
-                            'label' => false,
-                            'show_default_checkboxes' => true,
-                            'data' => $data[$key] ?? null,
-                            'constraints' => [
-                                new Assert\Valid(),
-                            ],
-                        ]);
-                }
+    /**
+     * @param FormBuilderInterface $builder
+     * @param SettingsInterface $settings
+     * @param ChannelInterface $channel
+     * @param array $data
+     *
+     * @throws SettingsException
+     */
+    private function addChannelLocales(FormBuilderInterface $builder, SettingsInterface $settings, ChannelInterface $channel, array $data): void
+    {
+        if ($settings->showLocalesInForm()) {
+            foreach ($channel->getLocales() as $locale) {
+                $builder->add(
+                    $key = 'channel-' . $channel->getId() . '-' . $locale->getCode(), $settings->getFormClass(), [
+                        'settings' => $settings,
+                        'channel' => $channel,
+                        'label' => false,
+                        'show_default_checkboxes' => true,
+                        'data' => $data[$key] ?? null,
+                        'constraints' => [
+                            new Assert\Valid(),
+                        ],
+                    ]);
             }
         }
     }

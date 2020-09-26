@@ -226,6 +226,9 @@ final class Settings implements SettingsInterface
         return null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function showLocalesInForm(): bool
     {
         return $this->metadata->useLocales();
