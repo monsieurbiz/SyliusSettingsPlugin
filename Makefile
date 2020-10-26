@@ -3,7 +3,8 @@ SHELL=/bin/bash
 SYMFONY=cd tests/Application && symfony
 COMPOSER=symfony composer
 CONSOLE=${SYMFONY} console
-DOCKER-COMPOSE=docker-compose
+export COMPOSE_PROJECT_NAME=settings
+COMPOSE=docker-compose
 YARN=cd tests/Application && yarn
 
 ###
@@ -90,18 +91,18 @@ platform: .php-version up ## Setup the platform tools
 .PHONY: platform
 
 docker.pull: ## Pull the docker images
-	cd tests/Application && ${DOCKER-COMPOSE} pull
+	cd tests/Application && ${COMPOSE} pull
 
 docker.up: ## Start the docker containers
-	cd tests/Application && ${DOCKER-COMPOSE} up -d
+	cd tests/Application && ${COMPOSE} up -d
 .PHONY: docker.up
 
 docker.stop: ## Stop the docker containers
-	cd tests/Application && ${DOCKER-COMPOSE} stop
+	cd tests/Application && ${COMPOSE} stop
 .PHONY: docker.stop
 
 docker.down: ## Stop and remove the docker containers
-	cd tests/Application && ${DOCKER-COMPOSE} down
+	cd tests/Application && ${COMPOSE} down
 .PHONY: docker.down
 
 server.start: ## Run the local webserver using Symfony
