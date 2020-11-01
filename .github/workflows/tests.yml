@@ -25,6 +25,9 @@ jobs:
         run: |
           sudo update-alternatives --set php /usr/bin/php${{ matrix.php }}
           php -v
+    
+      - name: Composer v1
+        run: sudo composer self-update --1
 
       - uses: actions/cache@v1
         with:
@@ -35,7 +38,7 @@ jobs:
       - name: Install symfony CLI
         run: |
           curl https://get.symfony.com/cli/installer | bash
-          echo "::add-path::${HOME}/.symfony/bin"
+          echo ${HOME}/.symfony/bin >> $GITHUB_PATH
 
       - name: Validate composer.json
         run: composer validate --strict
@@ -79,7 +82,7 @@ jobs:
     steps:
       - name: Setup some envs
         run: |
-          echo ::set-env name=DATABASE_URL::mysql://root@127.0.0.1/sylius?serverVersion=mariadb-${{ matrix.mariadb_version }}
+          echo "DATABASE_URL=mysql://root@127.0.0.1/sylius?serverVersion=mariadb-${{ matrix.mariadb_version }}" >> $GITHUB_ENV
 
       - name: Switch PHP
         run: |
@@ -90,6 +93,9 @@ jobs:
         run: |
           echo "date.timezone=UTC" >> /tmp/timezone.ini; \
           sudo mv /tmp/timezone.ini /etc/php/${{ matrix.php }}/cli/conf.d/timezone.ini
+    
+      - name: Composer v1
+        run: sudo composer self-update --1
 
       - uses: actions/checkout@v2
         with:
@@ -111,7 +117,7 @@ jobs:
       - name: Install symfony CLI
         run: |
           curl https://get.symfony.com/cli/installer | bash
-          echo "::add-path::${HOME}/.symfony/bin"
+          echo ${HOME}/.symfony/bin >> $GITHUB_PATH
 
       - name: Composer Github Auth
         run: composer config -g github-oauth.github.com ${{ github.token }}

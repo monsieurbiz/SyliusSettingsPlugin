@@ -32,8 +32,8 @@ class Setting implements SettingInterface
 
     /**
      * @var int|null
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private ?int $id;
