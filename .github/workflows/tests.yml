@@ -38,7 +38,7 @@ jobs:
       - name: Install symfony CLI
         run: |
           curl https://get.symfony.com/cli/installer | bash
-          echo "::add-path::${HOME}/.symfony/bin"
+          echo ${HOME}/.symfony/bin >> $GITHUB_PATH
 
       - name: Validate composer.json
         run: composer validate --strict
@@ -82,7 +82,7 @@ jobs:
     steps:
       - name: Setup some envs
         run: |
-          echo ::set-env name=DATABASE_URL::mysql://root@127.0.0.1/sylius?serverVersion=mariadb-${{ matrix.mariadb_version }}
+          echo "DATABASE_URL=mysql://root@127.0.0.1/sylius?serverVersion=mariadb-${{ matrix.mariadb_version }}" >> $GITHUB_ENV
 
       - name: Switch PHP
         run: |
@@ -117,7 +117,7 @@ jobs:
       - name: Install symfony CLI
         run: |
           curl https://get.symfony.com/cli/installer | bash
-          echo "::add-path::${HOME}/.symfony/bin"
+          echo ${HOME}/.symfony/bin >> $GITHUB_PATH
 
       - name: Composer Github Auth
         run: composer config -g github-oauth.github.com ${{ github.token }}
