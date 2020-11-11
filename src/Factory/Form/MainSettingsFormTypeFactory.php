@@ -80,7 +80,7 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
     private function getInitialFormData(SettingsInterface $settings): array
     {
         $data = [
-            Settings::DEFAULT_KEY . '-' . Settings::DEFAULT_KEY => $settings->getSettingsValuesByChannelAndLocale(),
+            Settings::DEFAULT_KEY . '-' . Settings::DEFAULT_KEY => $settings->getSettingsValuesByChannelAndLocale() + $settings->getDefaultValues(),
         ];
 
         if ($settings->showLocalesInForm()) {

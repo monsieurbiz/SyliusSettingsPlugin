@@ -9,3 +9,6 @@ monsieurbiz_sylius_settings:
             use_locales: true
             classes:
                 form: App\Form\SettingsType
+            default_values:
+                demo_message: My amazing message
+                enabled: true

@@ -1,3 +1,7 @@
 <p>
+{% if setting('app.default', 'enabled') %}
     {{ setting('app.default', 'demo_message') }}
+{% else %}
+    {{ 'Message is disabled'|trans }}
+{% endif %}
 </p>
