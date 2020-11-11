@@ -172,15 +172,20 @@ final class SettingsProcessor implements SettingsProcessorInterface
         foreach ($data as $key => $value) {
             if (isset($actualSettings[$key])) {
                 $setting = $actualSettings[$key];
-                $setting->setValue($value);
-                $this->em->persist($setting);
-            } elseif (null !== $value) {
-                $setting = $this->settingFactory->createNewFromGlobalSettings($settings, $channel, $locale);
-                $setting->setPath($key);
-                $setting->setStorageTypeFromValue($value);
-                $setting->setValue($value);
-                $this->em->persist($setting);
+                try {
+                    $setting->setValue($value);
+                    $this->em->persist($setting);
+                    continue;
+                } catch (\TypeError $e) {
+                    // The type doesn't match, it could be normal, let's find the type out of the value.
+                }
             }
+
+            $setting = $this->settingFactory->createNewFromGlobalSettings($settings, $channel, $locale);
+            $setting->setPath($key);
+            $setting->setStorageTypeFromValue($value);
+            $setting->setValue($value);
+            $this->em->persist($setting);
         }
     }
 }

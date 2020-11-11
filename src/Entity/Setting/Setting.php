@@ -309,11 +309,14 @@ class Setting implements SettingInterface
             'integer' => function(): string {
                 return SettingInterface::STORAGE_TYPE_INTEGER;
             },
+            'NULL' => function(): string {
+                return SettingInterface::STORAGE_TYPE_TEXT;
+            },
         ];
 
         $type = \gettype($value);
         if (!isset($types[$type])) {
-            throw new LogicException('Impossible to match the type of the value.');
+            throw new LogicException(sprintf('Impossible to match the type of the value. (%s)', $type));
         }
 
         return $types[$type]($value);
