@@ -29,6 +29,8 @@ interface MetadataInterface
 
     public function getParameters(): array;
 
+    public function getDefaultValues(): array;
+
     public function getClass(string $name): string;
 
     public function hasClass(string $name): bool;

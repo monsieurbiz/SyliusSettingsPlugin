@@ -223,6 +223,26 @@ final class Settings implements SettingsInterface
             return $settings[$path]->getValue();
         }
 
+        return $this->getDefaultValue($path);
+    }
+
+    public function getDefaultValues(): array
+    {
+        return $this->metadata->getDefaultValues();
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return mixed
+     */
+    public function getDefaultValue(string $path)
+    {
+        $defaultValues = $this->getDefaultValues();
+        if (\array_key_exists($path, $defaultValues)) {
+            return $defaultValues[$path];
+        }
+
         return null;
     }
 

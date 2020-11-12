@@ -51,7 +51,7 @@ abstract class AbstractSettingsType extends AbstractType implements SettingsType
             $builder->add($child . '___' . Settings::DEFAULT_KEY, DefaultCheckboxType::class, [
                 'label' => 'monsieurbiz.settings.ui.use_default_value',
                 'related_form_child' => $builder->get($child),
-                'data' => !isset($data[$child]),
+                'data' => !\array_key_exists($child, $data),
                 'required' => true,
             ]);
         }

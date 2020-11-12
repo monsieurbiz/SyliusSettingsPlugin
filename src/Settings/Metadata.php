@@ -104,6 +104,14 @@ final class Metadata implements MetadataInterface
     }
 
     /**
+     * @return array
+     */
+    public function getDefaultValues(): array
+    {
+        return $this->parameters['default_values'];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getClass(string $name): string
