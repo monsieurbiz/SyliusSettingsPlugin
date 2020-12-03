@@ -14,7 +14,6 @@
 
 [![Settings Plugin license](https://img.shields.io/github/license/monsieurbiz/SyliusSettingsPlugin?public)](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/LICENSE)
 [![Tests](https://img.shields.io/github/workflow/status/monsieurbiz/SyliusSettingsPlugin/Tests/master?label=tests&logo=github)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions?query=workflow%3ATests)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/quality/g/monsieurbiz/SyliusSettingsPlugin/master?logo=scrutinizer)](https://scrutinizer-ci.com/g/monsieurbiz/SyliusSettingsPlugin/?branch=master)
 [![Packagist Version (including pre-releases)](https://img.shields.io/packagist/v/monsieurbiz/sylius-settings-plugin?include_prereleases)](https://packagist.org/packages/monsieurbiz/sylius-settings-plugin)
 
 This plugin gives you the ability to have Plugins oriented settings in your favorite e-commerce platform, Sylius.
