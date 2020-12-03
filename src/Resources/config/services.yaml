@@ -46,4 +46,5 @@ services:
     monsieurbiz.settings.registry:
         class: MonsieurBiz\SyliusSettingsPlugin\Settings\Registry
 
-    MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface: '@monsieurbiz.settings.registry' 
+    MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface: '@monsieurbiz.settings.registry'
+
