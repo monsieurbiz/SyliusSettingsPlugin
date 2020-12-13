@@ -148,7 +148,7 @@ jobs:
       - name: Install plugin
         working-directory: ./sylius
         run: |
-          composer config platform.php ${{ matrix.php }}
+          composer config --unset platform.php
           cp -Rv ../plugin/recipes/dev/config/* ./config/
           composer require monsieurbiz/sylius-settings-plugin="*@dev"
 
