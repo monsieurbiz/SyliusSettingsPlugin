@@ -30,7 +30,7 @@ A few steps to start:
 
 - Require the plugin via composer (`composer require monsieurbiz/sylius-settings-plugin="@rc" --no-scripts`).
 - Edit the `config/bundles.php` (`MonsieurBiz\SyliusSettingsPlugin\MonsieurBizSyliusSettingsPlugin::class => ['all' => true],`).
-- Copy the config (`cp -Rv vendor/monsieurbiz/sylius-settings-plugin/recipes/1.0-dev/config/ config/`).
+- Copy the config (`cp -Rv vendor/monsieurbiz/sylius-settings-plugin/recipes/1.0-dev/config/ .`).
 - Run the diff in your migrations (`./bin/console doctrine:migration:diff`).
 - Execute the migrations (`./bin/console doctrine:migration:migrate`).
 - Continue to "[How it works](#how-it-works)".
