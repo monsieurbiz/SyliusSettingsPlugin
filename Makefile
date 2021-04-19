@@ -50,6 +50,8 @@ tests/Application/node_modules: yarn.install
 ### TESTS
 ### ¯¯¯¯¯
 
+test.all: test.phpcs test.phpcs.fix test.yaml test.schema test.twig
+
 test.phpcs: ## Run PHP CS Fixer in dry-run
 	${COMPOSER} run -- phpcs --dry-run -v
 
