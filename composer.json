@@ -21,7 +21,8 @@
         "symfony/web-profiler-bundle": "^4.4",
         "symfony/web-server-bundle": "^4.4",
         "lchrusciel/api-test-case": "^3.0",
-        "friendsofphp/php-cs-fixer": "^2.16.1"
+        "friendsofphp/php-cs-fixer": "^2.16.1",
+        "phpstan/phpstan": "^0.12.83"
     },
     "prefer-stable": true,
     "autoload": {
