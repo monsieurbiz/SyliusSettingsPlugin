@@ -8,8 +8,7 @@
         "php": "~7.4",
         "ext-mbstring": "*",
         "ext-json": "*",
-        "sylius/sylius": "^1.7.0",
-        "phpstan/phpstan": "^0.12.84"
+        "sylius/sylius": "^1.7.0"
     },
     "require-dev": {
         "phpspec/phpspec": "^6.1",
@@ -23,7 +22,8 @@
         "symfony/web-server-bundle": "^4.4",
         "lchrusciel/api-test-case": "^3.0",
         "friendsofphp/php-cs-fixer": "^2.16.1",
-        "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev"
+        "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev",
+        "phpstan/phpstan": "^0.12.84"
     },
     "prefer-stable": true,
     "autoload": {
