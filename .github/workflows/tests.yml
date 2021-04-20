@@ -25,15 +25,18 @@ jobs:
         run: |
           sudo update-alternatives --set php /usr/bin/php${{ matrix.php }}
           php -v
-    
-      - name: Composer v1
-        run: sudo composer self-update --1
 
       - uses: actions/cache@v1
         with:
           path: /home/runner/.composer/cache
-          key: composer-php.${{ matrix.php }}-prefer.stable-${{ github.sha }}
-          restore-keys: composer-php.${{ matrix.php }}-prefer.stable-
+          key: composer2-php:${{ matrix.php }}-${{ github.sha }}
+          restore-keys: composer2-php:${{ matrix.php }}-
+
+      - run: mkdir -p /home/runner/{.composer/cache,.config/composer}
+        if: steps.cache-composer.outputs.cache-hit != 'true'
+              
+      - name: Composer v2
+        run: sudo composer self-update --2
 
       - name: Install symfony CLI
         run: |
@@ -84,18 +87,34 @@ jobs:
         run: |
           echo "DATABASE_URL=mysql://root@127.0.0.1/sylius?serverVersion=mariadb-${{ matrix.mariadb_version }}" >> $GITHUB_ENV
 
-      - name: Switch PHP
+      - name: Setup PHP
         run: |
           sudo update-alternatives --set php /usr/bin/php${{ matrix.php }}
-          php -v
+          echo "date.timezone=UTC" >> /tmp/timezone.ini
+          sudo mv /tmp/timezone.ini /etc/php/${{ matrix.php }}/cli/conf.d/timezone.ini
+          echo ${{ matrix.php }} > .php-version
 
       - name: Setup timezone
         run: |
           echo "date.timezone=UTC" >> /tmp/timezone.ini; \
           sudo mv /tmp/timezone.ini /etc/php/${{ matrix.php }}/cli/conf.d/timezone.ini
+
+      - uses: actions/cache@v1
+        with:
+          path: /home/runner/.composer/cache
+          key: composer2-php:${{ matrix.sylius }}-${{ matrix.php }}-${{ github.sha }}
+          restore-keys: composer2-php:${{ matrix.sylius }}-${{ matrix.php }}-
     
+      - run: mkdir -p /home/runner/{.composer/cache,.config/composer}
+        if: steps.cache-composer.outputs.cache-hit != 'true'
+
+      - name: Composer v2
+        run: sudo composer self-update --2
+        if: matrix.sylius >= 1.8
+
       - name: Composer v1
         run: sudo composer self-update --1
+        if: matrix.sylius < 1.8
 
       - uses: actions/checkout@v2
         with:
@@ -111,8 +130,8 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: /home/runner/.composer/cache
-          key: composer-php.${{ matrix.php }}-sylius.${{ matrix.sylius }}.0-${{ github.sha }}
-          restore-keys: composer-php.${{ matrix.php }}-sylius.${{ matrix.sylius }}.0-
+          key: composer2-php:${{ matrix.sylius }}-${{ matrix.php }}-${{ github.sha }}
+          restore-keys: composer2-php:${{ matrix.sylius }}-${{ matrix.php }}-
 
       - name: Install symfony CLI
         run: |
