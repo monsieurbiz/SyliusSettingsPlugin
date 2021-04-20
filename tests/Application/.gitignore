@@ -2,8 +2,16 @@
 /public/css
 /public/js
 /public/media
+/public/build
 !/public/media/image/.gitkeep
 
+/app/config/parameters.yml
+
+/bin/symfony_requirements
+
+/docs/.doctrees
+
+/composer.lock
 /node_modules
 
 /etc/build/*
@@ -12,9 +20,9 @@
 /behat.yml
 /phpspec.yml
 
-/docker-compose.override.yaml
-/docker-compose.override.yml
-/docker/mysql/data/
+# Symfony CLI https://symfony.com/doc/current/setup/symfony_server.html#different-php-settings-per-project
+/.php-version
+/php.ini
 
 ###> symfony/framework-bundle ###
 /.env.*.local
@@ -32,4 +40,10 @@
 
 ###> phpunit/phpunit ###
 /phpunit.xml
+/.phpunit.result.cache
 ###< phpunit/phpunit ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+!/config/jwt/*-test.pem
+###< lexik/jwt-authentication-bundle ###
