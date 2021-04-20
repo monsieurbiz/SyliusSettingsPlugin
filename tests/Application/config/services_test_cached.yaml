@@ -1,2 +1,1 @@
-imports:
-    - { resource: "services_test.yaml" }
+../../../vendor/sylius/sylius/config/services_test_cached.yaml
