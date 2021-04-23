@@ -4,6 +4,7 @@ SYMFONY=cd tests/Application && symfony
 COMPOSER=symfony composer
 CONSOLE=${SYMFONY} console
 export COMPOSE_PROJECT_NAME=settings
+DOCTRINE_NAMESPACE=MonsieurBiz\SyliusSettingsPlugin\Migrations
 COMPOSE=docker-compose
 YARN=cd tests/Application && yarn
 
@@ -80,10 +81,13 @@ sylius: dependencies sylius.database sylius.fixtures ## Install Sylius
 sylius.database: ## Setup the database
 	${CONSOLE} doctrine:database:drop --if-exists --force
 	${CONSOLE} doctrine:database:create --if-not-exists
-	${CONSOLE} doctrine:schema:update --force
+	${CONSOLE} doctrine:migration:migrate -n
 
 sylius.fixtures: ## Run the fixtures
 	${CONSOLE} sylius:fixtures:load -n default
+
+doctrine.diff: ## Make doctrine diff
+	${CONSOLE} doctrine:migration:diff --namespace="${DOCTRINE_NAMESPACE}"
 
 ###
 ### PLATFORM

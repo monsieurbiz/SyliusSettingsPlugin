@@ -1,3 +1,4 @@
 imports:
+    - { resource: 'app/doctrine_migrations.yaml' }
     - { resource: "sylius/resources.yaml" }
     - { resource: "sylius/ui_events.yaml" }
