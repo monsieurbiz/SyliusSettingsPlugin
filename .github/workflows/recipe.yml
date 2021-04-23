@@ -61,13 +61,18 @@ jobs:
               run: |
                   composer create-project --prefer-dist --no-scripts --no-progress sylius/sylius-standard sylius
 
-            - name: Install plugin
+            - name: Setup some requirements
               working-directory: ./sylius
               run: |
                   composer config repositories.plugin '{"type": "path", "url": "../plugin/"}'
                   composer config extra.symfony.allow-contrib true
                   composer config secure-http false
-                  composer require monsieurbiz/sylius-settings-plugin="*@dev"
+                  composer config --unset platform.php
+
+            - name: Install plugin
+              working-directory: ./sylius
+              run: |
+                composer require monsieurbiz/sylius-settings-plugin="*@dev"
 
             - name: Show flex server logs
               run: docker logs --tail 100 flex
