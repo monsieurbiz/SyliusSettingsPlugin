@@ -13,14 +13,14 @@ We use:
 
 From the plugin root directory, run the following command:
 
-    ```bash
-    make install
-    ```
+```bash
+make install
+```
 
 ## Need help?
 
 From the plugin root directory, run the following command:
 
-    ```bash
-    make help
-    ```
+```bash
+make help
+```
