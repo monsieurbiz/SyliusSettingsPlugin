@@ -180,6 +180,10 @@ jobs:
         working-directory: ./sylius
         run: php bin/console sylius:install -n
 
+      - name: Run fixtures
+        working-directory: ./sylius
+        run: php bin/console sylius:fixtures:load -n default
+
     services:
 
       mariadb:
