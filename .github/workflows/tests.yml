@@ -172,7 +172,6 @@ jobs:
       - name: Update database schema
         working-directory: ./sylius
         run: |
-          php bin/console doctrine:migr:diff -vvv
           php bin/console doctrine:migr:migr -n
           php bin/console doctrine:schema:validate
 
