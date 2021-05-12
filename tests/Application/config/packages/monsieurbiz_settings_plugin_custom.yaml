@@ -12,3 +12,10 @@ monsieurbiz_sylius_settings:
             default_values:
                 demo_message: My amazing message
                 enabled: true
+
+sylius_ui:
+    events:
+        sylius.shop.layout.before_body:
+            blocks:
+                demo_message:
+                    template: '/views/message.html.twig'
