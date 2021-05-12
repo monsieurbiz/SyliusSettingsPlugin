@@ -22,17 +22,28 @@ This plugin gives you the ability to have Plugins oriented settings in your favo
 
 ## Installation
 
-**⚠️ This plugin is not released yet.**
-
-⚙️ To Be Defined
-
 A few steps to start:
 
-- Require the plugin via composer (`composer require monsieurbiz/sylius-settings-plugin="@rc" --no-scripts`).
-- Edit the `config/bundles.php` (`MonsieurBiz\SyliusSettingsPlugin\MonsieurBizSyliusSettingsPlugin::class => ['all' => true],`).
-- Copy the config (`cp -Rv vendor/monsieurbiz/sylius-settings-plugin/recipes/1.0-dev/config/ config`).
-- Run the diff in your migrations (`./bin/console doctrine:migration:diff`).
-- Execute the migrations (`./bin/console doctrine:migration:migrate`).
+- Require the plugin via composer 
+  ```bash
+  composer require monsieurbiz/sylius-settings-plugin="@rc" --no-scripts
+  ```
+- Edit the `config/bundles.php` to add this line
+  ```bash  
+  MonsieurBiz\SyliusSettingsPlugin\MonsieurBizSyliusSettingsPlugin::class => ['all' => true],
+  ```
+- Copy the config 
+  ```bash  
+  cp -Rv vendor/monsieurbiz/sylius-settings-plugin/recipes/1.0-dev/config/ config
+  ```
+- Run the diff in your migrations
+  ```bash  
+  bin/console doctrine:migration:diff
+  ```
+- Execute the migrations 
+  ```bash 
+  bin/console doctrine:migration:migrate
+  ```
 - Continue to "[How it works](#how-it-works)".
 
 Note: you may encounter an error during the installation via composer if you let it run the scripts.  
@@ -61,15 +72,13 @@ The configuration is then required to run any console command.
 
 ## How it works
 
-⚙️ To Be Defined.
-
-As a good start you can have a look to:
+As a good start you can have a look at:
 
 - The [configuration file](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/tests/Application/config/packages/monsieurbiz_settings_plugin_custom.yaml) to add your own settings.
 - The [form with your own fields](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/tests/Application/src/Form/SettingsType.php).
 
 Then you can get your settings using a twig function: `setting()`.  
-Have a look to [this example](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/tests/Application/templates/views/message.html.twig).
+Have a look at [this example](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/tests/Application/templates/views/message.html.twig).
 
 You can also use the DI to get your Settings, as example with the settings in the test Application `app.default`:
 
@@ -81,12 +90,6 @@ $ ./bin/console debug:container | grep app.settings.default
 ```
 
 Note: the "Settings" menu won't appear until you have at least one setting.
-
-## Testing
-
-To Be Defined
-
-<!-- See [TESTING.md](TESTING.md). -->
 
 ## Contributing
 
