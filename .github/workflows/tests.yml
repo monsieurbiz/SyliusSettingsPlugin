@@ -17,6 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         php: [7.4]
+        mysql: [5.7]
 
     steps:
       - uses: actions/checkout@v2
@@ -67,6 +68,15 @@ jobs:
 #      - name: PHPunit
 #        run: ./vendor/bin/phpunit
 
+    services:
+
+      mysql:
+        image: percona:${{ matrix.mysql }}
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+
 
   sylius:
 
@@ -79,13 +89,13 @@ jobs:
       fail-fast: false
       matrix:
         php: [7.4]
-        sylius: [1.8]
-        mariadb_version: [10.4.14]
+        sylius: [1.8, 1.9]
+        mysql: [5.7]
 
     steps:
       - name: Setup some envs
         run: |
-          echo "DATABASE_URL=mysql://root@127.0.0.1/sylius?serverVersion=mariadb-${{ matrix.mariadb_version }}" >> $GITHUB_ENV
+          echo "DATABASE_URL=mysql://root@127.0.0.1/sylius" >> $GITHUB_ENV
 
       - name: Setup PHP
         run: |
@@ -185,8 +195,8 @@ jobs:
 
     services:
 
-      mariadb:
-        image: mariadb:${{ matrix.mariadb_version }}
+      mysql:
+        image: percona:${{ matrix.mysql }}
         ports:
           - 3306:3306
         env:
