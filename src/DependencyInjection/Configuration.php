@@ -65,7 +65,7 @@ final class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->arrayNode('default_values')
-                                ->scalarPrototype()->end()
+                                ->variablePrototype()->end()
                             ->end()
                         ->end()
                     ->end()
