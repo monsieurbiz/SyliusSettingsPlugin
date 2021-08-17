@@ -15,7 +15,7 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Twig\Extension;
 
 use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
-use Sylius\Component\Core\Context\ShopperContext;
+use Sylius\Component\Core\Context\ShopperContextInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\ExtensionInterface;
@@ -66,7 +66,7 @@ final class SettingsExtension extends AbstractExtension implements ExtensionInte
      */
     public function getSettingValue(array $context, string $alias, string $path)
     {
-        if (isset($context['sylius']) && $context['sylius'] instanceof ShopperContext) {
+        if (isset($context['sylius']) && $context['sylius'] instanceof ShopperContextInterface) {
             if ($settingsInstance = $this->settingsRegistry->getByAlias($alias)) {
                 return $settingsInstance->getCurrentValue(
                     $context['sylius']->getChannel(),
