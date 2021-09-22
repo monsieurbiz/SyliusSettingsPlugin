@@ -19,7 +19,8 @@ $finder = PhpCsFixer\Finder::create()
         'tests/Application/config',
     ]);
 
-return PhpCsFixer\Config::create()
+$config = new PhpCsFixer\Config();
+$config
     ->setRiskyAllowed(true)
     ->setRules([
         '@DoctrineAnnotation' => true,
@@ -118,4 +119,7 @@ return PhpCsFixer\Config::create()
         ],
         'void_return' => true,
     ])
-    ->setFinder($finder);
+    ->setFinder($finder)
+;
+
+return $config;
