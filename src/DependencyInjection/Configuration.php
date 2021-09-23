@@ -35,7 +35,7 @@ final class Configuration implements ConfigurationInterface
 
     private function addPlugins(ArrayNodeDefinition $rootNode): void
     {
-        /** @scrutinizer ignore-call */
+        /** @phpstan-ignore-next-line */
         $rootNode
                 ->children()
                 ->arrayNode('plugins')
@@ -70,9 +70,10 @@ final class Configuration implements ConfigurationInterface
     private function getRootNode(TreeBuilder $treeBuilder): ArrayNodeDefinition
     {
         if (method_exists($treeBuilder, 'getRootNode')) {
+            /** @phpstan-ignore-next-line */
             return $treeBuilder->getRootNode();
         }
 
-        return /** @scrutinizer ignore-deprecated */ $treeBuilder->root('monsieurbiz_sylius_settings');
+        return $treeBuilder->root('monsieurbiz_sylius_settings'); /** @phpstan-ignore-line */
     }
 }

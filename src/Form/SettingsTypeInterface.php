@@ -21,8 +21,6 @@ interface SettingsTypeInterface extends FormTypeInterface
     /**
      * This method should add a checkbox field to the form when adding a new setting's field.
      *
-     * @param $child
-     *
      * @return $this
      */
     public function addWithDefaultCheckbox(FormBuilderInterface $builder, string $child, string $type = null, array $options = []): self;

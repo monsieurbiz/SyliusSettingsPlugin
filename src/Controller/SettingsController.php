@@ -51,11 +51,9 @@ final class SettingsController extends AbstractController
     }
 
     /**
-     * @param $alias
-     *
      * @return Response
      */
-    public function formAction(Request $request, RegistryInterface $registry, $alias)
+    public function formAction(Request $request, RegistryInterface $registry, string $alias)
     {
         if (null === ($settings = $registry->getByAlias($alias))) {
             throw $this->createNotFoundException();

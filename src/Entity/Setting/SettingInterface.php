@@ -35,8 +35,14 @@ interface SettingInterface extends ResourceInterface
 
     public function getId(): ?int;
 
+    /**
+     * @return mixed
+     */
     public function getValue();
 
+    /**
+     * @param mixed $value
+     */
     public function setValue($value): void;
 
     public function getVendor(): ?string;
@@ -63,6 +69,9 @@ interface SettingInterface extends ResourceInterface
 
     public function setStorageType(?string $storageType): void;
 
+    /**
+     * @param mixed $value
+     */
     public function setStorageTypeFromValue($value): void;
 
     public function getTextValue(): ?string;

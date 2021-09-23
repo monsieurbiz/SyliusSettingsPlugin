@@ -138,7 +138,7 @@ final class Metadata implements MetadataInterface
 
     private static function alias(string $string): string
     {
-        return strtolower(preg_replace('`([A-Z])`', '_\1', lcfirst($string)));
+        return strtolower(preg_replace('`([A-Z])`', '_\1', lcfirst($string)) ?? '');
     }
 
     /**

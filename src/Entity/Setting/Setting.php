@@ -136,9 +136,6 @@ class Setting implements SettingInterface
         return $this->{$getter}();
     }
 
-    /**
-     * @param $value
-     */
     public function setValue($value): void
     {
         if (null === $this->getStorageType()) {
@@ -221,7 +218,7 @@ class Setting implements SettingInterface
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      */
     private function getTypeFromValue($value): string
     {
@@ -261,7 +258,7 @@ class Setting implements SettingInterface
             throw new LogicException(sprintf('Impossible to match the type of the value. (%s)', $type));
         }
 
-        return $types[$type]($value);
+        return $types[$type]($value); /** @phpstan-ignore-line */
     }
 
     public function getTextValue(): ?string

@@ -35,11 +35,6 @@ abstract class AbstractSettingsType extends AbstractType implements SettingsType
         ]);
     }
 
-    /**
-     * @param $child
-     *
-     * @return $this
-     */
     public function addWithDefaultCheckbox(FormBuilderInterface $builder, string $child, string $type = null, array $options = []): self
     {
         $data = $builder->getData();

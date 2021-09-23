@@ -65,10 +65,9 @@ final class SettingsProcessor implements SettingsProcessorInterface
     }
 
     /**
-     * @param $settingKey
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function getChannelIdAndLocaleCodeFromSettingKey($settingKey): array
+    private function getChannelIdAndLocaleCodeFromSettingKey(string $settingKey): array
     {
         switch (true) {
             // Default website + Default locale

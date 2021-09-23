@@ -90,12 +90,8 @@ final class SettingRepository extends EntityRepository implements SettingReposit
             return;
         }
 
-        $whereCondition = 'o.channel = :channel';
-        if ($withNull) {
-            $whereCondition .= ' OR o.channel IS NULL';
-        }
         $queryBuilder
-            ->andWhere($whereCondition)
+            ->andWhere('o.channel = :channel' . ($withNull ? ' OR o.channel IS NULL' : ''))
             ->setParameter('channel', $channel)
         ;
     }
@@ -111,12 +107,8 @@ final class SettingRepository extends EntityRepository implements SettingReposit
             return;
         }
 
-        $whereCondition = 'o.localeCode = :localeCode';
-        if ($withNull) {
-            $whereCondition .= ' OR o.localeCode IS NULL';
-        }
         $queryBuilder
-            ->andWhere($whereCondition)
+            ->andWhere('o.localeCode = :localeCode' . ($withNull ? ' OR o.localeCode IS NULL' : ''))
             ->setParameter('localeCode', $localeCode)
         ;
     }
