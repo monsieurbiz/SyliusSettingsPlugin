@@ -32,7 +32,7 @@ final class SettingsProcessor implements SettingsProcessorInterface
 
     private SettingRepositoryInterface $settingRepository;
 
-    private EntityManagerInterface $em;
+    private EntityManagerInterface $entityManager;
 
     private SettingFactoryInterface $settingFactory;
 
@@ -43,13 +43,13 @@ final class SettingsProcessor implements SettingsProcessorInterface
         ChannelRepositoryInterface $channelRepository,
         RepositoryInterface $localeRepository,
         SettingRepositoryInterface $settingRepository,
-        EntityManagerInterface $em,
+        EntityManagerInterface $entityManager,
         SettingFactoryInterface $settingFactory
     ) {
         $this->channelRepository = $channelRepository;
         $this->localeRepository = $localeRepository;
         $this->settingRepository = $settingRepository;
-        $this->em = $em;
+        $this->entityManager = $entityManager;
         $this->settingFactory = $settingFactory;
     }
 
@@ -66,6 +66,7 @@ final class SettingsProcessor implements SettingsProcessorInterface
 
     /**
      * @param $settingKey
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getChannelIdAndLocaleCodeFromSettingKey($settingKey): array
     {
@@ -103,18 +104,21 @@ final class SettingsProcessor implements SettingsProcessorInterface
         $this->removeUnusedSettings($data, $actualSettings);
         $this->saveNewAndExistingSettings($data, $actualSettings, $settings, $channel, $locale);
 
-        $this->em->flush();
+        $this->entityManager->flush();
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function removeUnusedSettings(array &$data, array $settings): void
     {
         // Manage defaults, and remove actual settings with "use default value" checked
         foreach ($data as $key => $value) {
             // Is the setting a "use default value"?
             if (1 === preg_match(sprintf('`^(?P<key>.*)(?:___%1$s)$`', Settings::DEFAULT_KEY), $key, $matches)) {
-                if (true === $data[$key]) {
+                if (true === $value) {
                     if (isset($settings[$matches['key']])) {
-                        $this->em->remove($settings[$matches['key']]);
+                        $this->entityManager->remove($settings[$matches['key']]);
                     }
                     unset($data[$matches['key']]);
                 }
@@ -131,7 +135,7 @@ final class SettingsProcessor implements SettingsProcessorInterface
 
                 try {
                     $setting->setValue($value);
-                    $this->em->persist($setting);
+                    $this->entityManager->persist($setting);
 
                     continue;
                 } catch (\TypeError $e) {
@@ -143,7 +147,7 @@ final class SettingsProcessor implements SettingsProcessorInterface
             $setting->setPath($key);
             $setting->setStorageTypeFromValue($value);
             $setting->setValue($value);
-            $this->em->persist($setting);
+            $this->entityManager->persist($setting);
         }
     }
 }

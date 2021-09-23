@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 
+use InvalidArgumentException;
+
 final class Metadata implements MetadataInterface
 {
     private string $name;
@@ -48,6 +50,7 @@ final class Metadata implements MetadataInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function getApplicationName(bool $aliased = false): string
     {
@@ -56,6 +59,7 @@ final class Metadata implements MetadataInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function getName(bool $aliased = false): string
     {
@@ -68,7 +72,7 @@ final class Metadata implements MetadataInterface
     public function getParameter(string $name)
     {
         if (!$this->hasParameter($name)) {
-            throw new \InvalidArgumentException(sprintf('Parameter "%s" is not configured for resource "%s".', $name, $this->getAlias()));
+            throw new InvalidArgumentException(sprintf('Parameter "%s" is not configured for resource "%s".', $name, $this->getAlias()));
         }
 
         return $this->parameters[$name];
@@ -101,7 +105,7 @@ final class Metadata implements MetadataInterface
     public function getClass(string $name): string
     {
         if (!$this->hasClass($name)) {
-            throw new \InvalidArgumentException(sprintf('Class "%s" is not configured for resource "%s".', $name, $this->getAlias()));
+            throw new InvalidArgumentException(sprintf('Class "%s" is not configured for resource "%s".', $name, $this->getAlias()));
         }
 
         return $this->parameters['classes'][$name];
@@ -126,7 +130,7 @@ final class Metadata implements MetadataInterface
     private static function parseAlias(string $alias): array
     {
         if (false === strpos($alias, '.')) {
-            throw new \InvalidArgumentException(sprintf('Invalid alias "%s" supplied, it should conform to the following format "<applicationName>.<name>".', $alias));
+            throw new InvalidArgumentException(sprintf('Invalid alias "%s" supplied, it should conform to the following format "<applicationName>.<name>".', $alias));
         }
 
         return explode('.', $alias);

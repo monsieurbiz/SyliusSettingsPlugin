@@ -22,6 +22,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class DefaultCheckboxType extends AbstractType
 {
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameters)
+     */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['related_form_child'] = $options['related_form_child'];

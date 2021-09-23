@@ -65,6 +65,12 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
             }
         }
 
+        return $data + $this->getChannelInitialFormData($settings);
+    }
+
+    private function getChannelInitialFormData(SettingsInterface $settings): array
+    {
+        $data = [];
         /** @var ChannelInterface $channel */
         foreach ($this->channelRepository->findAll() as $channel) {
             $data['channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY] = $settings->getSettingsValuesByChannelAndLocale($channel);

@@ -27,10 +27,6 @@ final class Settings implements SettingsInterface
 
     private SettingRepositoryInterface $settingRepository;
 
-    private ?array $settingsByChannelAndLocale;
-
-    private ?array $settingsByChannelAndLocaleWithDefault;
-
     /**
      * Settings constructor.
      */
@@ -107,33 +103,28 @@ final class Settings implements SettingsInterface
         return $this->{$varName}[$channelIdentifier][$localeIdentifier];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
     public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false): array
     {
         $channelIdentifier = null === $channel ? '___' . self::DEFAULT_KEY : (string) $channel->getCode();
         $localeIdentifier = null === $localeCode ? '___' . self::DEFAULT_KEY : $localeCode;
 
         if (null === $settings = $this->getCachedSettingsByChannelAndLocale($channelIdentifier, $localeIdentifier, $withDefault)) {
-            if ($withDefault) {
-                $settings = $this->stackSettings(
-                    $this->settingRepository->findAllByChannelAndLocaleWithDefault(
-                        $this->metadata->getApplicationName(),
-                        $this->metadata->getName(true),
-                        $channel,
-                        $localeCode
-                    )
-                );
-                $this->settingsByChannelAndLocaleWithDefault[$channelIdentifier][$localeIdentifier] = $settings;
-            } else {
-                $settings = $this->stackSettings(
-                    $this->settingRepository->findAllByChannelAndLocale(
-                        $this->metadata->getApplicationName(),
-                        $this->metadata->getName(true),
-                        $channel,
-                        $localeCode
-                    )
-                );
-                $this->settingsByChannelAndLocale[$channelIdentifier][$localeIdentifier] = $settings;
-            }
+            $methodName = $withDefault ? 'findAllByChannelAndLocaleWithDefault' : 'findAllByChannelAndLocale';
+            $settings = $this->stackSettings(
+                $this->settingRepository->{$methodName}(
+                    $this->metadata->getApplicationName(),
+                    $this->metadata->getName(true),
+                    $channel,
+                    $localeCode
+                )
+            );
+
+            $varName = $withDefault ? 'settingsByChannelAndLocaleWithDefault' : 'settingsByChannelAndLocale';
+            $this->{$varName}[$channelIdentifier][$localeIdentifier] = $settings;
         }
 
         return $settings;

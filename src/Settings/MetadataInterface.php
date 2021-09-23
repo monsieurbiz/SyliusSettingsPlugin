@@ -19,8 +19,14 @@ interface MetadataInterface
 
     public function getAlias(): string;
 
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
     public function getApplicationName(bool $aliased = false): string;
 
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
     public function getName(bool $aliased = false): string;
 
     public function getParameter(string $name);
