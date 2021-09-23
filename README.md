@@ -22,53 +22,44 @@ This plugin gives you the ability to have Plugins oriented settings in your favo
 
 ## Installation
 
-A few steps to start:
+Install the plugin via composer:
 
-- Require the plugin via composer 
-  ```bash
-  composer require monsieurbiz/sylius-settings-plugin="@rc" --no-scripts
-  ```
-- Edit the `config/bundles.php` to add this line
-  ```bash  
-  MonsieurBiz\SyliusSettingsPlugin\MonsieurBizSyliusSettingsPlugin::class => ['all' => true],
-  ```
-- Copy the config 
-  ```bash  
-  cp -Rv vendor/monsieurbiz/sylius-settings-plugin/recipes/1.0-dev/config/ config
-  ```
-- Run the diff in your migrations
-  ```bash  
-  bin/console doctrine:migration:diff
-  ```
-- Execute the migrations 
-  ```bash 
-  bin/console doctrine:migration:migrate
-  ```
-- Continue to "[How it works](#how-it-works)".
+```bash
+composer require monsieurbiz/sylius-settings-plugin
+```
 
-Note: you may encounter an error during the installation via composer if you let it run the scripts.  
+<details><summary>For the installation without flex, follow these additional steps</summary>
+<p>
+
+Change your `config/bundles.php` file to add this line for the plugin declaration:
+```php
+<?php
+
+return [
+    //..
+    MonsieurBiz\SyliusSettingsPlugin\MonsieurBizSyliusSettingsPlugin::class => ['all' => true],
+];  
+```
+
+Copy the plugin configuration files in your `config` folder: 
+```bash  
+cp -Rv vendor/monsieurbiz/sylius-settings-plugin/recipes/1.0-dev/config/ config
+```
+
+</p>
+</details>  
+
+Update your database:
+
+```bash 
+bin/console doctrine:migration:migrate
+```
+
+Continue to "[How it works](#how-it-works)" to add your first setting for your store.
+
+*Note:* you may encounter an error during the installation via composer if you let it run the scripts.  
 Copy the configuration files and rerun the `composer require`, it should work. This is due to the use of other plugins in the DI.
 The configuration is then required to run any console command.
-
-<!--
-
-**Beware!**
-
-> This installation instruction assumes that you're using Symfony Flex.
-
-1. Require the plugin using composer
-
-    ```bash
-    composer require monsieurbiz/sylius-settings-plugin
-    ```
-
-2. Generate & Run Doctrine migrations
-
-    ```
-    ./bin/console doctrine:migration:diff
-    ./bin/console doctrine:migration:migrate
-    ```
--->
 
 ## How it works
 
@@ -89,7 +80,7 @@ $ ./bin/console debug:container | grep app.settings.default
   app.settings.default                                                                   MonsieurBiz\SyliusSettingsPlugin\Settings\Settings
 ```
 
-Note: the "Settings" menu won't appear until you have at least one setting.
+*Note:* the "Settings" menu won't appear until you have at least one setting.
 
 ## Contributing
 
