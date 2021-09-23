@@ -51,13 +51,16 @@ tests/Application/node_modules: yarn.install
 ### TESTS
 ### ¯¯¯¯¯
 
-test.all: test.phpcs test.yaml test.schema test.twig
+test.all: test.phpcs test.phpmd test.yaml test.schema test.twig
 
 test.phpcs: ## Run PHP CS Fixer in dry-run
 	${COMPOSER} run -- phpcs --dry-run -v
 
 test.phpcs.fix: ## Run PHP CS Fixer and fix issues if possible
 	${COMPOSER} run -- phpcs -v
+
+test.phpmd: ## Run PHP Mass Detector
+	${COMPOSER} run -- phpmd
 
 test.container: ## Lint the symfony container
 	${CONSOLE} lint:container

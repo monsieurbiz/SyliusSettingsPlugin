@@ -11,7 +11,12 @@
         "sylius/sylius": "~1.8.0 || ~1.9.0 || ~1.10.0"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.1",
+        "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev",
+        "lchrusciel/api-test-case": "^3.0 || ^5.0",
+        "phpmd/phpmd": "@stable",
         "phpspec/phpspec": "^7.0",
+        "phpstan/phpstan": "^0.12.84",
         "sensiolabs/security-checker": "^6.0",
         "sylius-labs/coding-standard": "^4.0",
         "symfony/browser-kit": "^4.4 || ^5.2",
@@ -19,11 +24,7 @@
         "symfony/dotenv": "^4.4 || ^5.2",
         "symfony/intl": "^4.4 || ^5.2",
         "symfony/web-profiler-bundle": "^4.4 || ^5.2",
-        "symfony/web-server-bundle": "^4.4 || ^5.2",
-        "lchrusciel/api-test-case": "^3.0 || ^5.0",
-        "friendsofphp/php-cs-fixer": "^3.1",
-        "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev",
-        "phpstan/phpstan": "^0.12.84"
+        "symfony/web-server-bundle": "^4.4 || ^5.2"
     },
     "prefer-stable": true,
     "autoload": {
@@ -38,7 +39,8 @@
         }
     },
     "scripts": {
-        "phpcs": "php-cs-fixer fix --using-cache=no"
+        "phpcs": "php-cs-fixer fix --using-cache=no",
+        "phpmd": "phpmd src/ ansi phpmd.xml --exclude src/Migrations"
     },
     "extra": {
         "symfony": {
@@ -47,5 +49,8 @@
         "branch-alias": {
             "dev-master": "1.0-dev"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }

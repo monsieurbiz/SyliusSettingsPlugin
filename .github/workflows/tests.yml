@@ -64,6 +64,9 @@ jobs:
 
       - name: PHP CS Fixer
         run: make test.phpcs
+        
+      - name: PHPMD
+        run: make test.phpmd        
 
 #      - name: Lint container
 #        run: make test.container
