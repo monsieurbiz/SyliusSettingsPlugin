@@ -15,27 +15,14 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 
 final class Metadata implements MetadataInterface
 {
-    /**
-     * @var string
-     */
     private string $name;
 
-    /**
-     * @var string
-     */
     private string $applicationName;
 
-    /**
-     * @var array
-     */
     private array $parameters;
 
     /**
      * Metadata constructor.
-     *
-     * @param string $name
-     * @param string $applicationName
-     * @param array $parameters
      */
     private function __construct(string $name, string $applicationName, array $parameters)
     {
@@ -52,7 +39,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAlias(): string
     {
@@ -60,7 +47,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getApplicationName(bool $aliased = false): string
     {
@@ -68,7 +55,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName(bool $aliased = false): string
     {
@@ -76,7 +63,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getParameter(string $name)
     {
@@ -88,7 +75,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function hasParameter(string $name): bool
     {
@@ -96,23 +83,20 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getParameters(): array
     {
         return $this->parameters;
     }
 
-    /**
-     * @return array
-     */
     public function getDefaultValues(): array
     {
         return $this->parameters['default_values'];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getClass(string $name): string
     {
@@ -124,7 +108,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function hasClass(string $name): bool
     {
@@ -132,7 +116,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getServiceId(string $serviceName): string
     {
@@ -154,7 +138,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function useLocales(): bool
     {

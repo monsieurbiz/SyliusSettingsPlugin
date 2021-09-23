@@ -26,21 +26,33 @@ class SettingsType extends AbstractSettingsType implements SettingsTypeInterface
     {
         if ($this->isDefaultForm($builder)) {
             $this->addWithDefaultCheckbox(
-                $builder, 'demo_message', TextType::class, [
+                $builder,
+                'demo_message',
+                TextType::class,
+                [
                     'required' => true,
                     'constraints' => [
                         new Assert\NotBlank(),
                     ],
-                ]);
+                ]
+            );
         } else {
             $this->addWithDefaultCheckbox(
-                $builder, 'demo_message', TextType::class, [
+                $builder,
+                'demo_message',
+                TextType::class,
+                [
                     'required' => false,
-                ]);
+                ]
+            );
         }
         $this->addWithDefaultCheckbox(
-            $builder, 'enabled', CheckboxType::class, [
+            $builder,
+            'enabled',
+            CheckboxType::class,
+            [
                 'required' => false,
-            ]);
+            ]
+        );
     }
 }

@@ -26,39 +26,18 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class SettingsProcessor implements SettingsProcessorInterface
 {
-    /**
-     * @var ChannelRepositoryInterface
-     */
     private ChannelRepositoryInterface $channelRepository;
 
-    /**
-     * @var RepositoryInterface
-     */
     private RepositoryInterface $localeRepository;
 
-    /**
-     * @var SettingRepositoryInterface
-     */
     private SettingRepositoryInterface $settingRepository;
 
-    /**
-     * @var EntityManagerInterface
-     */
     private EntityManagerInterface $em;
 
-    /**
-     * @var SettingFactoryInterface
-     */
     private SettingFactoryInterface $settingFactory;
 
     /**
      * SettingsProcessor constructor.
-     *
-     * @param ChannelRepositoryInterface $channelRepository
-     * @param RepositoryInterface $localeRepository
-     * @param SettingRepositoryInterface $settingRepository
-     * @param EntityManagerInterface $em
-     * @param SettingFactoryInterface $settingFactory
      */
     public function __construct(
         ChannelRepositoryInterface $channelRepository,
@@ -74,10 +53,6 @@ final class SettingsProcessor implements SettingsProcessorInterface
         $this->settingFactory = $settingFactory;
     }
 
-    /**
-     * @param SettingsInterface $settings
-     * @param array $data
-     */
     public function processData(SettingsInterface $settings, array $data): void
     {
         foreach ($data as $settingsIdentifier => $settingsData) {
@@ -91,8 +66,6 @@ final class SettingsProcessor implements SettingsProcessorInterface
 
     /**
      * @param $settingKey
-     *
-     * @return array
      */
     private function getChannelIdAndLocaleCodeFromSettingKey($settingKey): array
     {
@@ -114,12 +87,6 @@ final class SettingsProcessor implements SettingsProcessorInterface
         }
     }
 
-    /**
-     * @param SettingsInterface $settings
-     * @param int|null $channelId
-     * @param string|null $localeCode
-     * @param array $data
-     */
     private function saveSettings(SettingsInterface $settings, ?int $channelId, ?string $localeCode, array $data): void
     {
         /** @var ChannelInterface|null $channel */
@@ -139,10 +106,6 @@ final class SettingsProcessor implements SettingsProcessorInterface
         $this->em->flush();
     }
 
-    /**
-     * @param array $data
-     * @param array $settings
-     */
     private function removeUnusedSettings(array &$data, array $settings): void
     {
         // Manage defaults, and remove actual settings with "use default value" checked
@@ -160,21 +123,16 @@ final class SettingsProcessor implements SettingsProcessorInterface
         }
     }
 
-    /**
-     * @param array $data
-     * @param array $actualSettings
-     * @param SettingsInterface $settings
-     * @param ChannelInterface|null $channel
-     * @param LocaleInterface|null $locale
-     */
     private function saveNewAndExistingSettings(array $data, array $actualSettings, SettingsInterface $settings, ?ChannelInterface $channel, ?LocaleInterface $locale): void
     {
         foreach ($data as $key => $value) {
             if (isset($actualSettings[$key])) {
                 $setting = $actualSettings[$key];
+
                 try {
                     $setting->setValue($value);
                     $this->em->persist($setting);
+
                     continue;
                 } catch (\TypeError $e) {
                     // The type doesn't match, it could be normal, let's find the type out of the value.

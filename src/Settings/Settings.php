@@ -23,31 +23,16 @@ final class Settings implements SettingsInterface
 {
     public const DEFAULT_KEY = 'default';
 
-    /**
-     * @var Metadata
-     */
     private Metadata $metadata;
 
-    /**
-     * @var SettingRepositoryInterface
-     */
     private SettingRepositoryInterface $settingRepository;
 
-    /**
-     * @var array|null
-     */
     private ?array $settingsByChannelAndLocale;
 
-    /**
-     * @var array|null
-     */
     private ?array $settingsByChannelAndLocaleWithDefault;
 
     /**
      * Settings constructor.
-     *
-     * @param Metadata $metadata
-     * @param SettingRepositoryInterface $settingRepository
      */
     public function __construct(Metadata $metadata, SettingRepositoryInterface $settingRepository)
     {
@@ -95,8 +80,6 @@ final class Settings implements SettingsInterface
 
     /**
      * @throws SettingsException
-     *
-     * @return string
      */
     public function getFormClass(): string
     {
@@ -108,13 +91,6 @@ final class Settings implements SettingsInterface
         return $className;
     }
 
-    /**
-     * @param string $channelIdentifier
-     * @param string $localeIdentifier
-     * @param bool $withDefault
-     *
-     * @return array|null
-     */
     private function getCachedSettingsByChannelAndLocale(string $channelIdentifier, string $localeIdentifier, bool $withDefault): ?array
     {
         // With default?
@@ -131,13 +107,6 @@ final class Settings implements SettingsInterface
         return $this->{$varName}[$channelIdentifier][$localeIdentifier];
     }
 
-    /**
-     * @param ChannelInterface|null $channel
-     * @param string|null $localeCode
-     * @param bool $withDefault
-     *
-     * @return array
-     */
     public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false): array
     {
         $channelIdentifier = null === $channel ? '___' . self::DEFAULT_KEY : (string) $channel->getCode();
@@ -170,11 +139,6 @@ final class Settings implements SettingsInterface
         return $settings;
     }
 
-    /**
-     * @param array $allSettings
-     *
-     * @return array
-     */
     private function stackSettings(array $allSettings): array
     {
         $settings = [];
@@ -191,12 +155,6 @@ final class Settings implements SettingsInterface
         return $settings;
     }
 
-    /**
-     * @param ChannelInterface|null $channel
-     * @param string|null $localeCode
-     *
-     * @return array
-     */
     public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null): array
     {
         $allSettings = $this->getSettingsByChannelAndLocale($channel, $localeCode);
@@ -210,10 +168,6 @@ final class Settings implements SettingsInterface
     }
 
     /**
-     * @param ChannelInterface|null $channel
-     * @param string|null $localeCode
-     * @param string $path
-     *
      * @return mixed
      */
     public function getCurrentValue(?ChannelInterface $channel, ?string $localeCode, string $path)
@@ -232,8 +186,6 @@ final class Settings implements SettingsInterface
     }
 
     /**
-     * @param string $path
-     *
      * @return mixed
      */
     public function getDefaultValue(string $path)
@@ -247,7 +199,7 @@ final class Settings implements SettingsInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function showLocalesInForm(): bool
     {

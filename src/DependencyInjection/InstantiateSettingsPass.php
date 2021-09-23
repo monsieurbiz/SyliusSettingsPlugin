@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\Reference;
 final class InstantiateSettingsPass implements CompilerPassInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(ContainerBuilder $container): void
     {
@@ -72,11 +72,6 @@ final class InstantiateSettingsPass implements CompilerPassInterface
         }
     }
 
-    /**
-     * @param Metadata $metadata
-     *
-     * @return Definition
-     */
     private function getMetadataDefinition(Metadata $metadata): Definition
     {
         $metadataDefinition = new Definition(Metadata::class);

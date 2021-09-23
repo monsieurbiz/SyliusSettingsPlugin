@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 abstract class AbstractSettingsType extends AbstractType implements SettingsTypeInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -36,10 +36,7 @@ abstract class AbstractSettingsType extends AbstractType implements SettingsType
     }
 
     /**
-     * @param FormBuilderInterface $builder
      * @param $child
-     * @param string|null $type
-     * @param array $options
      *
      * @return $this
      */
@@ -59,11 +56,6 @@ abstract class AbstractSettingsType extends AbstractType implements SettingsType
         return $this;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     *
-     * @return bool
-     */
     protected function isDefaultForm(FormBuilderInterface $builder): bool
     {
         return !$builder->getOption('show_default_checkboxes', true);

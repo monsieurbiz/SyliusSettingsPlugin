@@ -17,14 +17,9 @@ use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsAlreadyExistsException;
 
 final class Registry implements RegistryInterface
 {
-    /**
-     * @var array
-     */
     private array $settings = [];
 
     /**
-     * @param SettingsInterface $settings
-     *
      * @throws SettingsAlreadyExistsException
      */
     public function addSettingsInstance(SettingsInterface $settings): void
@@ -35,11 +30,6 @@ final class Registry implements RegistryInterface
         $this->settings[] = $settings;
     }
 
-    /**
-     * @param SettingsInterface $settings
-     *
-     * @return bool
-     */
     public function hasSettingsInstance(SettingsInterface $settings): bool
     {
         return !(null === $this->getByAlias($settings->getAlias()));
@@ -53,11 +43,6 @@ final class Registry implements RegistryInterface
         return $this->settings;
     }
 
-    /**
-     * @param string $alias
-     *
-     * @return SettingsInterface|null
-     */
     public function getByAlias(string $alias): ?SettingsInterface
     {
         foreach ($this->settings as $settings) {
@@ -69,9 +54,6 @@ final class Registry implements RegistryInterface
         return null;
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return \count($this->settings);

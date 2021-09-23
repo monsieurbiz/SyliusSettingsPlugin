@@ -20,11 +20,17 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 interface SettingInterface extends ResourceInterface
 {
     public const STORAGE_TYPE_TEXT = 'text';
+
     public const STORAGE_TYPE_BOOLEAN = 'boolean';
+
     public const STORAGE_TYPE_INTEGER = 'integer';
+
     public const STORAGE_TYPE_FLOAT = 'float';
+
     public const STORAGE_TYPE_DATETIME = 'datetime';
+
     public const STORAGE_TYPE_DATE = 'date';
+
     public const STORAGE_TYPE_JSON = 'json';
 
     public function getId(): ?int;

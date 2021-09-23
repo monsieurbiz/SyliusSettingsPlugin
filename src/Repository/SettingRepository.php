@@ -18,14 +18,6 @@ use Sylius\Component\Channel\Model\ChannelInterface;
 
 final class SettingRepository extends EntityRepository implements SettingRepositoryInterface
 {
-    /**
-     * @param string $vendor
-     * @param string $plugin
-     * @param ChannelInterface|null $channel
-     * @param string|null $localeCode
-     *
-     * @return array
-     */
     public function findAllByChannelAndLocale(string $vendor, string $plugin, ChannelInterface $channel = null, ?string $localeCode = null): array
     {
         $queryBuilder = $this->createQueryBuilder('o');
@@ -60,14 +52,6 @@ final class SettingRepository extends EntityRepository implements SettingReposit
         return $queryBuilder->getQuery()->getResult();
     }
 
-    /**
-     * @param string $vendor
-     * @param string $plugin
-     * @param ChannelInterface|null $channel
-     * @param string|null $localeCode
-     *
-     * @return array
-     */
     public function findAllByChannelAndLocaleWithDefault(string $vendor, string $plugin, ChannelInterface $channel = null, ?string $localeCode = null): array
     {
         $queryBuilder = $this->createQueryBuilder('o');
