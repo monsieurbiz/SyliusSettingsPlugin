@@ -61,6 +61,9 @@ jobs:
 
       - name: Update dependencies
         run: composer update --prefer-stable --prefer-dist --no-progress --no-suggest --no-scripts
+        
+      - name: PHPStan
+        run: make test.phpstan
 
       - name: PHP CS Fixer
         run: make test.phpcs

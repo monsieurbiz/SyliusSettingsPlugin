@@ -40,7 +40,8 @@
     },
     "scripts": {
         "phpcs": "php-cs-fixer fix --using-cache=no",
-        "phpmd": "phpmd src/ ansi phpmd.xml --exclude src/Migrations"
+        "phpmd": "phpmd src/ ansi phpmd.xml --exclude src/Migrations",
+        "phpstan": "phpstan analyse -c phpstan.neon src/"
     },
     "extra": {
         "symfony": {
