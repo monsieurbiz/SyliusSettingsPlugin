@@ -3,6 +3,7 @@ SHELL=/bin/bash
 SYMFONY=cd tests/Application && symfony
 COMPOSER=symfony composer
 CONSOLE=${SYMFONY} console
+PHPSTAN=${SYMFONY} php vendor/bin/phpstan
 export COMPOSE_PROJECT_NAME=settings
 DOCTRINE_NAMESPACE=MonsieurBiz\SyliusSettingsPlugin\Migrations
 COMPOSE=docker-compose
@@ -51,13 +52,19 @@ tests/Application/node_modules: yarn.install
 ### TESTS
 ### ¯¯¯¯¯
 
-test.all: test.phpcs test.phpcs.fix test.yaml test.schema test.twig
+test.all: test.phpstan test.phpcs test.phpmd test.yaml test.schema test.twig
+
+test.phpstan:
+	${COMPOSER} run -- phpstan
 
 test.phpcs: ## Run PHP CS Fixer in dry-run
 	${COMPOSER} run -- phpcs --dry-run -v
 
 test.phpcs.fix: ## Run PHP CS Fixer and fix issues if possible
 	${COMPOSER} run -- phpcs -v
+
+test.phpmd: ## Run PHP Mass Detector
+	${COMPOSER} run -- phpmd
 
 test.container: ## Lint the symfony container
 	${CONSOLE} lint:container

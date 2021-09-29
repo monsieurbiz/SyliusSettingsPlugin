@@ -61,9 +61,15 @@ jobs:
 
       - name: Update dependencies
         run: composer update --prefer-stable --prefer-dist --no-progress --no-suggest --no-scripts
+        
+      - name: PHPStan
+        run: make test.phpstan
 
       - name: PHP CS Fixer
         run: make test.phpcs
+        
+      - name: PHPMD
+        run: make test.phpmd        
 
 #      - name: Lint container
 #        run: make test.container

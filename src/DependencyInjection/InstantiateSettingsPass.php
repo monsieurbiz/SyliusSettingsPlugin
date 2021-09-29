@@ -25,13 +25,13 @@ use Symfony\Component\DependencyInjection\Reference;
 final class InstantiateSettingsPass implements CompilerPassInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(ContainerBuilder $container): void
     {
         // Get required parameters and definitions in order to populate the DI
         try {
-            $plugins = $container->getParameter('monsieurbiz.settings.config.plugins');
+            $plugins = (array) $container->getParameter('monsieurbiz.settings.config.plugins');
             $registry = $container->findDefinition('monsieurbiz.settings.registry');
             $metadataRegistry = $container->findDefinition('monsieurbiz.settings.metadata_registry');
         } catch (InvalidArgumentException $exception) {
@@ -67,16 +67,12 @@ final class InstantiateSettingsPass implements CompilerPassInterface
 
     private function validateSettingsResource(string $class): void
     {
-        if (!\in_array(SettingsInterface::class, class_implements($class), true)) {
+        $classImplements = (array) class_implements($class) ?? [];
+        if (!\in_array(SettingsInterface::class, $classImplements, true)) {
             throw new InvalidArgumentException(sprintf('Class "%s" must implement "%s" to be registered as a Settings resource.', $class, SettingsInterface::class));
         }
     }
 
-    /**
-     * @param Metadata $metadata
-     *
-     * @return Definition
-     */
     private function getMetadataDefinition(Metadata $metadata): Definition
     {
         $metadataDefinition = new Definition(Metadata::class);

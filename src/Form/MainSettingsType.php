@@ -27,21 +27,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class MainSettingsType extends AbstractType implements MainSettingsTypeInterface
 {
-    /**
-     * @var ChannelRepositoryInterface
-     */
     private ChannelRepositoryInterface $channelRepository;
 
-    /**
-     * @var RepositoryInterface
-     */
     private RepositoryInterface $localeRepository;
 
     /**
      * MainSettingsType constructor.
-     *
-     * @param ChannelRepositoryInterface $channelRepository
-     * @param RepositoryInterface $localeRepository
      */
     public function __construct(
         ChannelRepositoryInterface $channelRepository,
@@ -51,9 +42,6 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
         $this->localeRepository = $localeRepository;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired([
@@ -62,9 +50,6 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     *
      * @throws SettingsException
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -72,7 +57,9 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
         $settings = $options['settings'];
         $data = $options['data'];
         $builder->add(
-            $key = Settings::DEFAULT_KEY . '-' . Settings::DEFAULT_KEY, $settings->getFormClass(), [
+            $key = Settings::DEFAULT_KEY . '-' . Settings::DEFAULT_KEY,
+            $settings->getFormClass(),
+            [
                 'settings' => $settings,
                 'channel' => null,
                 'label' => false,
@@ -81,14 +68,17 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
                 'constraints' => [
                     new Assert\Valid(),
                 ],
-            ]);
+            ]
+        );
 
         $this->addDefaultLocales($builder, $settings, $data);
 
         /** @var ChannelInterface $channel */
         foreach ($this->channelRepository->findAll() as $channel) {
             $builder->add(
-                $key = 'channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY, $settings->getFormClass(), [
+                $key = 'channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY,
+                $settings->getFormClass(),
+                [
                     'settings' => $settings,
                     'channel' => $channel,
                     'label' => false,
@@ -97,17 +87,14 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
                     'constraints' => [
                         new Assert\Valid(),
                     ],
-                ]);
+                ]
+            );
 
             $this->addChannelLocales($builder, $settings, $channel, $data);
         }
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param SettingsInterface $settings
-     * @param array $data
-     *
      * @throws SettingsException
      */
     private function addDefaultLocales(FormBuilderInterface $builder, SettingsInterface $settings, array $data): void
@@ -116,7 +103,9 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
             /** @var LocaleInterface $locale */
             foreach ($this->localeRepository->findAll() as $locale) {
                 $builder->add(
-                    $key = Settings::DEFAULT_KEY . '-' . $locale->getCode(), $settings->getFormClass(), [
+                    $key = Settings::DEFAULT_KEY . '-' . $locale->getCode(),
+                    $settings->getFormClass(),
+                    [
                         'settings' => $settings,
                         'channel' => null,
                         'label' => false,
@@ -125,17 +114,13 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
                         'constraints' => [
                             new Assert\Valid(),
                         ],
-                    ]);
+                    ]
+                );
             }
         }
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param SettingsInterface $settings
-     * @param ChannelInterface $channel
-     * @param array $data
-     *
      * @throws SettingsException
      */
     private function addChannelLocales(FormBuilderInterface $builder, SettingsInterface $settings, ChannelInterface $channel, array $data): void
@@ -143,7 +128,9 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
         if ($settings->showLocalesInForm()) {
             foreach ($channel->getLocales() as $locale) {
                 $builder->add(
-                    $key = 'channel-' . $channel->getId() . '-' . $locale->getCode(), $settings->getFormClass(), [
+                    $key = 'channel-' . $channel->getId() . '-' . $locale->getCode(),
+                    $settings->getFormClass(),
+                    [
                         'settings' => $settings,
                         'channel' => $channel,
                         'label' => false,
@@ -152,13 +139,14 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
                         'constraints' => [
                             new Assert\Valid(),
                         ],
-                    ]);
+                    ]
+                );
             }
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBlockPrefix(): string
     {

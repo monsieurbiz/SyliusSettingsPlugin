@@ -13,19 +13,12 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Repository;
 
+use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Component\Channel\Model\ChannelInterface;
 
 final class SettingRepository extends EntityRepository implements SettingRepositoryInterface
 {
-    /**
-     * @param string $vendor
-     * @param string $plugin
-     * @param ChannelInterface|null $channel
-     * @param string|null $localeCode
-     *
-     * @return array
-     */
     public function findAllByChannelAndLocale(string $vendor, string $plugin, ChannelInterface $channel = null, ?string $localeCode = null): array
     {
         $queryBuilder = $this->createQueryBuilder('o');
@@ -38,36 +31,14 @@ final class SettingRepository extends EntityRepository implements SettingReposit
         ;
 
         // Manage Channel
-        if (null === $channel) {
-            $queryBuilder->andWhere('o.channel IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('o.channel = :channel')
-                ->setParameter('channel', $channel)
-            ;
-        }
+        $this->addChannelCondition($queryBuilder, $channel, false);
 
         // Manage Locale
-        if (null === $localeCode) {
-            $queryBuilder->andWhere('o.localeCode IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('o.localeCode = :localeCode')
-                ->setParameter('localeCode', $localeCode)
-            ;
-        }
+        $this->addLocaleCondition($queryBuilder, $localeCode, false);
 
         return $queryBuilder->getQuery()->getResult();
     }
 
-    /**
-     * @param string $vendor
-     * @param string $plugin
-     * @param ChannelInterface|null $channel
-     * @param string|null $localeCode
-     *
-     * @return array
-     */
     public function findAllByChannelAndLocaleWithDefault(string $vendor, string $plugin, ChannelInterface $channel = null, ?string $localeCode = null): array
     {
         $queryBuilder = $this->createQueryBuilder('o');
@@ -80,24 +51,10 @@ final class SettingRepository extends EntityRepository implements SettingReposit
         ;
 
         // Manage Channel
-        if (null === $channel) {
-            $queryBuilder->andWhere('o.channel IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('o.channel = :channel OR o.channel IS NULL')
-                ->setParameter('channel', $channel)
-            ;
-        }
+        $this->addChannelCondition($queryBuilder, $channel);
 
         // Manage Locale
-        if (null === $localeCode) {
-            $queryBuilder->andWhere('o.localeCode IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('o.localeCode = :localeCode OR o.localeCode IS NULL')
-                ->setParameter('localeCode', $localeCode)
-            ;
-        }
+        $this->addLocaleCondition($queryBuilder, $localeCode);
 
         // The order is primordial! Default first in the results, correct value last
         $queryBuilder->addSelect(<<<EXPR
@@ -120,5 +77,39 @@ final class SettingRepository extends EntityRepository implements SettingReposit
         $queryBuilder->addOrderBy('value_position', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
+    private function addChannelCondition(QueryBuilder $queryBuilder, ChannelInterface $channel = null, bool $withNull = true): void
+    {
+        if (null === $channel) {
+            $queryBuilder->andWhere('o.channel IS NULL');
+
+            return;
+        }
+
+        $queryBuilder
+            ->andWhere('o.channel = :channel' . ($withNull ? ' OR o.channel IS NULL' : ''))
+            ->setParameter('channel', $channel)
+        ;
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
+    private function addLocaleCondition(QueryBuilder $queryBuilder, ?string $localeCode = null, bool $withNull = true): void
+    {
+        if (null === $localeCode) {
+            $queryBuilder->andWhere('o.localeCode IS NULL');
+
+            return;
+        }
+
+        $queryBuilder
+            ->andWhere('o.localeCode = :localeCode' . ($withNull ? ' OR o.localeCode IS NULL' : ''))
+            ->setParameter('localeCode', $localeCode)
+        ;
     }
 }

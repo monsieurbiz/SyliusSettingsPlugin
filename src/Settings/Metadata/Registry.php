@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Settings\Metadata;
 
+use InvalidArgumentException;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Metadata;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\MetadataInterface;
 
@@ -24,19 +25,19 @@ final class Registry implements RegistryInterface
     private array $metadata = [];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(string $alias): MetadataInterface
     {
         if (!\array_key_exists($alias, $this->metadata)) {
-            throw new \InvalidArgumentException(sprintf('Resource "%s" does not exist.', $alias));
+            throw new InvalidArgumentException(sprintf('Resource "%s" does not exist.', $alias));
         }
 
         return $this->metadata[$alias];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function add(MetadataInterface $metadata): void
     {
@@ -44,7 +45,7 @@ final class Registry implements RegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addFromAliasAndConfiguration(string $alias, array $configuration): void
     {

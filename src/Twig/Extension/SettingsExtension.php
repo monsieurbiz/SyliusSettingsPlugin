@@ -23,19 +23,10 @@ use Twig\TwigFunction;
 
 final class SettingsExtension extends AbstractExtension implements ExtensionInterface
 {
-    /**
-     * @var RegistryInterface
-     */
     private RegistryInterface $settingsRegistry;
 
-    /**
-     * @var LocaleContextInterface
-     */
     private LocaleContextInterface $localeContext;
 
-    /**
-     * @var ChannelContextInterface
-     */
     private ChannelContextInterface $channelContext;
 
     public function __construct(
@@ -58,10 +49,6 @@ final class SettingsExtension extends AbstractExtension implements ExtensionInte
     }
 
     /**
-     * @param array $context
-     * @param string $alias
-     * @param string $path
-     *
      * @return mixed
      */
     public function getSettingValue(array $context, string $alias, string $path)

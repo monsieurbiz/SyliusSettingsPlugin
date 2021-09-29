@@ -24,27 +24,14 @@ use Symfony\Component\Form\FormInterface;
 
 final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryInterface
 {
-    /**
-     * @var FormFactoryInterface
-     */
     private FormFactoryInterface $formFactory;
 
-    /**
-     * @var ChannelRepositoryInterface
-     */
     private ChannelRepositoryInterface $channelRepository;
 
-    /**
-     * @var RepositoryInterface
-     */
     private RepositoryInterface $localeRepository;
 
     /**
      * MainSettingsFormTypeFactory constructor.
-     *
-     * @param FormFactoryInterface $formFactory
-     * @param ChannelRepositoryInterface $channelRepository
-     * @param RepositoryInterface $localeRepository
      */
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -56,13 +43,6 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
         $this->localeRepository = $localeRepository;
     }
 
-    /**
-     * @param SettingsInterface $settings
-     * @param string $type
-     * @param array $options
-     *
-     * @return FormInterface
-     */
     public function createNew(SettingsInterface $settings, string $type, array $options = []): FormInterface
     {
         return $this->formFactory->create(
@@ -72,11 +52,6 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
         );
     }
 
-    /**
-     * @param SettingsInterface $settings
-     *
-     * @return array
-     */
     private function getInitialFormData(SettingsInterface $settings): array
     {
         $data = [
@@ -90,6 +65,12 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
             }
         }
 
+        return $data + $this->getChannelInitialFormData($settings);
+    }
+
+    private function getChannelInitialFormData(SettingsInterface $settings): array
+    {
+        $data = [];
         /** @var ChannelInterface $channel */
         foreach ($this->channelRepository->findAll() as $channel) {
             $data['channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY] = $settings->getSettingsValuesByChannelAndLocale($channel);

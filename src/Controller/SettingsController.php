@@ -25,21 +25,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class SettingsController extends AbstractController
 {
-    /**
-     * @var SettingsProcessorInterface
-     */
     private SettingsProcessorInterface $settingsProcessor;
 
-    /**
-     * @var MainSettingsFormTypeFactoryInterface
-     */
     private MainSettingsFormTypeFactoryInterface $formFactory;
 
     /**
      * SettingsController constructor.
-     *
-     * @param SettingsProcessorInterface $settingsProcessor
-     * @param MainSettingsFormTypeFactoryInterface $formFactory
      */
     public function __construct(
         SettingsProcessorInterface $settingsProcessor,
@@ -50,8 +41,6 @@ final class SettingsController extends AbstractController
     }
 
     /**
-     * @param RegistryInterface $registry
-     *
      * @return Response
      */
     public function indexAction(RegistryInterface $registry)
@@ -62,13 +51,9 @@ final class SettingsController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param RegistryInterface $registry
-     * @param $alias
-     *
      * @return Response
      */
-    public function formAction(Request $request, RegistryInterface $registry, $alias)
+    public function formAction(Request $request, RegistryInterface $registry, string $alias)
     {
         if (null === ($settings = $registry->getByAlias($alias))) {
             throw $this->createNotFoundException();
@@ -98,11 +83,6 @@ final class SettingsController extends AbstractController
         );
     }
 
-    /**
-     * @param SettingsInterface $settings
-     *
-     * @return FormInterface
-     */
     private function getForm(SettingsInterface $settings): FormInterface
     {
         return $this->formFactory->createNew(

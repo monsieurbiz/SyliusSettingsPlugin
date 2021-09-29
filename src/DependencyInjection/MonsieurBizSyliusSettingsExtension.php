@@ -22,13 +22,15 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 final class MonsieurBizSyliusSettingsExtension extends Extension implements PrependExtensionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load(array $config, ContainerBuilder $container): void
     {
         $configuration = $this->getConfiguration([], $container);
-        $config = $this->processConfiguration(/** @scrutinizer ignore-type */ $configuration, $config);
-        $container->setParameter('monsieurbiz.settings.config.plugins', $config['plugins']);
+        if (null !== $configuration) {
+            $config = $this->processConfiguration($configuration, $config);
+            $container->setParameter('monsieurbiz.settings.config.plugins', $config['plugins']);
+        }
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
@@ -40,7 +42,7 @@ final class MonsieurBizSyliusSettingsExtension extends Extension implements Prep
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepend(ContainerBuilder $container): void
     {

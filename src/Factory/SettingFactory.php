@@ -25,9 +25,6 @@ final class SettingFactory implements SettingFactoryInterface
      */
     private $className;
 
-    /**
-     * @param string $className
-     */
     public function __construct(string $className)
     {
         $this->className = $className;
@@ -42,7 +39,7 @@ final class SettingFactory implements SettingFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createNewFromGlobalSettings(SettingsInterface $settings, ?ChannelInterface $channel, ?LocaleInterface $locale): SettingInterface
     {
