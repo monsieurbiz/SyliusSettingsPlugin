@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -41,7 +41,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAlias(): string
     {
@@ -49,7 +49,8 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function getApplicationName(bool $aliased = false): string
@@ -58,7 +59,8 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function getName(bool $aliased = false): string
@@ -67,7 +69,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getParameter(string $name)
     {
@@ -79,7 +81,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function hasParameter(string $name): bool
     {
@@ -87,7 +89,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getParameters(): array
     {
@@ -100,7 +102,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getClass(string $name): string
     {
@@ -112,7 +114,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function hasClass(string $name): bool
     {
@@ -120,7 +122,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getServiceId(string $serviceName): string
     {
@@ -142,7 +144,7 @@ final class Metadata implements MetadataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function useLocales(): bool
     {

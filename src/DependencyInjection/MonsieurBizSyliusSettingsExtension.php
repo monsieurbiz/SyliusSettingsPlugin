@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 final class MonsieurBizSyliusSettingsExtension extends Extension implements PrependExtensionInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function load(array $config, ContainerBuilder $container): void
     {
@@ -42,7 +42,7 @@ final class MonsieurBizSyliusSettingsExtension extends Extension implements Prep
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function prepend(ContainerBuilder $container): void
     {

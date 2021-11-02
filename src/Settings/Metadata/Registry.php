@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -25,7 +25,7 @@ final class Registry implements RegistryInterface
     private array $metadata = [];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(string $alias): MetadataInterface
     {
@@ -37,7 +37,7 @@ final class Registry implements RegistryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function add(MetadataInterface $metadata): void
     {
@@ -45,7 +45,7 @@ final class Registry implements RegistryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addFromAliasAndConfiguration(string $alias, array $configuration): void
     {
