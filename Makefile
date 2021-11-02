@@ -95,7 +95,7 @@ ${APP_DIR}/php.ini: php.ini
 	(cd ${APP_DIR} && ln -sf ../../php.ini)
 
 apply_dist:
-	cp -Rv dist/* ${APP_DIR} || true
+	cp -Rv dist/* ${APP_DIR}
 
 ###
 ### TESTS
