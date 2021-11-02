@@ -1,26 +1,15 @@
-# Development
+## Node
 
-## Requirements
+Be sure you have node 14 on your machine. You can use NVM to easily switch versions.
 
-We use:
+# Docker
 
-- the [Symfony's binary](https://symfony.com/download)
-- Docker
-- yarn
-- PHP 7.4
+Be sure you have docker on your machine.
 
-## Installation
+# Symfony
 
-From the plugin root directory, run the following command:
+Be sure you have the Symfony binary on your machine.
 
-```bash
-make install
 ```
-
-## Need help?
-
-From the plugin root directory, run the following command:
-
-```bash
-make help
-```
+ curl -sS https://get.symfony.com/cli/installer | bash 
+ ```
