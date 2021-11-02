@@ -1,6 +1,6 @@
 {
-    "bundles": {
-        "MonsieurBiz\\SyliusSettingsPlugin\\MonsieurBizSyliusSettingsPlugin::class": [
+  "bundles": {
+        "MonsieurBiz\\SyliusSettingsPlugin\\MonsieurBizSyliusSettingsPlugin": [
             "all"
         ]
     },
