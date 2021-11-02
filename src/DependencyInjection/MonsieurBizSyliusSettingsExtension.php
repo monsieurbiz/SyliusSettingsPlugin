@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 final class MonsieurBizSyliusSettingsExtension extends Extension implements PrependExtensionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load(array $config, ContainerBuilder $container): void
     {
@@ -42,7 +42,7 @@ final class MonsieurBizSyliusSettingsExtension extends Extension implements Prep
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepend(ContainerBuilder $container): void
     {

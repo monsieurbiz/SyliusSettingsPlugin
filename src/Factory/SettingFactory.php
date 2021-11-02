@@ -39,7 +39,7 @@ final class SettingFactory implements SettingFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createNewFromGlobalSettings(SettingsInterface $settings, ?ChannelInterface $channel, ?LocaleInterface $locale): SettingInterface
     {

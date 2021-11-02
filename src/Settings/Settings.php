@@ -218,7 +218,7 @@ final class Settings implements SettingsInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function showLocalesInForm(): bool
     {

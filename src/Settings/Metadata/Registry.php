@@ -25,7 +25,7 @@ final class Registry implements RegistryInterface
     private array $metadata = [];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(string $alias): MetadataInterface
     {
@@ -37,7 +37,7 @@ final class Registry implements RegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function add(MetadataInterface $metadata): void
     {
@@ -45,7 +45,7 @@ final class Registry implements RegistryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addFromAliasAndConfiguration(string $alias, array $configuration): void
     {

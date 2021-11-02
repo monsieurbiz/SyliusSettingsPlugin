@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 abstract class AbstractSettingsType extends AbstractType implements SettingsTypeInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function configureOptions(OptionsResolver $resolver): void
     {

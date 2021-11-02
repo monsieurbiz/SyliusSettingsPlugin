@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\Reference;
 final class InstantiateSettingsPass implements CompilerPassInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(ContainerBuilder $container): void
     {

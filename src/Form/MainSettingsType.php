@@ -146,7 +146,7 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBlockPrefix(): string
     {
