@@ -1,0 +1,155 @@
+{
+    "amphp/amp": {
+        "version": "v2.6.1"
+    },
+    "amphp/byte-stream": {
+        "version": "v1.8.1"
+    },
+    "behat/behat": {
+        "version": "v3.9.0"
+    },
+    "behat/gherkin": {
+        "version": "v4.9.0"
+    },
+    "behat/mink-selenium2-driver": {
+        "version": "v1.5.0"
+    },
+    "dmore/behat-chrome-extension": {
+        "version": "1.3.0"
+    },
+    "dmore/chrome-mink-driver": {
+        "version": "2.8.0"
+    },
+    "dnoegel/php-xdg-base-dir": {
+        "version": "v0.1.1"
+    },
+    "ergebnis/composer-normalize": {
+        "version": "2.15.0"
+    },
+    "ergebnis/json-normalizer": {
+        "version": "1.0.3"
+    },
+    "ergebnis/json-printer": {
+        "version": "3.1.1"
+    },
+    "felixfbecker/advanced-json-rpc": {
+        "version": "v3.2.1"
+    },
+    "felixfbecker/language-server-protocol": {
+        "version": "1.5.1"
+    },
+    "friends-of-behat/mink": {
+        "version": "v1.9.0"
+    },
+    "friends-of-behat/mink-browserkit-driver": {
+        "version": "v1.5.0"
+    },
+    "friends-of-behat/mink-extension": {
+        "version": "v2.5.0"
+    },
+    "friends-of-behat/page-object-extension": {
+        "version": "v0.3.2"
+    },
+    "friends-of-behat/symfony-extension": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "1e012e04f573524ca83795cd19df9ea690adb604"
+        }
+    },
+    "friends-of-behat/variadic-extension": {
+        "version": "v1.4.0"
+    },
+    "hwi/oauth-bundle": {
+        "version": "1.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.6",
+            "ref": "18ce21f16066cccfa0803c9e846a2e4f4bec92ab"
+        }
+    },
+    "instaclick/php-webdriver": {
+        "version": "1.4.10"
+    },
+    "justinrainbow/json-schema": {
+        "version": "5.2.11"
+    },
+    "localheinz/diff": {
+        "version": "1.1.1"
+    },
+    "matthiasnoback/symfony-config-test": {
+        "version": "4.3.0"
+    },
+    "matthiasnoback/symfony-dependency-injection-test": {
+        "version": "4.3.0"
+    },
+    "mikey179/vfsstream": {
+        "version": "v1.6.10"
+    },
+    "netresearch/jsonmapper": {
+        "version": "v3.1.1"
+    },
+    "pamil/prophecy-common": {
+        "version": "v0.1.0"
+    },
+    "pdepend/pdepend": {
+        "version": "2.10.1"
+    },
+    "php-http/client-common": {
+        "version": "2.4.0"
+    },
+    "php-http/discovery": {
+        "version": "1.14.1"
+    },
+    "phpmd/phpmd": {
+        "version": "2.10.2"
+    },
+    "phpstan/phpstan-doctrine": {
+        "version": "0.12.44"
+    },
+    "phpstan/phpstan-webmozart-assert": {
+        "version": "0.12.16"
+    },
+    "phpunit/php-token-stream": {
+        "version": "4.0.4"
+    },
+    "psalm/plugin-mockery": {
+        "version": "0.3.0"
+    },
+    "psr/event-dispatcher": {
+        "version": "1.0.0"
+    },
+    "psr/http-factory": {
+        "version": "1.0.1"
+    },
+    "symfony/css-selector": {
+        "version": "v5.3.4"
+    },
+    "symfony/flex": {
+        "version": "1.17",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "c0eeb50665f0f77226616b6038a9b06c03752d8e"
+        },
+        "files": [
+            ".env"
+        ]
+    },
+    "textalk/websocket": {
+        "version": "1.5.5"
+    },
+    "vimeo/psalm": {
+        "version": "3.18.2"
+    },
+    "webmozart/glob": {
+        "version": "4.4.0"
+    },
+    "webmozart/path-util": {
+        "version": "2.3.0"
+    }
+}
