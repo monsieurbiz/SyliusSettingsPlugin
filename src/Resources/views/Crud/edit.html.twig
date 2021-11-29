@@ -13,8 +13,8 @@
             <h1 class="ui header">
                 <i class="circular {{ settings.icon }} icon"></i>
                 <div class="content">
-                    {{ 'monsieurbiz.settings.ui.settings_of.title'|trans({'%pluginName%': settings.pluginName}) }}
-                    <div class="sub header">{{ settings.description }}</div>
+                    {{ 'monsieurbiz.settings.ui.settings_of.title'|trans({'%pluginName%': (settings.pluginName|trans)}) }}
+                    <div class="sub header">{{ settings.description|trans }}</div>
                 </div>
             </h1>
         </div>
