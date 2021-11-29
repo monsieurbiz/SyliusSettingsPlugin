@@ -17,13 +17,13 @@
         <a class="card olive" href="{{ path('monsieurbiz_sylius_settings_admin_edit', {'alias': card.alias}) }}">
             <div class="content">
                 <div class="header">
-                    <i class="icon {{ card.icon }}"></i> {{ card.pluginName }}
+                    <i class="icon {{ card.icon }}"></i> {{ card.pluginName|trans }}
                 </div>
                 <div class="meta">
                     {{ 'monsieurbiz.settings.ui.card.by'|trans({'%vendorName%': card.vendorName}) }}
                 </div>
                 <div class="description">
-                    {{ card.description }}
+                    {{ card.description|trans }}
                 </div>
             </div>
         </a>
