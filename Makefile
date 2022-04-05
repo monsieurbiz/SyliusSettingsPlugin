@@ -21,34 +21,26 @@ up: docker.up server.start ## Up the project (start docker, start symfony server
 stop: server.stop docker.stop ## Stop the project (stop docker, stop symfony server)
 down: server.stop docker.down ## Down the project (removes docker containers, stop symfony server)
 
-reset: docker.down ## Stop docker and remove dependencies
+reset: ## Stop docker and remove dependencies
+	${MAKE} docker.down || true
 	rm -rf ${APP_DIR}/node_modules ${APP_DIR}/yarn.lock
 	rm -rf ${APP_DIR}
 	rm -rf vendor composer.lock
 .PHONY: reset
 
-dependencies: vendor node_modules ## Setup the dependencies
+dependencies: composer.lock node_modules ## Setup the dependencies
 .PHONY: dependencies
 
 .php-version: .php-version.dist
-	cp .php-version.dist .php-version
+	rm -f .php-version
+	ln -s .php-version.dist .php-version
 
 php.ini: php.ini.dist
-	cp php.ini.dist php.ini
-
-vendor: composer.lock ## Install the PHP dependencies using composer
-ifdef GITHUB_ACTIONS
-	${COMPOSER} install --prefer-dist
-else
-	${COMPOSER} install --prefer-source
-endif
+	rm -f php.ini
+	ln -s php.ini.dist php.ini
 
 composer.lock: composer.json
-ifdef GITHUB_ACTIONS
-	${COMPOSER} update --prefer-dist
-else
-	${COMPOSER} update --prefer-source
-endif
+	${COMPOSER} install --no-scripts --no-plugins
 
 yarn.install: ${APP_DIR}/yarn.lock
 
@@ -70,22 +62,25 @@ ${APP_DIR}/node_modules: yarn.install
 application: .php-version php.ini ${APP_DIR} setup_application ${APP_DIR}/docker-compose.yaml
 
 ${APP_DIR}:
-	(${COMPOSER} create-project --prefer-dist --no-scripts --no-progress --no-install sylius/sylius-standard="${SYLIUS_VERSION}" ${APP_DIR})
+	(${COMPOSER} create-project --no-interaction --prefer-dist --no-scripts --no-progress --no-install sylius/sylius-standard="${SYLIUS_VERSION}" ${APP_DIR})
 
 setup_application:
 	rm -f ${APP_DIR}/yarn.lock
 	(cd ${APP_DIR} && ${COMPOSER} config repositories.plugin '{"type": "path", "url": "../../"}')
 	(cd ${APP_DIR} && ${COMPOSER} config extra.symfony.allow-contrib true)
-	(cd ${APP_DIR} && ${COMPOSER} require --no-scripts --no-progress --no-install --no-update monsieurbiz/${PLUGIN_NAME}="*@dev")
-	$(MAKE) apply_dist
+	(cd ${APP_DIR} && ${COMPOSER} config minimum-stability dev)
+	(cd ${APP_DIR} && ${COMPOSER} require --no-install --no-scripts --no-progress sylius/sylius="${SYLIUS_VERSION}")
 	$(MAKE) ${APP_DIR}/.php-version
 	$(MAKE) ${APP_DIR}/php.ini
-	(cd ${APP_DIR} && ${COMPOSER} install)
+	(cd ${APP_DIR} && ${COMPOSER} install --no-interaction)
+	$(MAKE) apply_dist
+	(cd ${APP_DIR} && ${COMPOSER} require --no-progress monsieurbiz/${PLUGIN_NAME}="*@dev")
+
 
 ${APP_DIR}/docker-compose.yaml:
 	rm -f ${APP_DIR}/docker-compose.yml
 	rm -f ${APP_DIR}/docker-compose.yaml
-	cp docker-compose.yaml.dist ${APP_DIR}/docker-compose.yaml
+	ln -s ../../docker-compose.yaml.dist ${APP_DIR}/docker-compose.yaml
 .PHONY: ${APP_DIR}/docker-compose.yaml
 
 ${APP_DIR}/.php-version: .php-version
@@ -95,7 +90,15 @@ ${APP_DIR}/php.ini: php.ini
 	(cd ${APP_DIR} && ln -sf ../../php.ini)
 
 apply_dist:
-	cp -Rv dist/* ${APP_DIR}
+	ROOT_DIR=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))); \
+	for i in `cd dist && find . -type f`; do \
+		FILE_PATH=`echo $$i | sed 's|./||'`; \
+		FOLDER_PATH=`dirname $$FILE_PATH`; \
+		echo $$FILE_PATH; \
+		(cd ${APP_DIR} && rm -f $$FILE_PATH); \
+		(cd ${APP_DIR} && mkdir -p $$FOLDER_PATH); \
+		(cd ${APP_DIR} && ln -s $$ROOT_DIR/dist/$$FILE_PATH $$FILE_PATH); \
+    done
 
 ###
 ### TESTS
