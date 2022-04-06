@@ -1,70 +1,132 @@
 .DEFAULT_GOAL := help
 SHELL=/bin/bash
-SYMFONY=cd tests/Application && symfony
+APP_DIR=tests/Application
+SYLIUS_VERSION=1.10.0
+SYMFONY=cd ${APP_DIR} && symfony
 COMPOSER=symfony composer
 CONSOLE=${SYMFONY} console
-PHPSTAN=${SYMFONY} php vendor/bin/phpstan
 export COMPOSE_PROJECT_NAME=settings
-DOCTRINE_NAMESPACE=MonsieurBiz\SyliusSettingsPlugin\Migrations
+PLUGIN_NAME=sylius-${COMPOSE_PROJECT_NAME}-plugin
 COMPOSE=docker-compose
-YARN=cd tests/Application && yarn
+YARN=yarn
 
 ###
 ### DEVELOPMENT
 ### ¯¯¯¯¯¯¯¯¯¯¯
 
-install: platform sylius ## Install the plugin
+install: application platform sylius ## Install the plugin
 .PHONY: install
 
 up: docker.up server.start ## Up the project (start docker, start symfony server)
 stop: server.stop docker.stop ## Stop the project (stop docker, stop symfony server)
 down: server.stop docker.down ## Down the project (removes docker containers, stop symfony server)
 
-reset: docker.down ## Stop docker and remove dependencies
-	rm -rf tests/Application/{node_modules} tests/Application/yarn.lock
+reset: ## Stop docker and remove dependencies
+	${MAKE} docker.down || true
+	rm -rf ${APP_DIR}/node_modules ${APP_DIR}/yarn.lock
+	rm -rf ${APP_DIR}
 	rm -rf vendor composer.lock
 .PHONY: reset
 
-dependencies: vendor node_modules ## Setup the dependencies
+dependencies: composer.lock node_modules ## Setup the dependencies
 .PHONY: dependencies
 
 .php-version: .php-version.dist
-	cp .php-version.dist .php-version
-	(cd tests/Application && ln -sf ../../.php-version)
+	rm -f .php-version
+	ln -s .php-version.dist .php-version
 
-vendor: composer.lock ## Install the PHP dependencies using composer
-	${COMPOSER} install --prefer-source
+php.ini: php.ini.dist
+	rm -f php.ini
+	ln -s php.ini.dist php.ini
 
 composer.lock: composer.json
-	${COMPOSER} update --prefer-source
+	${COMPOSER} install --no-scripts --no-plugins
 
-yarn.install: tests/Application/yarn.lock
+yarn.install: ${APP_DIR}/yarn.lock
 
-tests/Application/yarn.lock:
-	${YARN} install
-	${YARN} build
+${APP_DIR}/yarn.lock:
+	ln -sf ${APP_DIR}/node_modules node_modules
+	cd ${APP_DIR} && ${YARN} install && ${YARN} build
+# No CSS and JS on this plugin yet
+#	${YARN} install
+#	${YARN} encore prod
 
-node_modules: tests/Application/node_modules ## Install the Node dependencies using yarn
+node_modules: ${APP_DIR}/node_modules ## Install the Node dependencies using yarn
 
-tests/Application/node_modules: yarn.install
+${APP_DIR}/node_modules: yarn.install
+
+###
+### TEST APPLICATION
+### ¯¯¯¯¯
+
+application: .php-version php.ini ${APP_DIR} setup_application ${APP_DIR}/docker-compose.yaml
+
+${APP_DIR}:
+	(${COMPOSER} create-project --no-interaction --prefer-dist --no-scripts --no-progress --no-install sylius/sylius-standard="~${SYLIUS_VERSION}" ${APP_DIR})
+
+setup_application:
+	rm -f ${APP_DIR}/yarn.lock
+	(cd ${APP_DIR} && ${COMPOSER} config repositories.plugin '{"type": "path", "url": "../../"}')
+	(cd ${APP_DIR} && ${COMPOSER} config extra.symfony.allow-contrib true)
+	(cd ${APP_DIR} && ${COMPOSER} config minimum-stability dev)
+	(cd ${APP_DIR} && ${COMPOSER} require --no-install --no-scripts --no-progress sylius/sylius="~${SYLIUS_VERSION}") # Make sure to install the required version of sylius because the sylius-standard has a soft constraint
+	$(MAKE) ${APP_DIR}/.php-version
+	$(MAKE) ${APP_DIR}/php.ini
+	(cd ${APP_DIR} && ${COMPOSER} install --no-interaction)
+	$(MAKE) apply_dist
+	(cd ${APP_DIR} && ${COMPOSER} require --no-progress monsieurbiz/${PLUGIN_NAME}="*@dev")
+	rm -rf ${APP_DIR}/var/cache
+
+
+${APP_DIR}/docker-compose.yaml:
+	rm -f ${APP_DIR}/docker-compose.yml
+	rm -f ${APP_DIR}/docker-compose.yaml
+	ln -s ../../docker-compose.yaml.dist ${APP_DIR}/docker-compose.yaml
+.PHONY: ${APP_DIR}/docker-compose.yaml
+
+${APP_DIR}/.php-version: .php-version
+	(cd ${APP_DIR} && ln -sf ../../.php-version)
+
+${APP_DIR}/php.ini: php.ini
+	(cd ${APP_DIR} && ln -sf ../../php.ini)
+
+apply_dist:
+	ROOT_DIR=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))); \
+	for i in `cd dist && find . -type f`; do \
+		FILE_PATH=`echo $$i | sed 's|./||'`; \
+		FOLDER_PATH=`dirname $$FILE_PATH`; \
+		echo $$FILE_PATH; \
+		(cd ${APP_DIR} && rm -f $$FILE_PATH); \
+		(cd ${APP_DIR} && mkdir -p $$FOLDER_PATH); \
+		(cd ${APP_DIR} && ln -s $$ROOT_DIR/dist/$$FILE_PATH $$FILE_PATH); \
+    done
 
 ###
 ### TESTS
 ### ¯¯¯¯¯
 
-test.all: test.phpstan test.phpcs test.phpmd test.yaml test.schema test.twig
+test.all: test.composer test.phpstan test.phpmd test.phpunit test.phpspec test.phpcs test.yaml test.schema test.twig test.container ## Run all tests in once
 
-test.phpstan:
-	${COMPOSER} run -- phpstan
+test.composer: ## Validate composer.json
+	${COMPOSER} validate --strict
+
+test.phpstan: ## Run PHPStan
+	${COMPOSER} phpstan
+
+test.phpmd: ## Run PHPMD
+	${COMPOSER} phpmd
+
+test.phpunit: ## Run PHPUnit
+	${COMPOSER} phpunit
+
+test.phpspec: ## Run PHPSpec
+	${COMPOSER} phpspec
 
 test.phpcs: ## Run PHP CS Fixer in dry-run
 	${COMPOSER} run -- phpcs --dry-run -v
 
 test.phpcs.fix: ## Run PHP CS Fixer and fix issues if possible
 	${COMPOSER} run -- phpcs -v
-
-test.phpmd: ## Run PHP Mass Detector
-	${COMPOSER} run -- phpmd
 
 test.container: ## Lint the symfony container
 	${CONSOLE} lint:container
@@ -82,7 +144,7 @@ test.twig: ## Validate Twig templates
 ### SYLIUS
 ### ¯¯¯¯¯¯
 
-sylius: dependencies sylius.database sylius.fixtures ## Install Sylius
+sylius: dependencies sylius.database sylius.fixtures sylius.assets ## Install Sylius
 .PHONY: sylius
 
 sylius.database: ## Setup the database
@@ -93,8 +155,10 @@ sylius.database: ## Setup the database
 sylius.fixtures: ## Run the fixtures
 	${CONSOLE} sylius:fixtures:load -n default
 
-doctrine.diff: ## Make doctrine diff
-	${CONSOLE} doctrine:migration:diff --namespace="${DOCTRINE_NAMESPACE}"
+sylius.assets: ## Install all assets with symlinks
+	${CONSOLE} assets:install --symlink
+	${CONSOLE} sylius:install:assets
+	${CONSOLE} sylius:theme:assets:install --symlink
 
 ###
 ### PLATFORM
@@ -104,22 +168,30 @@ platform: .php-version up ## Setup the platform tools
 .PHONY: platform
 
 docker.pull: ## Pull the docker images
-	cd tests/Application && ${COMPOSE} pull
+	cd ${APP_DIR} && ${COMPOSE} pull
 
 docker.up: ## Start the docker containers
-	cd tests/Application && ${COMPOSE} up -d
+	cd ${APP_DIR} && ${COMPOSE} up -d
 .PHONY: docker.up
 
 docker.stop: ## Stop the docker containers
-	cd tests/Application && ${COMPOSE} stop
+	cd ${APP_DIR} && ${COMPOSE} stop
 .PHONY: docker.stop
 
 docker.down: ## Stop and remove the docker containers
-	cd tests/Application && ${COMPOSE} down
+	cd ${APP_DIR} && ${COMPOSE} down
 .PHONY: docker.down
 
+docker.logs: ## Logs the docker containers
+	cd ${APP_DIR} && ${COMPOSE} logs -f
+.PHONY: docker.logs
+
+docker.dc: ARGS=ps
+docker.dc: ## Run docker-compose command. Use ARGS="" to pass parameters to docker-compose.
+	cd ${APP_DIR} && ${COMPOSE} ${ARGS}
+.PHONY: docker.dc
+
 server.start: ## Run the local webserver using Symfony
-	${SYMFONY} local:proxy:domain:attach settings
 	${SYMFONY} local:server:start -d
 
 server.stop: ## Stop the local webserver

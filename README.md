@@ -12,9 +12,9 @@
 
 <h1 align="center">Settings for Sylius</h1>
 
-[![Settings Plugin license](https://img.shields.io/github/license/monsieurbiz/SyliusSettingsPlugin?public)](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/LICENSE)
-[![Tests](https://img.shields.io/github/workflow/status/monsieurbiz/SyliusSettingsPlugin/Tests/master?label=tests&logo=github)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions?query=workflow%3ATests)
-[![Packagist Version (including pre-releases)](https://img.shields.io/packagist/v/monsieurbiz/sylius-settings-plugin?include_prereleases)](https://packagist.org/packages/monsieurbiz/sylius-settings-plugin)
+[![Settings Plugin license](https://img.shields.io/github/license/monsieurbiz/SyliusSettingsPlugin?public)](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/LICENSE.txt)
+[![Tests Status](https://img.shields.io/github/workflow/status/monsieurbiz/SyliusSettingsPlugin/Tests?logo=github)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions?query=workflow%3ATests)
+[![Security Status](https://img.shields.io/github/workflow/status/monsieurbiz/SyliusSettingsPlugin/Security?label=security&logo=github)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions?query=workflow%3ASecurity)
 
 This plugin gives you the ability to have Plugins oriented settings in your favorite e-commerce platform, Sylius.
 

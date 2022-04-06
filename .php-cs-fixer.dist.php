@@ -5,7 +5,7 @@
  *
  * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -16,7 +16,7 @@ This file is part of Monsieur Biz' Settings plugin for Sylius.
 
 (c) Monsieur Biz <sylius@monsieurbiz.com>
 
-For the full copyright and license information, please view the LICENSE
+For the full copyright and license information, please view the LICENSE.txt
 file that was distributed with this source code.
 HEADER;
 
@@ -24,9 +24,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
     ->exclude(
         [
-            'tests/Application/var',
-            'tests/Application/bin',
-            'tests/Application/config',
+            'tests/Application',
         ]
     )
 ;
