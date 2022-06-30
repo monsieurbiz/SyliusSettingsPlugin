@@ -13,30 +13,20 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Twig\Extension;
 
-use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
-use Sylius\Component\Channel\Context\ChannelContextInterface;
+use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
+use MonsieurBiz\SyliusSettingsPlugin\Provider\SettingsProviderInterface;
 use Sylius\Component\Core\Context\ShopperContextInterface;
-use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\ExtensionInterface;
 use Twig\TwigFunction;
 
 final class SettingsExtension extends AbstractExtension implements ExtensionInterface
 {
-    private RegistryInterface $settingsRegistry;
+    private SettingsProviderInterface $settingsProvider;
 
-    private LocaleContextInterface $localeContext;
-
-    private ChannelContextInterface $channelContext;
-
-    public function __construct(
-        RegistryInterface $settingsRegistry,
-        LocaleContextInterface $localeContext,
-        ChannelContextInterface $channelContext
-    ) {
-        $this->settingsRegistry = $settingsRegistry;
-        $this->localeContext = $localeContext;
-        $this->channelContext = $channelContext;
+    public function __construct(SettingsProviderInterface $settings)
+    {
+        $this->settingsProvider = $settings;
     }
 
     public function getFunctions()
@@ -54,12 +44,10 @@ final class SettingsExtension extends AbstractExtension implements ExtensionInte
     public function getSettingValue(array $context, string $alias, string $path)
     {
         if (isset($context['sylius']) && $context['sylius'] instanceof ShopperContextInterface) {
-            if ($settingsInstance = $this->settingsRegistry->getByAlias($alias)) {
-                return $settingsInstance->getCurrentValue(
-                    $context['sylius']->getChannel(),
-                    $context['sylius']->getLocaleCode(),
-                    $path
-                );
+            try {
+                $this->settingsProvider->getSettingValue($alias, $path);
+            } catch (SettingsException $settingsException) {
+                return null;
             }
         }
 
