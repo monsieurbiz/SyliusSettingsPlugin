@@ -82,6 +82,25 @@ $ ./bin/console debug:container | grep app.settings.default
 
 *Note:* the "Settings" menu won't appear until you have at least one setting.
 
+### Fetch settings
+
+```php
+use MonsieurBiz\SyliusSettingsPlugin\Provider\SettingsProviderInterface;
+//...
+
+    private SettingsProviderInterface $settingsProvider;
+
+    public function __construct(SettingsProviderInterface $settingsProvider)
+    {
+            $this->settingsProvider = $settingsProvider;
+    }
+    
+    public function myAwesomeMethod()
+    {
+        $this->settingsProvider->getSettingValue('app.default', 'demo_message')
+    }
+```
+
 ## Contributing
 
 You can find a way to run the plugin without effort in the file [DEVELOPMENT.md](./DEVELOPMENT.md).

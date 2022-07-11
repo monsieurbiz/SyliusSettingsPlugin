@@ -48,3 +48,7 @@ services:
 
     MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface: '@monsieurbiz.settings.registry'
 
+    monsieurbiz.settings.provider:
+      class: MonsieurBiz\SyliusSettingsPlugin\Provider\SettingsProvider
+
+    MonsieurBiz\SyliusSettingsPlugin\Provider\SettingsProviderInterface: '@monsieurbiz.settings.provider'
