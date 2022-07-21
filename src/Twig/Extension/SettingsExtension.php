@@ -45,7 +45,7 @@ final class SettingsExtension extends AbstractExtension implements ExtensionInte
     {
         if (isset($context['sylius']) && $context['sylius'] instanceof ShopperContextInterface) {
             try {
-                $this->settingsProvider->getSettingValue($alias, $path);
+                return $this->settingsProvider->getSettingValue($alias, $path);
             } catch (SettingsException $settingsException) {
                 return null;
             }

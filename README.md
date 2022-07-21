@@ -97,7 +97,7 @@ use MonsieurBiz\SyliusSettingsPlugin\Provider\SettingsProviderInterface;
     
     public function myAwesomeMethod()
     {
-        $this->settingsProvider->getSettingValue('app.default', 'demo_message')
+        return $this->settingsProvider->getSettingValue('app.default', 'demo_message')
     }
 ```
 

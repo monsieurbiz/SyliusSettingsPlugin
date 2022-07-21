@@ -44,7 +44,7 @@ class SettingsProvider implements SettingsProviderInterface
      */
     public function getSettingValue(string $alias, string $path)
     {
-        $this->getSettingValueByChannelAndLocale(
+        return $this->getSettingValueByChannelAndLocale(
             $alias,
             $path,
             $this->channelContext->getChannel(),
