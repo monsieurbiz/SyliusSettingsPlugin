@@ -7,6 +7,8 @@ on:
 jobs:
 
   security:
+      
+    name: PHP ${{ matrix.php }}
 
     runs-on: ubuntu-latest
 

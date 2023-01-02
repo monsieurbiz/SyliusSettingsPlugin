@@ -8,6 +8,8 @@ on:
 jobs:
 
   php:
+      
+    name: PHP ${{ matrix.php }}
 
     runs-on: ubuntu-latest
 

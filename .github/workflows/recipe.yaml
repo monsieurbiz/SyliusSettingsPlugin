@@ -9,6 +9,8 @@ jobs:
 
   recipe:
 
+    name: Sylius ${{ matrix.sylius }}, PHP ${{ matrix.php }}
+
     runs-on: ubuntu-latest
 
     env:
