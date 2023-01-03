@@ -53,7 +53,7 @@ final class Settings implements SettingsInterface
         ];
     }
 
-    public function getVendorName(): string
+    public function getVendorName(): ?string
     {
         return $this->metadata->getParameter('vendor_name');
     }
@@ -63,17 +63,17 @@ final class Settings implements SettingsInterface
         return $this->metadata->getParameter('vendor_url');
     }
 
-    public function getPluginName(): string
+    public function getPluginName(): ?string
     {
         return $this->metadata->getParameter('plugin_name');
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->metadata->getParameter('description');
     }
 
-    public function getIcon(): string
+    public function getIcon(): ?string
     {
         return $this->metadata->getParameter('icon');
     }
@@ -84,7 +84,7 @@ final class Settings implements SettingsInterface
     public function getFormClass(): string
     {
         $className = $this->metadata->getClass('form');
-        $parentClassNames = (array) class_parents($className) ?? [];
+        $parentClassNames = (array) (class_parents($className) ?: []);
         if (!\in_array(AbstractSettingsType::class, $parentClassNames, true)) {
             throw new SettingsException(sprintf('Class %s should extend %s', $className, AbstractSettingsType::class));
         }

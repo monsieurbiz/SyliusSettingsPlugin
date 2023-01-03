@@ -90,6 +90,11 @@ $config
         'function_to_constant' => true,
         'function_typehint_space' => true,
         'general_phpdoc_tag_rename' => true,
+        'global_namespace_import' => [
+            'import_classes' => true,
+            'import_constants' => false,
+            'import_functions' => false,
+        ],
         'header_comment' => [
             'header' => $header,
             'location' => 'after_open',
@@ -169,8 +174,7 @@ $config
         'no_unused_imports' => true,
         'no_useless_else' => true,
         'no_useless_return' => true,
-        'no_trailing_comma_in_list_call' => true,
-        'no_trailing_comma_in_singleline_array' => true,
+        'no_trailing_comma_in_singleline' => true,
         'no_trailing_whitespace' => true,
         'no_trailing_whitespace_in_comment' => true,
         'no_whitespace_before_comma_in_array' => true,

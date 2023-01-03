@@ -35,6 +35,7 @@ final class SettingFactory implements SettingFactoryInterface
      */
     public function createNew()
     {
+        /** @var SettingInterface */
         return new $this->className();
     }
 

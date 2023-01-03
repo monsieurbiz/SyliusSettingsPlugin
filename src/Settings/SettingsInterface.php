@@ -25,15 +25,15 @@ interface SettingsInterface
 
     public function getAliasAsArray(): array;
 
-    public function getVendorName(): string;
+    public function getVendorName(): ?string;
 
     public function getVendorUrl(): ?string;
 
-    public function getPluginName(): string;
+    public function getPluginName(): ?string;
 
-    public function getDescription(): string;
+    public function getDescription(): ?string;
 
-    public function getIcon(): string;
+    public function getIcon(): ?string;
 
     /**
      * @throws SettingsException

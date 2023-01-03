@@ -32,9 +32,8 @@
         "pamil/prophecy-common": "@stable",
         "phpspec/phpspec": "@stable",
         "phpstan/phpstan": "@stable",
-        "phpstan/phpstan-doctrine": "^0.12.19",
-        "phpstan/phpstan-webmozart-assert": "^0.12.7",
-        "phpunit/phpunit": "@stable",
+        "phpstan/phpstan-doctrine": "@stable",
+        "phpstan/phpstan-webmozart-assert": "@stable",
         "psalm/plugin-mockery": "@stable",
         "psr/event-dispatcher": "@stable",
         "symfony/browser-kit": "@stable",
@@ -59,7 +58,6 @@
         "phpcs": "php-cs-fixer fix --using-cache=no",
         "phpstan": "phpstan analyse -c phpstan.neon src/",
         "phpmd": "phpmd --exclude Migrations/* src/ ansi phpmd.xml",
-        "phpunit": "phpunit",
         "phpspec": "phpspec run"
     },
     "extra": {

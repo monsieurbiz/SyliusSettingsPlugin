@@ -54,8 +54,9 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var SettingsInterface $settings */
         $settings = $options['settings'];
-        $data = $options['data'];
+        $data = (array) $options['data'];
         $builder->add(
             $key = Settings::DEFAULT_KEY . '-' . Settings::DEFAULT_KEY,
             $settings->getFormClass(),

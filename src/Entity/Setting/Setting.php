@@ -106,6 +106,7 @@ class Setting implements SettingInterface
 
     /**
      * @var DateTimeInterface|null
+     *
      * @ORM\Column(name="created_at", type="datetime_immutable")
      * @Gedmo\Timestampable(on="create")
      */
@@ -113,6 +114,7 @@ class Setting implements SettingInterface
 
     /**
      * @var DateTimeInterface|null
+     *
      * @ORM\Column(name="updated_at", type="datetime")
      * @Gedmo\Timestampable(on="update")
      */
