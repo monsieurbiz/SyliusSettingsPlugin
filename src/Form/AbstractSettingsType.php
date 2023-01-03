@@ -37,7 +37,7 @@ abstract class AbstractSettingsType extends AbstractType implements SettingsType
 
     public function addWithDefaultCheckbox(FormBuilderInterface $builder, string $child, string $type = null, array $options = []): self
     {
-        $data = $builder->getData();
+        $data = (array) $builder->getData();
         $builder->add($child, $type, $options);
         if (!$this->isDefaultForm($builder)) {
             $builder->add($child . '___' . Settings::DEFAULT_KEY, DefaultCheckboxType::class, [

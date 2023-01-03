@@ -36,7 +36,7 @@ final class SettingRepository extends EntityRepository implements SettingReposit
         // Manage Locale
         $this->addLocaleCondition($queryBuilder, $localeCode, false);
 
-        return $queryBuilder->getQuery()->getResult();
+        return (array) $queryBuilder->getQuery()->getResult();
     }
 
     public function findAllByChannelAndLocaleWithDefault(string $vendor, string $plugin, ChannelInterface $channel = null, ?string $localeCode = null): array
@@ -76,7 +76,7 @@ final class SettingRepository extends EntityRepository implements SettingReposit
         EXPR);
         $queryBuilder->addOrderBy('value_position', 'DESC');
 
-        return $queryBuilder->getQuery()->getResult();
+        return (array) $queryBuilder->getQuery()->getResult();
     }
 
     /**

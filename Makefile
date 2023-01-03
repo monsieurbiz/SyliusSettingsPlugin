@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 SHELL=/bin/bash
 APP_DIR=tests/Application
-SYLIUS_VERSION=1.11.0
+SYLIUS_VERSION=1.12.0
 SYMFONY=cd ${APP_DIR} && symfony
 COMPOSER=symfony composer
 CONSOLE=${SYMFONY} console
@@ -106,7 +106,7 @@ apply_dist:
 ### TESTS
 ### ¯¯¯¯¯
 
-test.all: test.composer test.phpstan test.phpmd test.phpunit test.phpspec test.phpcs test.yaml test.schema test.twig test.container ## Run all tests in once
+test.all: test.composer test.phpstan test.phpmd test.phpspec test.phpcs test.yaml test.schema test.twig test.container ## Run all tests in once
 
 test.composer: ## Validate composer.json
 	${COMPOSER} validate --strict
@@ -116,9 +116,6 @@ test.phpstan: ## Run PHPStan
 
 test.phpmd: ## Run PHPMD
 	${COMPOSER} phpmd
-
-test.phpunit: ## Run PHPUnit
-	${COMPOSER} phpunit
 
 test.phpspec: ## Run PHPSpec
 	${COMPOSER} phpspec

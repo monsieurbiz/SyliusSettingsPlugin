@@ -63,7 +63,7 @@ final class SettingsController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
+            $data = (array) $form->getData();
             $this->settingsProcessor->processData($settings, $data);
             $this->addFlash('success', 'monsieurbiz.settings.settings_successfully_saved');
 

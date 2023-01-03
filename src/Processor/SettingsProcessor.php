@@ -16,21 +16,19 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Processor;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
 use MonsieurBiz\SyliusSettingsPlugin\Factory\SettingFactoryInterface;
-use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Settings;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use TypeError;
 
 final class SettingsProcessor implements SettingsProcessorInterface
 {
     private ChannelRepositoryInterface $channelRepository;
 
     private RepositoryInterface $localeRepository;
-
-    private SettingRepositoryInterface $settingRepository;
 
     private EntityManagerInterface $entityManager;
 
@@ -42,13 +40,11 @@ final class SettingsProcessor implements SettingsProcessorInterface
     public function __construct(
         ChannelRepositoryInterface $channelRepository,
         RepositoryInterface $localeRepository,
-        SettingRepositoryInterface $settingRepository,
         EntityManagerInterface $entityManager,
         SettingFactoryInterface $settingFactory
     ) {
         $this->channelRepository = $channelRepository;
         $this->localeRepository = $localeRepository;
-        $this->settingRepository = $settingRepository;
         $this->entityManager = $entityManager;
         $this->settingFactory = $settingFactory;
     }
@@ -73,13 +69,13 @@ final class SettingsProcessor implements SettingsProcessorInterface
             // Default website + Default locale
             case sprintf('%1$s-%1$s', Settings::DEFAULT_KEY) === $settingKey:
                 return [null, null];
-            // Default website + locale
+                // Default website + locale
             case 1 === preg_match(sprintf('`^%1$s-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingKey, $matches):
                 return [null, $matches['localeCode']];
-            // Website + default locale
+                // Website + default locale
             case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-%1$s$`', Settings::DEFAULT_KEY), $settingKey, $matches):
                 return [(int) $matches['channelId'], null];
-            // Website + locale
+                // Website + locale
             case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingKey, $matches):
                 return [(int) $matches['channelId'], $matches['localeCode']];
             default:
@@ -137,7 +133,7 @@ final class SettingsProcessor implements SettingsProcessorInterface
                     $this->entityManager->persist($setting);
 
                     continue;
-                } catch (\TypeError $e) {
+                } catch (TypeError $e) {
                     // The type doesn't match, it could be normal, let's find the type out of the value.
                 }
             }

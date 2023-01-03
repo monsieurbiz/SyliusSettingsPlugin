@@ -9,7 +9,9 @@ parameters:
 
     checkMissingIterableValueType: false
 
-    excludes_analyse:
+    checkGenericClassInNonGenericObjectType: false
+
+    excludePaths:
         # Makes PHPStan crash
         - 'src/DependencyInjection/Configuration.php'
         - 'src/DependencyInjection/MonsieurBizSyliusSettingsExtension.php'

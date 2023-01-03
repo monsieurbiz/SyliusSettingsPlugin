@@ -67,7 +67,7 @@ final class InstantiateSettingsPass implements CompilerPassInterface
 
     private function validateSettingsResource(string $class): void
     {
-        $classImplements = (array) class_implements($class) ?? [];
+        $classImplements = (array) (class_implements($class) ?: []);
         if (!\in_array(SettingsInterface::class, $classImplements, true)) {
             throw new InvalidArgumentException(sprintf('Class "%s" must implement "%s" to be registered as a Settings resource.', $class, SettingsInterface::class));
         }
