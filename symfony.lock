@@ -55,9 +55,6 @@
     "composer/xdebug-handler": {
         "version": "1.4.6"
     },
-    "dealerdirect/phpcodesniffer-composer-installer": {
-        "version": "v0.7.1"
-    },
     "dmore/behat-chrome-extension": {
         "version": "1.3.0"
     },
@@ -199,12 +196,12 @@
         "version": "v1.4.0"
     },
     "friendsofphp/php-cs-fixer": {
-        "version": "2.19",
+        "version": "3.13",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "2.19",
-            "ref": "34d1a22f840953909c581b8f993093b14cc9491b"
+            "branch": "main",
+            "version": "3.0",
+            "ref": "be2103eb4a20942e28a6dd87736669b757132435"
         },
         "files": [
             ".php-cs-fixer.dist.php"
@@ -305,6 +302,19 @@
     },
     "lcobucci/jwt": {
         "version": "4.1.5"
+    },
+    "league/flysystem-bundle": {
+        "version": "2.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "913dc3d7a5a1af0d2b044c5ac3a16e2f851d7380"
+        },
+        "files": [
+            "config/packages/flysystem.yaml",
+            "var/storage/.gitignore"
+        ]
     },
     "league/uri": {
         "version": "6.5.0"
@@ -427,9 +437,6 @@
     "phar-io/version": {
         "version": "3.1.0"
     },
-    "php-cs-fixer/diff": {
-        "version": "v1.3.1"
-    },
     "php-http/client-common": {
         "version": "2.4.0"
     },
@@ -495,9 +502,6 @@
     },
     "phpunit/php-timer": {
         "version": "2.1.3"
-    },
-    "phpunit/php-token-stream": {
-        "version": "4.0.4"
     },
     "phpunit/phpunit": {
         "version": "8.5",
@@ -588,9 +592,6 @@
     "sebastian/version": {
         "version": "2.0.1"
     },
-    "slevomat/coding-standard": {
-        "version": "6.4.1"
-    },
     "sonata-project/block-bundle": {
         "version": "4.8.0"
     },
@@ -612,15 +613,6 @@
     "sonata-project/twig-extensions": {
         "version": "1.9.0"
     },
-    "squizlabs/php_codesniffer": {
-        "version": "3.6",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.6",
-            "ref": "1019e5c08d4821cb9b77f4891f8e9c31ff20ac6f"
-        }
-    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.6",
         "recipe": {
@@ -636,9 +628,6 @@
     "sylius-labs/association-hydrator": {
         "version": "v1.1.4"
     },
-    "sylius-labs/coding-standard": {
-        "version": "v3.2.2"
-    },
     "sylius-labs/doctrine-migrations-extra-bundle": {
         "version": "v0.1.4"
     },
@@ -650,6 +639,9 @@
     },
     "sylius-labs/polyfill-symfony-security": {
         "version": "v1.0.0"
+    },
+    "sylius/calendar": {
+        "version": "v0.3.0"
     },
     "sylius/fixtures-bundle": {
         "version": "v1.7.0"
@@ -814,6 +806,18 @@
     "symfony/intl": {
         "version": "v5.3.8"
     },
+    "symfony/mailer": {
+        "version": "6.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "4.3",
+            "ref": "2bf89438209656b85b9a49238c4467bff1b1f939"
+        },
+        "files": [
+            "config/packages/mailer.yaml"
+        ]
+    },
     "symfony/messenger": {
         "version": "5.3",
         "recipe": {
@@ -872,9 +876,6 @@
         "version": "v1.23.1"
     },
     "symfony/polyfill-php56": {
-        "version": "v1.20.0"
-    },
-    "symfony/polyfill-php70": {
         "version": "v1.20.0"
     },
     "symfony/polyfill-php72": {
@@ -1039,6 +1040,25 @@
             "config/packages/dev/web_profiler.yaml"
         ]
     },
+    "symfony/webpack-encore-bundle": {
+        "version": "1.16",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.10",
+            "ref": "f8fc53f1942f76679e9ee3c25fd44865355707b5"
+        },
+        "files": [
+            "assets/app.js",
+            "assets/bootstrap.js",
+            "assets/controllers.json",
+            "assets/controllers/hello_controller.js",
+            "assets/styles/app.css",
+            "config/packages/webpack_encore.yaml",
+            "package.json",
+            "webpack.config.js"
+        ]
+    },
     "symfony/yaml": {
         "version": "v5.3.6"
     },
@@ -1049,9 +1069,6 @@
         "version": "8.3.48"
     },
     "symplify/console-color-diff": {
-        "version": "8.3.48"
-    },
-    "symplify/easy-coding-standard": {
         "version": "8.3.48"
     },
     "symplify/package-builder": {
@@ -1092,12 +1109,6 @@
     },
     "webmozart/assert": {
         "version": "1.9.1"
-    },
-    "webmozart/glob": {
-        "version": "4.4.0"
-    },
-    "webmozart/path-util": {
-        "version": "2.3.0"
     },
     "willdurand/hateoas": {
         "version": "3.7.0"
