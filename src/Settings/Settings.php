@@ -55,27 +55,32 @@ final class Settings implements SettingsInterface
 
     public function getVendorName(): ?string
     {
-        return $this->metadata->getParameter('vendor_name');
+        /** @phpstan-ignore-next-line */
+        return (string) $this->metadata->getParameter('vendor_name');
     }
 
     public function getVendorUrl(): ?string
     {
-        return $this->metadata->getParameter('vendor_url');
+        /** @phpstan-ignore-next-line */
+        return (string) $this->metadata->getParameter('vendor_url');
     }
 
     public function getPluginName(): ?string
     {
-        return $this->metadata->getParameter('plugin_name');
+        /** @phpstan-ignore-next-line */
+        return (string) $this->metadata->getParameter('plugin_name');
     }
 
     public function getDescription(): ?string
     {
-        return $this->metadata->getParameter('description');
+        /** @phpstan-ignore-next-line */
+        return (string) $this->metadata->getParameter('description');
     }
 
     public function getIcon(): ?string
     {
-        return $this->metadata->getParameter('icon');
+        /** @phpstan-ignore-next-line */
+        return (string) $this->metadata->getParameter('icon');
     }
 
     /**

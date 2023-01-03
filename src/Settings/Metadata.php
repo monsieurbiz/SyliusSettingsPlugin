@@ -71,7 +71,7 @@ final class Metadata implements MetadataInterface
     /**
      * @inheritdoc
      */
-    public function getParameter(string $name): ?string
+    public function getParameter(string $name)
     {
         if (!$this->hasParameter($name)) {
             throw new InvalidArgumentException(sprintf('Parameter "%s" is not configured for resource "%s".', $name, $this->getAlias()));
