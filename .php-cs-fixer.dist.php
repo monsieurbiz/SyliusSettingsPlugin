@@ -49,6 +49,7 @@ $config
         'binary_operator_spaces' => true,
         'blank_line_after_opening_tag' => true,
         'blank_line_after_namespace' => true,
+        'blank_lines_before_namespace' => true,
         'blank_line_before_statement' => true,
         'braces' => [
             'allow_single_line_closure' => true,
@@ -235,7 +236,6 @@ $config
         'self_accessor' => true,
         'short_scalar_cast' => true,
         'single_blank_line_at_eof' => true,
-        'blank_lines_before_namespace' => true,
         'single_class_element_per_statement' => true,
         'single_import_per_statement' => true,
         'single_line_after_imports' => true,

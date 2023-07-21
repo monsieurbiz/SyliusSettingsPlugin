@@ -61,6 +61,7 @@ final class Configuration implements ConfigurationInterface
                             ->end()
                             ->arrayNode('default_values_for_channels')
                                 ->defaultValue([])
+                                ->useAttributeAsKey('channel')
                                 ->arrayPrototype()
                                     ->children()
                                     ->variableNode('channel')

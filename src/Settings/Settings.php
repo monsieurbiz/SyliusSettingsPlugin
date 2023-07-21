@@ -237,17 +237,13 @@ final class Settings implements SettingsInterface
      */
     private function getDefaultValueForChannel(?ChannelInterface $channel): array
     {
-        $allChannelDefaultValues = $this->getDefaultValuesForChannels();
-
-        $defaultValues = [];
-        $channelCode = $channel ? $channel->getCode() : '';
-        foreach ($allChannelDefaultValues as $channelDefaultValues) {
-            if (isset($channelDefaultValues['channel']) && $channelDefaultValues['channel'] === $channelCode) {
-                $defaultValues = $channelDefaultValues['default_values'] ?? [];
-            }
+        if (null === $channel) {
+            return [];
         }
 
-        return $defaultValues;
+        $defaultValuesForChannels = $this->getDefaultValuesForChannels();
+
+        return $defaultValuesForChannels[$channel->getCode()]['default_values'] ?? [];
     }
 
     /**

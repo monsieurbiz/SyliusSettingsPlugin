@@ -73,13 +73,12 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
      */
     private function getChannelInitialFormData(SettingsInterface $settings): array
     {
-        $defaultDataByChannel = $this->getDefaultValuesForChannels($settings);
-
         $data = [];
         /** @var ChannelInterface $channel */
         foreach ($this->channelRepository->findAll() as $channel) {
             $channelKey = 'channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY;
             $data[$channelKey] = $settings->getSettingsValuesByChannelAndLocale($channel);
+            $defaultDataByChannel = $this->getDefaultValuesByChannel($settings, $channel);
 
             if (isset($defaultDataByChannel[$channelKey])) {
                 $data[$channelKey] += $defaultDataByChannel[$channelKey];
@@ -95,21 +94,13 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
         return $data;
     }
 
-    private function getDefaultValuesForChannels(SettingsInterface $settings): array
+    private function getDefaultValuesByChannel(SettingsInterface $settings, ChannelInterface $channel): array
     {
         $defaultDataByChannel = [];
-        if (!empty($defaultValuesForChannels = $settings->getDefaultValuesForChannels())) {
-            foreach ($defaultValuesForChannels as $defaultValue) {
-                $channelCode = $defaultValue['channel'];
-                /** @var ?ChannelInterface $channel */
-                $channel = $this->channelRepository->findOneByCode($channelCode);
-
-                if (null === $channel) {
-                    continue;
-                }
-
-                $defaultDataByChannel['channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY] = $defaultValue['default_values'] ?? '';
-            }
+        $defaultValuesForChannels = $settings->getDefaultValuesForChannels();
+        $channelCode = $channel->getCode();
+        if (isset($defaultValuesForChannels[$channelCode])) {
+            $defaultDataByChannel['channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY] = $defaultValuesForChannels[$channelCode]['default_values'] ?? [];
         }
 
         return $defaultDataByChannel;

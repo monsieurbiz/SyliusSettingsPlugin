@@ -101,6 +101,14 @@ use MonsieurBiz\SyliusSettingsPlugin\Provider\SettingsProviderInterface;
     }
 ```
 
+### Default Values
+
+You can also set default values for your settings either on a global scope or in the scope of a channel.
+
+- The [configuration file](dist/config/packages/monsieurbiz_settings_plugin_custom.yaml) to set default values.
+The settings in the higher key `default_values` will be global and can be overridden with `default_values_for_channels`
+by giving a channel code and the `default_values` specific to this channel.
+
 ## Contributing
 
 You can find a way to run the plugin without effort in the file [DEVELOPMENT.md](./DEVELOPMENT.md).
