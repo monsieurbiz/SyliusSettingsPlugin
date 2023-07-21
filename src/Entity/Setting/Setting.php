@@ -55,6 +55,7 @@ class Setting implements SettingInterface
     /**
      * @ORM\ManyToOne(targetEntity="\Sylius\Component\Core\Model\ChannelInterface")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
+     *
      * @Assert\Type(type="\Sylius\Component\Core\Model\ChannelInterface")
      */
     private ?ChannelInterface $channel;
@@ -108,6 +109,7 @@ class Setting implements SettingInterface
      * @var DateTimeInterface|null
      *
      * @ORM\Column(name="created_at", type="datetime_immutable")
+     *
      * @Gedmo\Timestampable(on="create")
      */
     protected $createdAt;
@@ -116,6 +118,7 @@ class Setting implements SettingInterface
      * @var DateTimeInterface|null
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     *
      * @Gedmo\Timestampable(on="update")
      */
     protected $updatedAt;
