@@ -101,6 +101,11 @@ final class Metadata implements MetadataInterface
         return $this->parameters['default_values'];
     }
 
+    public function getDefaultValuesForChannels(): array
+    {
+        return $this->parameters['default_values_for_channels'];
+    }
+
     /**
      * @inheritdoc
      */

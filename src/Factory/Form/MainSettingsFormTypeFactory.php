@@ -68,12 +68,22 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
         return $data + $this->getChannelInitialFormData($settings);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function getChannelInitialFormData(SettingsInterface $settings): array
     {
+        $defaultDataByChannel = $this->getDefaultValuesForChannels($settings);
+
         $data = [];
         /** @var ChannelInterface $channel */
         foreach ($this->channelRepository->findAll() as $channel) {
-            $data['channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY] = $settings->getSettingsValuesByChannelAndLocale($channel);
+            $channelKey = 'channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY;
+            $data[$channelKey] = $settings->getSettingsValuesByChannelAndLocale($channel);
+
+            if (isset($defaultDataByChannel[$channelKey])) {
+                $data[$channelKey] += $defaultDataByChannel[$channelKey];
+            }
 
             if ($settings->showLocalesInForm()) {
                 foreach ($channel->getLocales() as $locale) {
@@ -83,5 +93,25 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
         }
 
         return $data;
+    }
+
+    private function getDefaultValuesForChannels(SettingsInterface $settings): array
+    {
+        $defaultDataByChannel = [];
+        if (!empty($defaultValuesForChannels = $settings->getDefaultValuesForChannels())) {
+            foreach ($defaultValuesForChannels as $defaultValue) {
+                $channelCode = $defaultValue['channel'];
+                /** @var ?ChannelInterface $channel */
+                $channel = $this->channelRepository->findOneByCode($channelCode);
+
+                if (null === $channel) {
+                    continue;
+                }
+
+                $defaultDataByChannel['channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY] = $defaultValue['default_values'] ?? '';
+            }
+        }
+
+        return $defaultDataByChannel;
     }
 }

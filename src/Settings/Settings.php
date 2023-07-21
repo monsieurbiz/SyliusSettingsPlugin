@@ -204,12 +204,22 @@ final class Settings implements SettingsInterface
             return $settings[$path]->getValue();
         }
 
+        $defaultSettingByChannel = $this->getDefaultValueForChannel($channel);
+        if (isset($defaultSettingByChannel[$path])) {
+            return $defaultSettingByChannel[$path];
+        }
+
         return $this->getDefaultValue($path);
     }
 
     public function getDefaultValues(): array
     {
         return $this->metadata->getDefaultValues();
+    }
+
+    public function getDefaultValuesForChannels(): array
+    {
+        return $this->metadata->getDefaultValuesForChannels();
     }
 
     public function getDefaultValue(string $path)
@@ -220,6 +230,24 @@ final class Settings implements SettingsInterface
         }
 
         return null;
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function getDefaultValueForChannel(?ChannelInterface $channel): array
+    {
+        $allChannelDefaultValues = $this->getDefaultValuesForChannels();
+
+        $defaultValues = [];
+        $channelCode = $channel ? $channel->getCode() : '';
+        foreach ($allChannelDefaultValues as $channelDefaultValues) {
+            if (isset($channelDefaultValues['channel']) && $channelDefaultValues['channel'] === $channelCode) {
+                $defaultValues = $channelDefaultValues['default_values'] ?? [];
+            }
+        }
+
+        return $defaultValues;
     }
 
     /**

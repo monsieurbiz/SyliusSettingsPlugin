@@ -40,6 +40,8 @@ interface MetadataInterface
 
     public function getDefaultValues(): array;
 
+    public function getDefaultValuesForChannels(): array;
+
     public function getClass(string $name): string;
 
     public function hasClass(string $name): bool;
