@@ -43,9 +43,9 @@ interface SettingsInterface
     /**
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function getSettingsByChannelAndLocale(ChannelInterface $channel = null, string $localeCode = null, bool $withDefault = false): array;
+    public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false): array;
 
-    public function getSettingsValuesByChannelAndLocale(ChannelInterface $channel = null, string $localeCode = null): array;
+    public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null): array;
 
     /**
      * @return mixed

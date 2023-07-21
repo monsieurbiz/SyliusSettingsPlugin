@@ -68,9 +68,6 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
         return $data + $this->getChannelInitialFormData($settings);
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
     private function getChannelInitialFormData(SettingsInterface $settings): array
     {
         $data = [];
@@ -84,11 +81,7 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
                 $data[$channelKey] += $defaultDataByChannel[$channelKey];
             }
 
-            if ($settings->showLocalesInForm()) {
-                foreach ($channel->getLocales() as $locale) {
-                    $data['channel-' . $channel->getId() . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale($channel, $locale->getCode());
-                }
-            }
+            $data = $this->addLocaleValuesInForm($settings, $channel, $data);
         }
 
         return $data;
@@ -104,5 +97,16 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
         }
 
         return $defaultDataByChannel;
+    }
+
+    private function addLocaleValuesInForm(SettingsInterface $settings, ChannelInterface $channel, array $data): array
+    {
+        if ($settings->showLocalesInForm()) {
+            foreach ($channel->getLocales() as $locale) {
+                $data['channel-' . $channel->getId() . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale($channel, $locale->getCode());
+            }
+        }
+
+        return $data;
     }
 }
