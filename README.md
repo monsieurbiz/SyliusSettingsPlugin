@@ -101,6 +101,14 @@ use MonsieurBiz\SyliusSettingsPlugin\Provider\SettingsProviderInterface;
     }
 ```
 
+### Use fixtures
+
+We've implemented a fixtures loader to help you to create your settings if you need to have different settings for your
+tests or project (by channel, by locale…).
+
+You need to create a yaml file with your fixtures, like explained in the documentation of Sylius.  
+You can find our own example in the source code, section `sylius_fixtures`: [configuration file](dist/config/packages/monsieurbiz_settings_plugin_custom.yaml).
+
 ## Contributing
 
 You can find a way to run the plugin without effort in the file [DEVELOPMENT.md](./DEVELOPMENT.md).
