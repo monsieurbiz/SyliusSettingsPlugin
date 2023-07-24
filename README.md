@@ -13,8 +13,8 @@
 <h1 align="center">Settings for Sylius</h1>
 
 [![Settings Plugin license](https://img.shields.io/github/license/monsieurbiz/SyliusSettingsPlugin?public)](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/LICENSE.txt)
-[![Tests Status](https://img.shields.io/github/workflow/status/monsieurbiz/SyliusSettingsPlugin/Tests?logo=github)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions?query=workflow%3ATests)
-[![Security Status](https://img.shields.io/github/workflow/status/monsieurbiz/SyliusSettingsPlugin/Security?label=security&logo=github)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions?query=workflow%3ASecurity)
+[![Tests](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/tests.yaml/badge.svg?branch=master&event=push)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/tests.yaml)
+[![Security](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/security.yaml/badge.svg?branch=master&event=push)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/security.yaml)
 
 This plugin gives you the ability to have Plugins oriented settings in your favorite e-commerce platform, Sylius.
 
