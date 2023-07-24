@@ -40,6 +40,8 @@ class SettingsFixtureFactory extends AbstractExampleFactory
         $this->channelRepository = $channelRepository;
         $this->settingFactory = $settingFactory;
         $this->optionsResolver = new OptionsResolver();
+
+        $this->configureOptions($this->optionsResolver);
     }
 
     public function create(array $options = []): SettingInterface
