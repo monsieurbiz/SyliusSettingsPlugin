@@ -74,7 +74,14 @@ class SettingsFixtureFactory extends AbstractExampleFactory
         return $setting;
     }
 
-    private function formatValue($type, &$value): void
+    /**
+     * @param int|float|string|array $value
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     *
+     * @phpstan-ignore-next-line
+     */
+    private function formatValue(string $type, &$value): void
     {
         switch ($type) {
             case SettingInterface::STORAGE_TYPE_BOOLEAN:
@@ -91,7 +98,7 @@ class SettingsFixtureFactory extends AbstractExampleFactory
                 break;
             case SettingInterface::STORAGE_TYPE_JSON:
                 if (!\is_array($value)) {
-                    $value = json_decode($value, true);
+                    $value = json_decode((string) $value, true);
                 }
 
                 break;
@@ -99,9 +106,11 @@ class SettingsFixtureFactory extends AbstractExampleFactory
             case SettingInterface::STORAGE_TYPE_DATETIME:
                 if (\is_int($value)) {
                     $value = (new DateTime())->setTimestamp($value);
-                } else {
-                    $value = new DateTime($value);
+
+                    break;
                 }
+
+                $value = new DateTime((string) $value);
 
                 break;
         }
