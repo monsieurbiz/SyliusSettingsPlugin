@@ -50,7 +50,7 @@ class SettingsFixtureFactory extends AbstractExampleFactory
 
         /** @var SettingsInterface $settings */
         $settings = $this->settingsRegistry->getByAlias($options['alias']);
-        [$vendor, $plugin] = $settings->getAliasAsArray();
+        ['vendor' => $vendor, 'plugin' => $plugin] = $settings->getAliasAsArray();
 
         /** @var $setting SettingInterface */
         $setting = $this->settingFactory->createNew();
