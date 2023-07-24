@@ -111,6 +111,21 @@ You can find our own example in the source code, section `sylius_fixtures`: [con
 
 It's also possible to run test fixtures with a local suite in development: `make sylius.fixtures.local`.
 
+### Use CLI
+
+You can use a CLI command to set a value for a setting directly from the console:
+`$ ./bin/console monsieurbiz:settings:set {alias} {path} {type} {value} --channel="FASHION_WEB" --locale="en_US"`
+
+Examples:
+```bash
+$ ./bin/console monsieurbiz:settings:set app.default demo_message text 'fashion message' --channel="FASHION_WEB" --locale="en_US"
+$ ./bin/console monsieurbiz:settings:set app.default demo_message json '{"foo":"baz"}' --channel="FASHION_WEB" --locale="en_US"
+$ ./bin/console monsieurbiz:settings:set app.default demo_message datetime '2023-07-24 01:02:03' --channel="FASHION_WEB" --locale="en_US"
+$ ./bin/console monsieurbiz:settings:set app.default enabled boolean 0
+```
+The options channel and locale can be omitted if you want to set the value for a global scope.
+
+
 ## Contributing
 
 You can find a way to run the plugin without effort in the file [DEVELOPMENT.md](./DEVELOPMENT.md).
