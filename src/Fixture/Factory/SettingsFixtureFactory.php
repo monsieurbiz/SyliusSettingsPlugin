@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Fixture\Factory;
 
+use DateTime;
 use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\SettingInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
@@ -57,9 +58,35 @@ class SettingsFixtureFactory extends AbstractExampleFactory
         $setting->setVendor($vendor);
         $setting->setPlugin($plugin);
         $setting->setPath($options['path']);
-        $setting->setStorageType($options['type']);
-        $setting->setValue($options['value']);
         $setting->setLocaleCode($options['locale']);
+        $setting->setStorageType($options['type']);
+
+        switch ($options['type']) {
+            case SettingInterface::STORAGE_TYPE_BOOLEAN:
+                $options['value'] = (bool) $options['value'];
+                break;
+            case SettingInterface::STORAGE_TYPE_INTEGER:
+                $options['value'] = (int) $options['value'];
+                break;
+            case SettingInterface::STORAGE_TYPE_FLOAT:
+                $options['value'] = (float) $options['value'];
+                break;
+            case SettingInterface::STORAGE_TYPE_JSON:
+                if (!is_array($options['value'])) {
+                    $options['value'] = json_decode($options['value']);
+                }
+                break;
+            case SettingInterface::STORAGE_TYPE_DATE:
+            case SettingInterface::STORAGE_TYPE_DATETIME:
+                if (is_int($options['value'])) {
+                    $options['value'] = (new DateTime())->setTimestamp($options['value']);
+                } else {
+                    $options['value'] = new DateTime($options['value']);
+                }
+                break;
+        }
+
+        $setting->setValue($options['value']);
 
         if (null !== $options['channel']) {
             /** @var ?ChannelInterface $channel */

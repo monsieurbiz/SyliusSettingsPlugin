@@ -66,6 +66,11 @@ sylius_fixtures:
                                     {'foo':'bar'}
                             -
                                 alias: app.default
+                                path: test_json_array
+                                type: json
+                                value: {'foo':'bar'}
+                            -
+                                alias: app.default
                                 path: test_int
                                 type: integer
                                 value: 42
