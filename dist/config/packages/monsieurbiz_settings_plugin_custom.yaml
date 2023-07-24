@@ -48,3 +48,40 @@ sylius_fixtures:
                                 # no locale because we want the default
                                 type: text
                                 value: My very default message
+                            -
+                                alias: app.default
+                                path: test_bool
+                                type: boolean
+                                value: true
+                            -
+                                alias: app.default
+                                path: test_bool2
+                                type: boolean
+                                value: false
+                            -
+                                alias: app.default
+                                path: test_json
+                                type: json
+                                value: |
+                                    {'foo':'bar'}
+                            -
+                                alias: app.default
+                                path: test_int
+                                type: integer
+                                value: 42
+                            -
+                                alias: app.default
+                                path: test_float
+                                type: float
+                                value: 13.37
+                            -
+                                alias: app.default
+                                path: test_date
+                                type: date
+                                value: 2023-07-24
+                            -
+                                alias: app.default
+                                path: test_datetime
+                                type: datetime
+                                value: 2023-07-24 01:02:03
+                                
