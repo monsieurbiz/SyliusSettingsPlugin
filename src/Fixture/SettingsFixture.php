@@ -22,8 +22,8 @@ final class SettingsFixture extends AbstractResourceFixture
 {
     public function __construct(
         EntityManagerInterface $settingsManager,
-        SettingsFixtureFactory $exampleFactory)
-    {
+        SettingsFixtureFactory $exampleFactory
+    ) {
         parent::__construct($settingsManager, $exampleFactory);
     }
 
