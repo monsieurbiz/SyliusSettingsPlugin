@@ -19,3 +19,18 @@ sylius_ui:
             blocks:
                 demo_message:
                     template: '/views/message.html.twig'
+
+sylius_fixtures:
+    suites:
+        default:
+            fixtures:
+                monsieurbiz_settings:
+                    options:
+                        custom:
+                            -
+                                alias: app.default
+                                path: demo_message
+                                channel: FASHION_WEB
+                                locale: en_US
+                                type: text
+                                value: My amazing very fashion message
