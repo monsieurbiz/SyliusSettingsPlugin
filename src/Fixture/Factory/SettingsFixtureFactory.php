@@ -15,6 +15,7 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Fixture\Factory;
 
 use DateTime;
 use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\SettingInterface;
+use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
@@ -33,14 +34,18 @@ class SettingsFixtureFactory extends AbstractExampleFactory
 
     private FactoryInterface $settingFactory;
 
+    private SettingRepositoryInterface $settingRepository;
+
     public function __construct(
         RegistryInterface $settingsRegistry,
         ChannelRepositoryInterface $channelRepository,
-        FactoryInterface $settingFactory
+        FactoryInterface $settingFactory,
+        SettingRepositoryInterface $settingRepository
     ) {
         $this->settingsRegistry = $settingsRegistry;
         $this->channelRepository = $channelRepository;
         $this->settingFactory = $settingFactory;
+        $this->settingRepository = $settingRepository;
         $this->optionsResolver = new OptionsResolver();
 
         $this->configureOptions($this->optionsResolver);
@@ -54,34 +59,45 @@ class SettingsFixtureFactory extends AbstractExampleFactory
         $settings = $this->settingsRegistry->getByAlias($options['alias']);
         ['vendor' => $vendor, 'plugin' => $plugin] = $settings->getAliasAsArray();
 
-        /** @var SettingInterface $setting */
-        $setting = $this->settingFactory->createNew();
-        $setting->setVendor($vendor);
-        $setting->setPlugin($plugin);
-        $setting->setPath($options['path']);
-        $setting->setLocaleCode($options['locale']);
-        $setting->setStorageType($options['type']);
+        /** @var SettingInterface|null $setting */
+        $setting = $this->settingRepository->findOneBy([
+            'vendor' => $vendor,
+            'plugin' => $plugin,
+            'path' => $options['path'],
+            'localeCode' => $options['locale'],
+            'channel' => $options['channel'],
+        ]);
 
-        $this->formatValue($options['type'], $options['value']);
-        $setting->setValue($options['value']);
-
-        if (null !== $options['channel']) {
-            /** @var ?ChannelInterface $channel */
-            $channel = $this->channelRepository->findOneBy(['code' => $options['channel']]);
-            $setting->setChannel($channel);
+        if (null === $setting) {
+            /** @var SettingInterface $setting */
+            $setting = $this->settingFactory->createNew();
+            $setting->setVendor($vendor);
+            $setting->setPlugin($plugin);
+            $setting->setPath($options['path']);
+            $setting->setLocaleCode($options['locale']);
+            if (null !== $options['channel']) {
+                /** @var ?ChannelInterface $channel */
+                $channel = $this->channelRepository->findOneBy(['code' => $options['channel']]);
+                $setting->setChannel($channel);
+            }
         }
+
+        $setting->setValue(null); // reset the previous value according to the potential previous type
+        $setting->setStorageType($options['type']);
+        $setting->setValue($this->formatValue($options['type'], $options['value']));
 
         return $setting;
     }
 
     /**
      * @param int|float|string|array $value
+     * @param mixed $type
+     *
+     * @return mixed
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     *
-     * @phpstan-ignore-next-line
      */
-    private function formatValue(string $type, &$value): void
+    private function formatValue($type, $value)
     {
         switch ($type) {
             case SettingInterface::STORAGE_TYPE_BOOLEAN:
@@ -110,10 +126,13 @@ class SettingsFixtureFactory extends AbstractExampleFactory
                     break;
                 }
 
+                /** @phpstan-ignore-next-line */
                 $value = new DateTime((string) $value);
 
                 break;
         }
+
+        return $value;
     }
 
     protected function configureOptions(OptionsResolver $resolver): void
