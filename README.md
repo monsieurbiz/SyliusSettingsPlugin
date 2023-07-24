@@ -109,6 +109,8 @@ tests or project (by channel, by locale…).
 You need to create a yaml file with your fixtures, like explained in the documentation of Sylius.  
 You can find our own example in the source code, section `sylius_fixtures`: [configuration file](dist/config/packages/monsieurbiz_settings_plugin_custom.yaml).
 
+It's also possible to run test fixtures with a local suite in development: `make sylius.fixtures.local`.
+
 ## Contributing
 
 You can find a way to run the plugin without effort in the file [DEVELOPMENT.md](./DEVELOPMENT.md).
