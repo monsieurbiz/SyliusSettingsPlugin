@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Fixture\Factory;
 
-use DateTime;
 use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\SettingInterface;
+use MonsieurBiz\SyliusSettingsPlugin\Formatter\SettingsFormatterInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
@@ -36,16 +36,20 @@ class SettingsFixtureFactory extends AbstractExampleFactory
 
     private SettingRepositoryInterface $settingRepository;
 
+    private SettingsFormatterInterface $settingsFormatter;
+
     public function __construct(
         RegistryInterface $settingsRegistry,
         ChannelRepositoryInterface $channelRepository,
         FactoryInterface $settingFactory,
-        SettingRepositoryInterface $settingRepository
+        SettingRepositoryInterface $settingRepository,
+        SettingsFormatterInterface $settingsFormatter
     ) {
         $this->settingsRegistry = $settingsRegistry;
         $this->channelRepository = $channelRepository;
         $this->settingFactory = $settingFactory;
         $this->settingRepository = $settingRepository;
+        $this->settingsFormatter = $settingsFormatter;
         $this->optionsResolver = new OptionsResolver();
 
         $this->configureOptions($this->optionsResolver);
@@ -87,55 +91,9 @@ class SettingsFixtureFactory extends AbstractExampleFactory
 
         $setting->setValue(null); // reset the previous value according to the potential previous type
         $setting->setStorageType($options['type']); // If the type has changed, we change it!
-        $setting->setValue($this->formatValue($options['type'], $options['value']));
+        $setting->setValue($this->settingsFormatter->formatValue($options['type'], $options['value']));
 
         return $setting;
-    }
-
-    /**
-     * @param int|float|string|array $value
-     * @param mixed $type
-     *
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    private function formatValue($type, $value)
-    {
-        switch ($type) {
-            case SettingInterface::STORAGE_TYPE_BOOLEAN:
-                $value = (bool) $value;
-
-                break;
-            case SettingInterface::STORAGE_TYPE_INTEGER:
-                $value = (int) $value;
-
-                break;
-            case SettingInterface::STORAGE_TYPE_FLOAT:
-                $value = (float) $value;
-
-                break;
-            case SettingInterface::STORAGE_TYPE_JSON:
-                if (!\is_array($value)) {
-                    $value = json_decode((string) $value, true);
-                }
-
-                break;
-            case SettingInterface::STORAGE_TYPE_DATE:
-            case SettingInterface::STORAGE_TYPE_DATETIME:
-                if (\is_int($value)) {
-                    $value = (new DateTime())->setTimestamp($value);
-
-                    break;
-                }
-
-                /** @phpstan-ignore-next-line */
-                $value = new DateTime((string) $value);
-
-                break;
-        }
-
-        return $value;
     }
 
     protected function configureOptions(OptionsResolver $resolver): void

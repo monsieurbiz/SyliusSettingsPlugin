@@ -55,3 +55,9 @@ services:
     
     MonsieurBiz\SyliusSettingsPlugin\Fixture\:
         resource: '../../Fixture'
+
+    MonsieurBiz\SyliusSettingsPlugin\Command\:
+        resource: '../../Command'
+        
+    MonsieurBiz\SyliusSettingsPlugin\Formatter\:
+        resource: '../../Formatter'
