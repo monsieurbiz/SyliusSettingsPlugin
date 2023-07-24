@@ -34,3 +34,17 @@ sylius_fixtures:
                                 locale: en_US
                                 type: text
                                 value: My amazing very fashion message
+                            -
+                                alias: app.default
+                                path: demo_message
+                                # no channel because we want the default
+                                locale: fr_FR
+                                type: text
+                                value: Mon message vraiment très fashion
+                            -
+                                alias: app.default
+                                path: demo_message
+                                # no channel because we want the default
+                                # no locale because we want the default
+                                type: text
+                                value: My very default message
