@@ -61,6 +61,7 @@ sylius_fixtures:
                                 path: test_bool
                                 type: boolean
                                 value: true
+                                ignore_if_exists: true
                             -
                                 alias: app.default
                                 path: test_bool2

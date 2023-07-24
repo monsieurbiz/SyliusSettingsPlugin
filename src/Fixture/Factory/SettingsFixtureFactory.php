@@ -81,6 +81,8 @@ class SettingsFixtureFactory extends AbstractExampleFactory
                 $setting->setChannel($channel);
             }
             $setting->setStorageType($options['type']); // Do it once for the reset of the previous value to work
+        } elseif ($options['ignore_if_exists']) {
+            return $setting;
         }
 
         $setting->setValue(null); // reset the previous value according to the potential previous type
@@ -153,6 +155,8 @@ class SettingsFixtureFactory extends AbstractExampleFactory
                 SettingInterface::STORAGE_TYPE_FLOAT, SettingInterface::STORAGE_TYPE_JSON, SettingInterface::STORAGE_TYPE_DATE, SettingInterface::STORAGE_TYPE_DATETIME])
             ->setDefault('value', null)
             ->setAllowedTypes('value', ['null', 'string', 'integer', 'bool', 'float', 'Datetime', 'array'])
+            ->setDefault('ignore_if_exists', false)
+            ->setAllowedTypes('ignore_if_exists', 'bool')
         ;
     }
 }

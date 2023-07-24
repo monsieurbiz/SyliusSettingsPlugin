@@ -43,6 +43,7 @@ final class SettingsFixture extends AbstractResourceFixture
                 ->scalarNode('locale')->end()
                 ->scalarNode('type')->cannotBeEmpty()->end()
                 ->variableNode('value')->end()
+                ->variableNode('ignore_if_exists')->end()
                 ->end()
             ->end()
         ;
