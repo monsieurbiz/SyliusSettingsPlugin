@@ -80,10 +80,11 @@ class SettingsFixtureFactory extends AbstractExampleFactory
                 $channel = $this->channelRepository->findOneBy(['code' => $options['channel']]);
                 $setting->setChannel($channel);
             }
+            $setting->setStorageType($options['type']); // Do it once for the reset of the previous value to work
         }
 
         $setting->setValue(null); // reset the previous value according to the potential previous type
-        $setting->setStorageType($options['type']);
+        $setting->setStorageType($options['type']); // If the type has changed, we change it!
         $setting->setValue($this->formatValue($options['type'], $options['value']));
 
         return $setting;
