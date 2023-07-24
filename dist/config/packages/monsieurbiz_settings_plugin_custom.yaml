@@ -48,6 +48,12 @@ sylius_fixtures:
                                 # no locale because we want the default
                                 type: text
                                 value: My very default message
+
+        local:
+            fixtures:
+                monsieurbiz_settings:
+                    options:
+                        custom:
                             -
                                 alias: app.default
                                 path: test_bool

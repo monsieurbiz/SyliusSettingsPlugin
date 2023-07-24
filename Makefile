@@ -153,6 +153,9 @@ sylius.database: ## Setup the database
 sylius.fixtures: ## Run the fixtures
 	${CONSOLE} sylius:fixtures:load -n default
 
+sylius.fixtures.local: ## Run the local fixtures (for testing purpose)
+	${CONSOLE} sylius:fixtures:load -n local
+
 sylius.assets: ## Install all assets with symlinks
 	${CONSOLE} assets:install --symlink
 	${CONSOLE} sylius:install:assets
