@@ -108,9 +108,10 @@ class SettingsFixtureFactory extends AbstractExampleFactory
             ->setAllowedTypes('channel', ['null', 'string'])
             ->setDefault('locale', null)
             ->setAllowedTypes('locale', ['null', 'string'])
-            ->setDefault('type', 'text')
+            ->setDefault('type', SettingInterface::STORAGE_TYPE_TEXT)
             ->setAllowedTypes('type', 'string')
-            ->setAllowedValues('type', ['text', 'boolean', 'integer', 'float', 'json', 'date', 'datetime'])
+            ->setAllowedValues('type', [SettingInterface::STORAGE_TYPE_TEXT, SettingInterface::STORAGE_TYPE_BOOLEAN, SettingInterface::STORAGE_TYPE_INTEGER,
+                SettingInterface::STORAGE_TYPE_FLOAT, SettingInterface::STORAGE_TYPE_JSON, SettingInterface::STORAGE_TYPE_DATE, SettingInterface::STORAGE_TYPE_DATETIME])
             ->setDefault('value', null)
             ->setAllowedTypes('value', ['null', 'string', 'integer', 'bool', 'float', 'Datetime', 'array'])
         ;
