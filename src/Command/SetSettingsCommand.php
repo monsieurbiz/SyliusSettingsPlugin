@@ -94,7 +94,7 @@ class SetSettingsCommand extends Command
         try {
             /** @var string $alias */
             $alias = $input->getArgument(self::ARGUMENT_ALIAS);
-            /** @var ?string $path */
+            /** @var string $path */
             $path = $input->getArgument(self::ARGUMENT_PATH);
             $channelCode = $input->getOption(self::OPTION_CHANNEL);
             /** @var ?string $locale */
@@ -111,8 +111,10 @@ class SetSettingsCommand extends Command
             ['vendor' => $vendor, 'plugin' => $plugin] = $settings->getAliasAsArray();
             $setting = $this->getSetting($vendor, $plugin, $path, $locale, $channel);
 
-            /** @var ?string $type */
+            /** @var string $type */
             $type = $input->getArgument(self::ARGUMENT_TYPE);
+            $this->validateType($type);
+
             $value = $input->getArgument(self::ARGUMENT_VALUE);
 
             $setting->setStorageType($type);
@@ -127,7 +129,7 @@ class SetSettingsCommand extends Command
             return Command::FAILURE;
         }
 
-        $output->writeln(sprintf('<info>%s</info>', 'The settings has been saved'));
+        $output->writeln(sprintf('<info>%s</info>', 'The setting has been saved'));
 
         return Command::SUCCESS;
     }
@@ -159,5 +161,22 @@ class SetSettingsCommand extends Command
         }
 
         return $setting;
+    }
+
+    private function validateType(string $type): void
+    {
+        $types = [
+            SettingInterface::STORAGE_TYPE_TEXT,
+            SettingInterface::STORAGE_TYPE_BOOLEAN,
+            SettingInterface::STORAGE_TYPE_INTEGER,
+            SettingInterface::STORAGE_TYPE_FLOAT,
+            SettingInterface::STORAGE_TYPE_DATETIME,
+            SettingInterface::STORAGE_TYPE_DATE,
+            SettingInterface::STORAGE_TYPE_JSON,
+        ];
+
+        if (!\in_array($type, $types, true)) {
+            throw new Exception(sprintf('The type "%s" is not valid. Valid types are: %s', $type, implode(', ', $types)));
+        }
     }
 }
