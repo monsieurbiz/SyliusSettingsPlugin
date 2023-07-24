@@ -50,6 +50,8 @@ sylius_fixtures:
                                 value: My very default message
 
         local:
+            listeners:
+                logger: ~
             fixtures:
                 monsieurbiz_settings:
                     options:
