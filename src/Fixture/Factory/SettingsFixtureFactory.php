@@ -110,8 +110,9 @@ class SettingsFixtureFactory extends AbstractExampleFactory
             ->setAllowedTypes('locale', ['null', 'string'])
             ->setDefault('type', 'text')
             ->setAllowedTypes('type', 'string')
+            ->setAllowedValues('type', ['text', 'boolean', 'integer', 'float', 'json', 'date', 'datetime'])
             ->setDefault('value', null)
-            ->setAllowedTypes('type', ['null', 'string', 'integer', 'bool', 'float', 'Datetime'])
+            ->setAllowedTypes('value', ['null', 'string', 'integer', 'bool', 'float', 'Datetime', 'array'])
         ;
     }
 }
