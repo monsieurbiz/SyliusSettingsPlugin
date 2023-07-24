@@ -63,12 +63,12 @@ sylius_fixtures:
                                 path: test_json
                                 type: json
                                 value: |
-                                    {'foo':'bar'}
+                                    {"foo":"bar"}
                             -
                                 alias: app.default
                                 path: test_json_array
                                 type: json
-                                value: {'foo':'bar'}
+                                value: {"foo":"baz"}
                             -
                                 alias: app.default
                                 path: test_int

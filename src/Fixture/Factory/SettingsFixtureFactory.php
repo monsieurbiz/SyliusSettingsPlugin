@@ -61,31 +61,7 @@ class SettingsFixtureFactory extends AbstractExampleFactory
         $setting->setLocaleCode($options['locale']);
         $setting->setStorageType($options['type']);
 
-        switch ($options['type']) {
-            case SettingInterface::STORAGE_TYPE_BOOLEAN:
-                $options['value'] = (bool) $options['value'];
-                break;
-            case SettingInterface::STORAGE_TYPE_INTEGER:
-                $options['value'] = (int) $options['value'];
-                break;
-            case SettingInterface::STORAGE_TYPE_FLOAT:
-                $options['value'] = (float) $options['value'];
-                break;
-            case SettingInterface::STORAGE_TYPE_JSON:
-                if (!is_array($options['value'])) {
-                    $options['value'] = json_decode($options['value']);
-                }
-                break;
-            case SettingInterface::STORAGE_TYPE_DATE:
-            case SettingInterface::STORAGE_TYPE_DATETIME:
-                if (is_int($options['value'])) {
-                    $options['value'] = (new DateTime())->setTimestamp($options['value']);
-                } else {
-                    $options['value'] = new DateTime($options['value']);
-                }
-                break;
-        }
-
+        $this->formatValue($options['type'], $options['value']);
         $setting->setValue($options['value']);
 
         if (null !== $options['channel']) {
@@ -95,6 +71,34 @@ class SettingsFixtureFactory extends AbstractExampleFactory
         }
 
         return $setting;
+    }
+
+    private function formatValue($type, &$value)
+    {
+        switch ($type) {
+            case SettingInterface::STORAGE_TYPE_BOOLEAN:
+                $value = (bool) $value;
+                break;
+            case SettingInterface::STORAGE_TYPE_INTEGER:
+                $value = (int) $value;
+                break;
+            case SettingInterface::STORAGE_TYPE_FLOAT:
+                $value = (float) $value;
+                break;
+            case SettingInterface::STORAGE_TYPE_JSON:
+                if (!is_array($value)) {
+                    $value = json_decode($value, true);
+                }
+                break;
+            case SettingInterface::STORAGE_TYPE_DATE:
+            case SettingInterface::STORAGE_TYPE_DATETIME:
+                if (is_int($value)) {
+                    $value = (new DateTime())->setTimestamp($value);
+                } else {
+                    $value = new DateTime($value);
+                }
+                break;
+        }
     }
 
     protected function configureOptions(OptionsResolver $resolver): void
