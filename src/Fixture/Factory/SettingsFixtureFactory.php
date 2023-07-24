@@ -1,11 +1,11 @@
 <?php
 
 /*
- * This file is part of SyliusSettingsPlugin corporate website.
+ * This file is part of Monsieur Biz' Settings plugin for Sylius.
  *
- * (c) SyliusSettingsPlugin <sylius+syliussettingsplugin@monsieurbiz.com>
+ * (c) Monsieur Biz <sylius@monsieurbiz.com>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -23,20 +23,21 @@ use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-
 class SettingsFixtureFactory extends AbstractExampleFactory
 {
     private RegistryInterface $settingsRegistry;
+
     private OptionsResolver $optionsResolver;
+
     private ChannelRepositoryInterface $channelRepository;
+
     private FactoryInterface $settingFactory;
 
     public function __construct(
         RegistryInterface $settingsRegistry,
         ChannelRepositoryInterface $channelRepository,
         FactoryInterface $settingFactory
-    )
-    {
+    ) {
         $this->settingsRegistry = $settingsRegistry;
         $this->channelRepository = $channelRepository;
         $this->settingFactory = $settingFactory;
@@ -53,7 +54,7 @@ class SettingsFixtureFactory extends AbstractExampleFactory
         $settings = $this->settingsRegistry->getByAlias($options['alias']);
         ['vendor' => $vendor, 'plugin' => $plugin] = $settings->getAliasAsArray();
 
-        /** @var $setting SettingInterface */
+        /** @var SettingInterface $setting */
         $setting = $this->settingFactory->createNew();
         $setting->setVendor($vendor);
         $setting->setPlugin($plugin);
@@ -73,30 +74,35 @@ class SettingsFixtureFactory extends AbstractExampleFactory
         return $setting;
     }
 
-    private function formatValue($type, &$value)
+    private function formatValue($type, &$value): void
     {
         switch ($type) {
             case SettingInterface::STORAGE_TYPE_BOOLEAN:
                 $value = (bool) $value;
+
                 break;
             case SettingInterface::STORAGE_TYPE_INTEGER:
                 $value = (int) $value;
+
                 break;
             case SettingInterface::STORAGE_TYPE_FLOAT:
                 $value = (float) $value;
+
                 break;
             case SettingInterface::STORAGE_TYPE_JSON:
-                if (!is_array($value)) {
+                if (!\is_array($value)) {
                     $value = json_decode($value, true);
                 }
+
                 break;
             case SettingInterface::STORAGE_TYPE_DATE:
             case SettingInterface::STORAGE_TYPE_DATETIME:
-                if (is_int($value)) {
+                if (\is_int($value)) {
                     $value = (new DateTime())->setTimestamp($value);
                 } else {
                     $value = new DateTime($value);
                 }
+
                 break;
         }
     }

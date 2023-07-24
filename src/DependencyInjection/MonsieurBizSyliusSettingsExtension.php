@@ -47,8 +47,8 @@ final class MonsieurBizSyliusSettingsExtension extends Extension implements Prep
     public function prepend(ContainerBuilder $container): void
     {
         if (
-            $container->hasParameter('sylius_core.prepend_doctrine_migrations') &&
-            !$container->getParameter('sylius_core.prepend_doctrine_migrations')
+            $container->hasParameter('sylius_core.prepend_doctrine_migrations')
+            && !$container->getParameter('sylius_core.prepend_doctrine_migrations')
         ) {
             return;
         }
