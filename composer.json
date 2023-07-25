@@ -5,10 +5,10 @@
     "description": "Add a settings panel to your Sylius.",
     "license": "MIT",
     "require": {
-        "php": "~7.4|^8.0",
+        "php": "^8.0",
         "ext-mbstring": "*",
         "ext-json": "*",
-        "sylius/sylius": ">=1.8 <1.13"
+        "sylius/sylius": ">=1.10 <1.13"
     },
     "require-dev": {
         "behat/behat": "^3.6.1",
