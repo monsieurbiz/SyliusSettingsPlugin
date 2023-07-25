@@ -38,7 +38,7 @@ class SetSettingsCommand extends Command
 
     private const OPTION_LOCALE = 'locale';
 
-    private const ARGUMENT_TYPE = 'type';
+    private const OPTION_TYPE = 'type';
 
     private const ARGUMENT_VALUE = 'value';
 
@@ -77,8 +77,8 @@ class SetSettingsCommand extends Command
             ->setHelp('This command allows you to set a settings value for a given path')
             ->addArgument(self::ARGUMENT_ALIAS, InputArgument::REQUIRED, 'Alias of the settings like {vendor}.{plugin} from the setting definition')
             ->addArgument(self::ARGUMENT_PATH, InputArgument::REQUIRED, 'Path of the settings')
-            ->addArgument(self::ARGUMENT_TYPE, InputArgument::REQUIRED, 'Type of the settings', null)
             ->addArgument(self::ARGUMENT_VALUE, InputArgument::REQUIRED, 'Value of the settings')
+            ->addOption(self::OPTION_TYPE, 't', InputOption::VALUE_OPTIONAL, 'Type of the settings', null)
             ->addOption(self::OPTION_CHANNEL, 'c', InputOption::VALUE_OPTIONAL, 'Channel code')
             ->addOption(self::OPTION_LOCALE, 'l', InputOption::VALUE_OPTIONAL, 'Locale code')
         ;
@@ -112,7 +112,7 @@ class SetSettingsCommand extends Command
             $setting = $this->settingProvider->getSettingOrCreateNew($vendor, $plugin, $path, $locale, $channel);
 
             /** @var string $type */
-            $type = $input->getArgument(self::ARGUMENT_TYPE);
+            $type = $input->getOption(self::OPTION_TYPE) ?? $setting->getStorageType();
             $this->settingProvider->validateType($type);
 
             $value = $input->getArgument(self::ARGUMENT_VALUE);

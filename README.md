@@ -117,17 +117,21 @@ If you want to keep a value as it is in the database when running this fixture, 
 ### Use CLI
 
 You can use a CLI command to set a value for a setting directly from the console:
-`$ ./bin/console monsieurbiz:settings:set {alias} {path} {type} {value} --channel="FASHION_WEB" --locale="en_US"`
+`$ ./bin/console monsieurbiz:settings:set {alias} {path} {value} --channel="FASHION_WEB" --locale="en_US" --type="text"`
+
 
 Examples:
 ```bash
-$ ./bin/console monsieurbiz:settings:set app.default demo_message text 'fashion message' --channel="FASHION_WEB" --locale="en_US"
-$ ./bin/console monsieurbiz:settings:set app.default demo_message json '{"foo":"baz"}' --channel="FASHION_WEB" --locale="en_US"
-$ ./bin/console monsieurbiz:settings:set app.default demo_message datetime '2023-07-24 01:02:03' --channel="FASHION_WEB" --locale="en_US"
-$ ./bin/console monsieurbiz:settings:set app.default enabled boolean 0
+$ ./bin/console monsieurbiz:settings:set app.default demo_message 'fashion message' --channel="FASHION_WEB" --locale="en_US"
+$ ./bin/console monsieurbiz:settings:set app.default demo_json '{"foo":"baz"}' --channel="FASHION_WEB" --locale="en_US" --type="json"
+$ ./bin/console monsieurbiz:settings:set app.default demo_datetime '2023-07-24 01:02:03' --channel="FASHION_WEB" --locale="en_US" --type="datetime"
+$ ./bin/console monsieurbiz:settings:set app.default enabled 0
 ```
 The options channel and locale can be omitted if you want to set the value for a global scope.
+If a value exists for the given scope the type can be omitted as it will be the same as the existing one unless you want to change the type.
+For a new value you need to specify the type.
 
+⚠️ When specifying the type, be sure to know what you are doing as it should be coherent with the Form Type of the field.
 
 ## Contributing
 

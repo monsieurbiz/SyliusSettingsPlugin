@@ -58,7 +58,7 @@ class SettingProvider implements SettingProviderInterface
         return $setting;
     }
 
-    public function validateType(string $type): void
+    public function validateType(?string $type): void
     {
         $types = Setting::getAllStorageTypes();
         if (!\in_array($type, $types, true)) {
