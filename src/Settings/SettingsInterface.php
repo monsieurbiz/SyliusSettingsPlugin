@@ -47,17 +47,11 @@ interface SettingsInterface
 
     public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null): array;
 
-    /**
-     * @return mixed
-     */
-    public function getCurrentValue(?ChannelInterface $channel, ?string $localeCode, string $path);
+    public function getCurrentValue(?ChannelInterface $channel, ?string $localeCode, string $path): mixed;
 
     public function getDefaultValues(): array;
 
-    /**
-     * @return mixed
-     */
-    public function getDefaultValue(string $path);
+    public function getDefaultValue(string $path): mixed;
 
     public function showLocalesInForm(): bool;
 }

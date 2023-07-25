@@ -20,20 +20,11 @@ use Sylius\Component\Locale\Model\LocaleInterface;
 
 final class SettingFactory implements SettingFactoryInterface
 {
-    /**
-     * @var string
-     */
-    private $className;
-
-    public function __construct(string $className)
+    public function __construct(private string $className)
     {
-        $this->className = $className;
     }
 
-    /**
-     * @return SettingInterface
-     */
-    public function createNew()
+    public function createNew(): SettingInterface
     {
         /** @var SettingInterface */
         return new $this->className();

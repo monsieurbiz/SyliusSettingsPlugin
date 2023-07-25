@@ -19,17 +19,11 @@ use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
 final class AdminMenuListener
 {
-    private MenuManipulator $manipulator;
-
-    private RegistryInterface $settingsRegistry;
-
     /**
      * AdminMenuListener constructor.
      */
-    public function __construct(MenuManipulator $manipulator, RegistryInterface $settingsRegistry)
+    public function __construct(private MenuManipulator $manipulator, private RegistryInterface $settingsRegistry)
     {
-        $this->manipulator = $manipulator;
-        $this->settingsRegistry = $settingsRegistry;
     }
 
     public function addAdminMenuItems(MenuBuilderEvent $event): void

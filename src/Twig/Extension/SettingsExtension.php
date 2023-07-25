@@ -22,14 +22,11 @@ use Twig\TwigFunction;
 
 final class SettingsExtension extends AbstractExtension implements ExtensionInterface
 {
-    private SettingsProviderInterface $settingsProvider;
-
-    public function __construct(SettingsProviderInterface $settings)
+    public function __construct(private SettingsProviderInterface $settingsProvider)
     {
-        $this->settingsProvider = $settings;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('setting', [$this, 'getSettingValue'], [
@@ -38,10 +35,7 @@ final class SettingsExtension extends AbstractExtension implements ExtensionInte
         ];
     }
 
-    /**
-     * @return mixed
-     */
-    public function getSettingValue(array $context, string $alias, string $path)
+    public function getSettingValue(array $context, string $alias, string $path): mixed
     {
         if (isset($context['sylius']) && $context['sylius'] instanceof ShopperContextInterface) {
             try {

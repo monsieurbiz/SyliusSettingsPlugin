@@ -20,13 +20,10 @@ class SettingsFormatter implements SettingsFormatterInterface
 {
     /**
      * @param int|float|string|array $value
-     * @param mixed $type
-     *
-     * @return mixed
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function formatValue($type, $value): mixed
+    public function formatValue(mixed $type, $value): mixed
     {
         switch ($type) {
             case SettingInterface::STORAGE_TYPE_BOOLEAN:

@@ -68,10 +68,7 @@ final class Metadata implements MetadataInterface
         return $aliased ? $this->alias($this->name) : $this->name;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getParameter(string $name)
+    public function getParameter(string $name): mixed
     {
         if (!$this->hasParameter($name)) {
             throw new InvalidArgumentException(sprintf('Parameter "%s" is not configured for resource "%s".', $name, $this->getAlias()));
@@ -80,17 +77,11 @@ final class Metadata implements MetadataInterface
         return $this->parameters[$name];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function hasParameter(string $name): bool
     {
         return \array_key_exists($name, $this->parameters);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getParameters(): array
     {
         return $this->parameters;
@@ -101,9 +92,6 @@ final class Metadata implements MetadataInterface
         return $this->parameters['default_values'];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getClass(string $name): string
     {
         if (!$this->hasClass($name)) {
@@ -113,17 +101,11 @@ final class Metadata implements MetadataInterface
         return $this->parameters['classes'][$name];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function hasClass(string $name): bool
     {
         return isset($this->parameters['classes'][$name]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getServiceId(string $serviceName): string
     {
         return sprintf('%s.%s.%s', $this->applicationName, $serviceName, $this->alias($this->name));
@@ -131,7 +113,7 @@ final class Metadata implements MetadataInterface
 
     private static function parseAlias(string $alias): array
     {
-        if (false === strpos($alias, '.')) {
+        if (!str_contains($alias, '.')) {
             throw new InvalidArgumentException(sprintf('Invalid alias "%s" supplied, it should conform to the following format "<applicationName>.<name>".', $alias));
         }
 
@@ -143,9 +125,6 @@ final class Metadata implements MetadataInterface
         return strtolower(preg_replace('`([A-Z])`', '_\1', lcfirst($string)) ?? '');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function useLocales(): bool
     {
         if (!$this->hasParameter('use_locales')) {

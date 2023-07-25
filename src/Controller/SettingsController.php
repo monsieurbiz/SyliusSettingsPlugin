@@ -25,35 +25,23 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class SettingsController extends AbstractController
 {
-    private SettingsProcessorInterface $settingsProcessor;
-
-    private MainSettingsFormTypeFactoryInterface $formFactory;
-
     /**
      * SettingsController constructor.
      */
     public function __construct(
-        SettingsProcessorInterface $settingsProcessor,
-        MainSettingsFormTypeFactoryInterface $formFactory
+        private SettingsProcessorInterface $settingsProcessor,
+        private MainSettingsFormTypeFactoryInterface $formFactory
     ) {
-        $this->settingsProcessor = $settingsProcessor;
-        $this->formFactory = $formFactory;
     }
 
-    /**
-     * @return Response
-     */
-    public function indexAction(RegistryInterface $registry)
+    public function indexAction(RegistryInterface $registry): Response
     {
         return $this->render('@MonsieurBizSyliusSettingsPlugin/Crud/index.html.twig', [
             'settings' => $registry->getAllSettings(),
         ]);
     }
 
-    /**
-     * @return Response
-     */
-    public function formAction(Request $request, RegistryInterface $registry, string $alias)
+    public function formAction(Request $request, RegistryInterface $registry, string $alias): Response
     {
         if (null === ($settings = $registry->getByAlias($alias))) {
             throw $this->createNotFoundException();

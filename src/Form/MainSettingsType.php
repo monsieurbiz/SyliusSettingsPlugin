@@ -27,19 +27,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class MainSettingsType extends AbstractType implements MainSettingsTypeInterface
 {
-    private ChannelRepositoryInterface $channelRepository;
-
-    private RepositoryInterface $localeRepository;
-
     /**
      * MainSettingsType constructor.
      */
     public function __construct(
-        ChannelRepositoryInterface $channelRepository,
-        RepositoryInterface $localeRepository
+        private ChannelRepositoryInterface $channelRepository,
+        private RepositoryInterface $localeRepository
     ) {
-        $this->channelRepository = $channelRepository;
-        $this->localeRepository = $localeRepository;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

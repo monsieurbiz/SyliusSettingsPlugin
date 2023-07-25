@@ -17,9 +17,6 @@ interface SettingsFormatterInterface
 {
     /**
      * @param int|float|string|array $value
-     * @param mixed $type
-     *
-     * @return mixed
      */
-    public function formatValue($type, $value);
+    public function formatValue(mixed $type, $value): mixed;
 }
