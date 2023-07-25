@@ -22,12 +22,19 @@ use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'monsieurbiz:settings:set',
+    description: 'Set a settings value for a given path',
+    aliases: ['mbiz:settings:set'],
+    hidden: false
+)]
 class SetSettingsCommand extends Command
 {
     private const ARGUMENT_ALIAS = 'alias';
@@ -42,38 +49,20 @@ class SetSettingsCommand extends Command
 
     private const ARGUMENT_VALUE = 'value';
 
-    private RegistryInterface $settingsRegistry;
-
-    private ChannelRepositoryInterface $channelRepository;
-
-    private EntityManagerInterface $settingManager;
-
-    private SettingsFormatterInterface $settingsFormatter;
-
-    private SettingProviderInterface $settingProvider;
-
-    protected static $defaultName = 'monsieurbiz:settings:set';
-
     public function __construct(
-        RegistryInterface $settingsRegistry,
-        ChannelRepositoryInterface $channelRepository,
-        EntityManagerInterface $settingManager,
-        SettingsFormatterInterface $settingsFormatter,
-        SettingProviderInterface $settingProvider,
+        private RegistryInterface $settingsRegistry,
+        private ChannelRepositoryInterface $channelRepository,
+        private SettingProviderInterface $settingProvider,
+        private EntityManagerInterface $settingManager,
+        private SettingsFormatterInterface $settingsFormatter,
         string $name = null
     ) {
-        $this->settingsRegistry = $settingsRegistry;
-        $this->channelRepository = $channelRepository;
-        $this->settingManager = $settingManager;
-        $this->settingsFormatter = $settingsFormatter;
-        $this->settingProvider = $settingProvider;
         parent::__construct($name);
     }
 
     protected function configure(): void
     {
         $this
-            ->setDescription('Set a settings value for a given path')
             ->setHelp('This command allows you to set a settings value for a given path')
             ->addArgument(self::ARGUMENT_ALIAS, InputArgument::REQUIRED, 'Alias of the settings like {vendor}.{plugin} from the setting definition')
             ->addArgument(self::ARGUMENT_PATH, InputArgument::REQUIRED, 'Path of the settings')

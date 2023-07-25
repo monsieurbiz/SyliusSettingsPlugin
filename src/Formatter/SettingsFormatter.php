@@ -26,7 +26,7 @@ class SettingsFormatter implements SettingsFormatterInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function formatValue($type, $value)
+    public function formatValue($type, $value): mixed
     {
         switch ($type) {
             case SettingInterface::STORAGE_TYPE_BOOLEAN:
