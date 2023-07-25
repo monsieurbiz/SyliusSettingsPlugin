@@ -53,6 +53,11 @@ services:
 
     MonsieurBiz\SyliusSettingsPlugin\Provider\SettingsProviderInterface: '@monsieurbiz.settings.provider'
     
+    monsieurbiz.setting.provider:
+        class: MonsieurBiz\SyliusSettingsPlugin\Provider\SettingProvider
+
+    MonsieurBiz\SyliusSettingsPlugin\Provider\SettingProviderInterface: '@monsieurbiz.setting.provider'
+    
     MonsieurBiz\SyliusSettingsPlugin\Fixture\:
         resource: '../../Fixture'
 

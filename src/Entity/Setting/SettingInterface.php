@@ -101,4 +101,6 @@ interface SettingInterface extends ResourceInterface
     public function getJsonValue(): ?array;
 
     public function setJsonValue(?array $jsonValue): void;
+
+    public static function getAllStorageTypes(): array;
 }

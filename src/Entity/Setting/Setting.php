@@ -335,4 +335,17 @@ class Setting implements SettingInterface
     {
         $this->jsonValue = $jsonValue;
     }
+
+    public static function getAllStorageTypes(): array
+    {
+        return [
+            SettingInterface::STORAGE_TYPE_TEXT,
+            SettingInterface::STORAGE_TYPE_BOOLEAN,
+            SettingInterface::STORAGE_TYPE_INTEGER,
+            SettingInterface::STORAGE_TYPE_FLOAT,
+            SettingInterface::STORAGE_TYPE_JSON,
+            SettingInterface::STORAGE_TYPE_DATE,
+            SettingInterface::STORAGE_TYPE_DATETIME,
+        ];
+    }
 }

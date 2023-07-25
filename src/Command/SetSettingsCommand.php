@@ -15,14 +15,13 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\SettingInterface;
+use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
 use MonsieurBiz\SyliusSettingsPlugin\Formatter\SettingsFormatterInterface;
-use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
+use MonsieurBiz\SyliusSettingsPlugin\Provider\SettingProviderInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
-use Sylius\Component\Resource\Factory\FactoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,31 +46,27 @@ class SetSettingsCommand extends Command
 
     private ChannelRepositoryInterface $channelRepository;
 
-    private FactoryInterface $settingFactory;
-
-    private SettingRepositoryInterface $settingRepository;
-
     private EntityManagerInterface $settingManager;
 
     private SettingsFormatterInterface $settingsFormatter;
+
+    private SettingProviderInterface $settingProvider;
 
     protected static $defaultName = 'monsieurbiz:settings:set';
 
     public function __construct(
         RegistryInterface $settingsRegistry,
         ChannelRepositoryInterface $channelRepository,
-        FactoryInterface $settingFactory,
-        SettingRepositoryInterface $settingRepository,
         EntityManagerInterface $settingManager,
         SettingsFormatterInterface $settingsFormatter,
+        SettingProviderInterface $settingProvider,
         string $name = null
     ) {
         $this->settingsRegistry = $settingsRegistry;
         $this->channelRepository = $channelRepository;
-        $this->settingFactory = $settingFactory;
-        $this->settingRepository = $settingRepository;
         $this->settingManager = $settingManager;
         $this->settingsFormatter = $settingsFormatter;
+        $this->settingProvider = $settingProvider;
         parent::__construct($name);
     }
 
@@ -106,14 +101,19 @@ class SetSettingsCommand extends Command
                 $channel = $this->channelRepository->findOneBy(['code' => $channelCode]);
             }
 
-            /** @var SettingsInterface $settings */
+            /** @var ?SettingsInterface $settings */
             $settings = $this->settingsRegistry->getByAlias($alias);
+
+            if (null === $settings) {
+                throw new SettingsException(sprintf('The alias "%s" is not valid.', $alias));
+            }
+
             ['vendor' => $vendor, 'plugin' => $plugin] = $settings->getAliasAsArray();
-            $setting = $this->getSetting($vendor, $plugin, $path, $locale, $channel);
+            $setting = $this->settingProvider->getSettingOrCreateNew($vendor, $plugin, $path, $locale, $channel);
 
             /** @var string $type */
             $type = $input->getArgument(self::ARGUMENT_TYPE);
-            $this->validateType($type);
+            $this->settingProvider->validateType($type);
 
             $value = $input->getArgument(self::ARGUMENT_VALUE);
 
@@ -132,51 +132,5 @@ class SetSettingsCommand extends Command
         $output->writeln(sprintf('<info>%s</info>', 'The setting has been saved'));
 
         return Command::SUCCESS;
-    }
-
-    private function getSetting(string $vendor, string $plugin, ?string $path, ?string $locale, ?ChannelInterface $channel): SettingInterface
-    {
-        /** @var SettingInterface|null $setting */
-        $setting = $this->settingRepository->findOneBy([
-            'vendor' => $vendor,
-            'plugin' => $plugin,
-            'path' => $path,
-            'localeCode' => $locale,
-            'channel' => $channel,
-        ]);
-
-        // Reset existing value
-        if ($setting) {
-            $setting->setValue(null);
-        }
-
-        if (null === $setting) {
-            /** @var SettingInterface $setting */
-            $setting = $this->settingFactory->createNew();
-            $setting->setVendor($vendor);
-            $setting->setPlugin($plugin);
-            $setting->setPath($path);
-            $setting->setLocaleCode($locale);
-            $setting->setChannel($channel);
-        }
-
-        return $setting;
-    }
-
-    private function validateType(string $type): void
-    {
-        $types = [
-            SettingInterface::STORAGE_TYPE_TEXT,
-            SettingInterface::STORAGE_TYPE_BOOLEAN,
-            SettingInterface::STORAGE_TYPE_INTEGER,
-            SettingInterface::STORAGE_TYPE_FLOAT,
-            SettingInterface::STORAGE_TYPE_DATETIME,
-            SettingInterface::STORAGE_TYPE_DATE,
-            SettingInterface::STORAGE_TYPE_JSON,
-        ];
-
-        if (!\in_array($type, $types, true)) {
-            throw new Exception(sprintf('The type "%s" is not valid. Valid types are: %s', $type, implode(', ', $types)));
-        }
     }
 }

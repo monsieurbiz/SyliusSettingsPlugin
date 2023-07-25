@@ -74,7 +74,7 @@
             "symfony/thanks": true,
             "ergebnis/composer-normalize": true,
             "symfony/flex": true,
-            "php-http/discovery": false
+            "php-http/discovery": true
         }
     }
 }
