@@ -117,6 +117,7 @@ class SetSettingsCommand extends Command
 
             $value = $input->getArgument(self::ARGUMENT_VALUE);
 
+            $this->settingProvider->resetExistingValue($setting);
             $setting->setStorageType($type);
             /** @phpstan-ignore-next-line */
             $setting->setValue($this->settingsFormatter->formatValue($type, $value));

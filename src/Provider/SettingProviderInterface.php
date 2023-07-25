@@ -21,4 +21,6 @@ interface SettingProviderInterface
     public function getSettingOrCreateNew(string $vendor, string $plugin, ?string $path, ?string $locale, ?ChannelInterface $channel): SettingInterface;
 
     public function validateType(string $type): void;
+
+    public function resetExistingValue(SettingInterface $setting): SettingInterface;
 }

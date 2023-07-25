@@ -68,7 +68,7 @@ class Setting implements SettingInterface
     /**
      * @ORM\Column(name="storage_type", type="string", length=10, nullable=false)
      */
-    private ?string $storageType;
+    private ?string $storageType = null;
 
     /**
      * @ORM\Column(name="text_value", type="text", length=65535, nullable=true)

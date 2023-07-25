@@ -71,6 +71,7 @@ class SettingsFixtureFactory extends AbstractExampleFactory
             return $setting;
         }
 
+        $this->settingProvider->resetExistingValue($setting);
         $setting->setStorageType($options['type']); // If the type has changed, we change it!
         $setting->setValue($this->settingsFormatter->formatValue($options['type'], $options['value']));
 

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace MonsieurBiz\SyliusSettingsPlugin\Provider;
 
 use Exception;
+use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\Setting;
 use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\SettingInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
@@ -44,11 +45,6 @@ class SettingProvider implements SettingProviderInterface
             'channel' => $channel,
         ]);
 
-        // Reset existing value
-        if ($setting) {
-            $setting->setValue(null);
-        }
-
         if (null === $setting) {
             /** @var SettingInterface $setting */
             $setting = $this->settingFactory->createNew();
@@ -64,18 +60,19 @@ class SettingProvider implements SettingProviderInterface
 
     public function validateType(string $type): void
     {
-        $types = [
-            SettingInterface::STORAGE_TYPE_TEXT,
-            SettingInterface::STORAGE_TYPE_BOOLEAN,
-            SettingInterface::STORAGE_TYPE_INTEGER,
-            SettingInterface::STORAGE_TYPE_FLOAT,
-            SettingInterface::STORAGE_TYPE_DATETIME,
-            SettingInterface::STORAGE_TYPE_DATE,
-            SettingInterface::STORAGE_TYPE_JSON,
-        ];
-
+        $types = Setting::getAllStorageTypes();
         if (!\in_array($type, $types, true)) {
             throw new Exception(sprintf('The type "%s" is not valid. Valid types are: %s', $type, implode(', ', $types)));
         }
+    }
+
+    public function resetExistingValue(SettingInterface $setting): SettingInterface
+    {
+        if (null !== $setting->getStorageType()) {
+            // Reset existing value
+            $setting->setValue(null);
+        }
+
+        return $setting;
     }
 }
