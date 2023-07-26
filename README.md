@@ -13,6 +13,7 @@
 <h1 align="center">Settings for Sylius</h1>
 
 [![Settings Plugin license](https://img.shields.io/github/license/monsieurbiz/SyliusSettingsPlugin?public)](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/LICENSE.txt)
+[![Recipe](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/recipe.yaml/badge.svg?branch=master&event=push)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/recipe.yaml)
 [![Tests](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/tests.yaml/badge.svg?branch=master&event=push)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/tests.yaml)
 [![Security](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/security.yaml/badge.svg?branch=master&event=push)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/security.yaml)
 
