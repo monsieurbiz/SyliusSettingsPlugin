@@ -63,6 +63,8 @@ jobs:
 
       - run: make install
 
+      - run: make sylius.fixtures.local
+
       - run: make test.composer
 
       - run: make test.phpcs

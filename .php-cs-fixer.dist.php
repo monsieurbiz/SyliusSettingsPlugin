@@ -49,10 +49,8 @@ $config
         'binary_operator_spaces' => true,
         'blank_line_after_opening_tag' => true,
         'blank_line_after_namespace' => true,
+        'blank_lines_before_namespace' => true,
         'blank_line_before_statement' => true,
-        'braces' => [
-            'allow_single_line_closure' => true,
-        ],
         'cast_spaces' => true,
         'class_attributes_separation' => true,
         'class_definition' => [
@@ -88,7 +86,6 @@ $config
         'fully_qualified_strict_types' => true,
         'function_declaration' => true,
         'function_to_constant' => true,
-        'function_typehint_space' => true,
         'general_phpdoc_tag_rename' => true,
         'global_namespace_import' => [
             'import_classes' => true,
@@ -115,6 +112,7 @@ $config
         'lowercase_static_reference' => true,
         'magic_constant_casing' => true,
         'method_argument_space' => true,
+        'modernize_strpos' => false,
         'modernize_types_casting' => true,
         'multiline_comment_opening_closing' => true,
         'multiline_whitespace_before_semicolons' => [
@@ -181,6 +179,7 @@ $config
         'no_whitespace_in_blank_line' => true,
         'non_printable_character' => true,
         'normalize_index_brace' => true,
+        'nullable_type_declaration_for_default_null_value' => false,
         'object_operator_without_whitespace' => true,
         'ordered_imports' => [
             'imports_order' => [
@@ -215,7 +214,9 @@ $config
         'phpdoc_order' => true,
         'phpdoc_return_self_reference' => true,
         'phpdoc_scalar' => true,
-        'phpdoc_separation' => true,
+        'phpdoc_separation' => ['groups' => [
+            ['ORM\\*'], ['Assert\\*'],
+        ]],
         'phpdoc_single_line_var_spacing' => true,
         'phpdoc_tag_type' => true,
         'phpdoc_to_comment' => false,
@@ -235,7 +236,6 @@ $config
         'self_accessor' => true,
         'short_scalar_cast' => true,
         'single_blank_line_at_eof' => true,
-        'single_blank_line_before_namespace' => true,
         'single_class_element_per_statement' => true,
         'single_import_per_statement' => true,
         'single_line_after_imports' => true,
@@ -252,6 +252,7 @@ $config
             'elements' => ['arrays'],
         ],
         'trim_array_spaces' => true,
+        'type_declaration_spaces' => true,
         'unary_operator_spaces' => true,
         'visibility_required' => [
             'elements' => [

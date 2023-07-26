@@ -19,3 +19,83 @@ sylius_ui:
             blocks:
                 demo_message:
                     template: '/views/message.html.twig'
+
+sylius_fixtures:
+    suites:
+        default:
+            fixtures:
+                monsieurbiz_settings:
+                    options:
+                        custom:
+                            -
+                                alias: app.default
+                                path: demo_message
+                                channel: FASHION_WEB
+                                locale: en_US
+                                type: text
+                                value: My amazing very fashion message
+                            -
+                                alias: app.default
+                                path: demo_message
+                                # no channel because we want the default
+                                locale: fr_FR
+                                type: text
+                                value: Mon message vraiment très fashion
+                            -
+                                alias: app.default
+                                path: demo_message
+                                # no channel because we want the default
+                                # no locale because we want the default
+                                type: text
+                                value: My very default message
+
+        local:
+            listeners:
+                logger: ~
+            fixtures:
+                monsieurbiz_settings:
+                    options:
+                        custom:
+                            -
+                                alias: app.default
+                                path: test_bool
+                                type: boolean
+                                value: true
+                                ignore_if_exists: true
+                            -
+                                alias: app.default
+                                path: test_bool2
+                                type: boolean
+                                value: false
+                            -
+                                alias: app.default
+                                path: test_json
+                                type: json
+                                value: |
+                                    {"foo":"bar"}
+                            -
+                                alias: app.default
+                                path: test_json_array
+                                type: json
+                                value: {"foo":"baz"}
+                            -
+                                alias: app.default
+                                path: test_int
+                                type: integer
+                                value: 42
+                            -
+                                alias: app.default
+                                path: test_float
+                                type: float
+                                value: 13.37
+                            -
+                                alias: app.default
+                                path: test_date
+                                type: date
+                                value: 2023-07-24
+                            -
+                                alias: app.default
+                                path: test_datetime
+                                type: datetime
+                                value: 2023-07-24 01:02:03
+                                

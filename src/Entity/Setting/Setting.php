@@ -55,6 +55,7 @@ class Setting implements SettingInterface
     /**
      * @ORM\ManyToOne(targetEntity="\Sylius\Component\Core\Model\ChannelInterface")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
+     *
      * @Assert\Type(type="\Sylius\Component\Core\Model\ChannelInterface")
      */
     private ?ChannelInterface $channel;
@@ -67,7 +68,7 @@ class Setting implements SettingInterface
     /**
      * @ORM\Column(name="storage_type", type="string", length=10, nullable=false)
      */
-    private ?string $storageType;
+    private ?string $storageType = null;
 
     /**
      * @ORM\Column(name="text_value", type="text", length=65535, nullable=true)
@@ -108,6 +109,7 @@ class Setting implements SettingInterface
      * @var DateTimeInterface|null
      *
      * @ORM\Column(name="created_at", type="datetime_immutable")
+     *
      * @Gedmo\Timestampable(on="create")
      */
     protected $createdAt;
@@ -116,6 +118,7 @@ class Setting implements SettingInterface
      * @var DateTimeInterface|null
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     *
      * @Gedmo\Timestampable(on="update")
      */
     protected $updatedAt;
@@ -331,5 +334,18 @@ class Setting implements SettingInterface
     public function setJsonValue(?array $jsonValue): void
     {
         $this->jsonValue = $jsonValue;
+    }
+
+    public static function getAllStorageTypes(): array
+    {
+        return [
+            SettingInterface::STORAGE_TYPE_TEXT,
+            SettingInterface::STORAGE_TYPE_BOOLEAN,
+            SettingInterface::STORAGE_TYPE_INTEGER,
+            SettingInterface::STORAGE_TYPE_FLOAT,
+            SettingInterface::STORAGE_TYPE_JSON,
+            SettingInterface::STORAGE_TYPE_DATE,
+            SettingInterface::STORAGE_TYPE_DATETIME,
+        ];
     }
 }
