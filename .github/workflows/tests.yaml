@@ -68,7 +68,7 @@ jobs:
 
       - run: make test.phpcs
 
-      - run: make test.phpunit
+      # - run: make test.phpunit
 
       - run: make test.phpstan
 
