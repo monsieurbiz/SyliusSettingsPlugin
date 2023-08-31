@@ -31,13 +31,27 @@
   "forwardPorts": [
     8000
   ],
+  "portsAttributes": {
+    "8000": {
+      "label": "Sylius Test Application"
+    }
+  },
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "onCreateCommand": "make install stop",
-  "postStartCommand": "make up"
+  "onCreateCommand": "make dependencies application codespace.hostname docker.pull install stop",
+  "postStartCommand": "make up",
 
   // Configure tool-specific properties.
-  // "customizations": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+		"ms-vscode.makefile-tools",
+		"TheNouillet.symfony-vscode",
+		"xdebug.php-debug",
+		"eamodio.gitlens"
+	]
+    }
+  }
 
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
   // "remoteUser": "root"
