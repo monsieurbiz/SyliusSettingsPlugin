@@ -26,26 +26,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SettingsFixtureFactory extends AbstractExampleFactory
 {
-    private RegistryInterface $settingsRegistry;
-
     private OptionsResolver $optionsResolver;
 
-    private ChannelRepositoryInterface $channelRepository;
-
-    private SettingsFormatterInterface $settingsFormatter;
-
-    private SettingProviderInterface $settingProvider;
-
     public function __construct(
-        RegistryInterface $settingsRegistry,
-        ChannelRepositoryInterface $channelRepository,
-        SettingsFormatterInterface $settingsFormatter,
-        SettingProviderInterface $settingProvider
+        private RegistryInterface $settingsRegistry,
+        private ChannelRepositoryInterface $channelRepository,
+        private SettingProviderInterface $settingProvider,
+        private SettingsFormatterInterface $settingsFormatter
     ) {
-        $this->settingsRegistry = $settingsRegistry;
-        $this->channelRepository = $channelRepository;
-        $this->settingsFormatter = $settingsFormatter;
-        $this->settingProvider = $settingProvider;
         $this->optionsResolver = new OptionsResolver();
 
         $this->configureOptions($this->optionsResolver);

@@ -21,28 +21,17 @@ use Sylius\Component\Locale\Context\LocaleContextInterface;
 
 class SettingsProvider implements SettingsProviderInterface
 {
-    private RegistryInterface $settingsRegistry;
-
-    private LocaleContextInterface $localeContext;
-
-    private ChannelContextInterface $channelContext;
-
     public function __construct(
-        RegistryInterface $settingsRegistry,
-        ChannelContextInterface $channelContext,
-        LocaleContextInterface $localeContext
+        private RegistryInterface $settingsRegistry,
+        private ChannelContextInterface $channelContext,
+        private LocaleContextInterface $localeContext
     ) {
-        $this->settingsRegistry = $settingsRegistry;
-        $this->channelContext = $channelContext;
-        $this->localeContext = $localeContext;
     }
 
     /**
      * @throws SettingsException
-     *
-     * @return mixed
      */
-    public function getSettingValue(string $alias, string $path)
+    public function getSettingValue(string $alias, string $path): mixed
     {
         return $this->getSettingValueByChannelAndLocale(
             $alias,
@@ -54,15 +43,13 @@ class SettingsProvider implements SettingsProviderInterface
 
     /**
      * @throws SettingsException
-     *
-     * @return mixed
      */
     public function getSettingValueByChannelAndLocale(
         string $alias,
         string $path,
         ChannelInterface $channel,
         ?string $locale = null
-    ) {
+    ): mixed {
         if ($settingsInstance = $this->settingsRegistry->getByAlias($alias)) {
             return $settingsInstance->getCurrentValue($channel, $locale, $path);
         }

@@ -23,10 +23,6 @@ final class Settings implements SettingsInterface
 {
     public const DEFAULT_KEY = 'default';
 
-    private Metadata $metadata;
-
-    private SettingRepositoryInterface $settingRepository;
-
     private ?array $settingsByChannelAndLocale;
 
     private ?array $settingsByChannelAndLocaleWithDefault;
@@ -34,10 +30,8 @@ final class Settings implements SettingsInterface
     /**
      * Settings constructor.
      */
-    public function __construct(Metadata $metadata, SettingRepositoryInterface $settingRepository)
+    public function __construct(private Metadata $metadata, private SettingRepositoryInterface $settingRepository)
     {
-        $this->metadata = $metadata;
-        $this->settingRepository = $settingRepository;
     }
 
     public function getAlias(): string
@@ -197,7 +191,7 @@ final class Settings implements SettingsInterface
         return $settingsValues;
     }
 
-    public function getCurrentValue(?ChannelInterface $channel, ?string $localeCode, string $path)
+    public function getCurrentValue(?ChannelInterface $channel, ?string $localeCode, string $path): mixed
     {
         $settings = $this->getSettingsByChannelAndLocale($channel, $localeCode, true);
         if (isset($settings[$path])) {
@@ -212,7 +206,7 @@ final class Settings implements SettingsInterface
         return $this->metadata->getDefaultValues();
     }
 
-    public function getDefaultValue(string $path)
+    public function getDefaultValue(string $path): mixed
     {
         $defaultValues = $this->getDefaultValues();
         if (\array_key_exists($path, $defaultValues)) {

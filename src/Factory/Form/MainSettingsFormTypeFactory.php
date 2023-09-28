@@ -24,23 +24,14 @@ use Symfony\Component\Form\FormInterface;
 
 final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryInterface
 {
-    private FormFactoryInterface $formFactory;
-
-    private ChannelRepositoryInterface $channelRepository;
-
-    private RepositoryInterface $localeRepository;
-
     /**
      * MainSettingsFormTypeFactory constructor.
      */
     public function __construct(
-        FormFactoryInterface $formFactory,
-        ChannelRepositoryInterface $channelRepository,
-        RepositoryInterface $localeRepository
+        private FormFactoryInterface $formFactory,
+        private ChannelRepositoryInterface $channelRepository,
+        private RepositoryInterface $localeRepository
     ) {
-        $this->formFactory = $formFactory;
-        $this->channelRepository = $channelRepository;
-        $this->localeRepository = $localeRepository;
     }
 
     public function createNew(SettingsInterface $settings, string $type, array $options = []): FormInterface

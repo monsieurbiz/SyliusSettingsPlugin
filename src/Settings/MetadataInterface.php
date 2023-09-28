@@ -29,10 +29,7 @@ interface MetadataInterface
      */
     public function getName(bool $aliased = false): string;
 
-    /**
-     * @return mixed
-     */
-    public function getParameter(string $name);
+    public function getParameter(string $name): mixed;
 
     public function hasParameter(string $name): bool;
 

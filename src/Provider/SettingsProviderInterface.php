@@ -17,18 +17,12 @@ use Sylius\Component\Channel\Model\ChannelInterface;
 
 interface SettingsProviderInterface
 {
-    /**
-     * @return mixed
-     */
-    public function getSettingValue(string $alias, string $path);
+    public function getSettingValue(string $alias, string $path): mixed;
 
-    /**
-     * @return mixed
-     */
     public function getSettingValueByChannelAndLocale(
         string $alias,
         string $path,
         ChannelInterface $channel,
         ?string $locale = null
-    );
+    ): mixed;
 }

@@ -22,23 +22,14 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class SettingsFormMenuBuilder
 {
-    private FactoryInterface $factory;
-
-    private ChannelRepositoryInterface $channelRepository;
-
-    private RepositoryInterface $localeRepository;
-
     /**
      * SettingsFormMenuBuilder constructor.
      */
     public function __construct(
-        FactoryInterface $factory,
-        ChannelRepositoryInterface $channelRepository,
-        RepositoryInterface $localeRepository
+        private FactoryInterface $factory,
+        private ChannelRepositoryInterface $channelRepository,
+        private RepositoryInterface $localeRepository
     ) {
-        $this->factory = $factory;
-        $this->channelRepository = $channelRepository;
-        $this->localeRepository = $localeRepository;
     }
 
     public function createMenu(array $options = []): ItemInterface

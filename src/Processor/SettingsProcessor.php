@@ -26,27 +26,15 @@ use TypeError;
 
 final class SettingsProcessor implements SettingsProcessorInterface
 {
-    private ChannelRepositoryInterface $channelRepository;
-
-    private RepositoryInterface $localeRepository;
-
-    private EntityManagerInterface $entityManager;
-
-    private SettingFactoryInterface $settingFactory;
-
     /**
      * SettingsProcessor constructor.
      */
     public function __construct(
-        ChannelRepositoryInterface $channelRepository,
-        RepositoryInterface $localeRepository,
-        EntityManagerInterface $entityManager,
-        SettingFactoryInterface $settingFactory
+        private ChannelRepositoryInterface $channelRepository,
+        private RepositoryInterface $localeRepository,
+        private EntityManagerInterface $entityManager,
+        private SettingFactoryInterface $settingFactory
     ) {
-        $this->channelRepository = $channelRepository;
-        $this->localeRepository = $localeRepository;
-        $this->entityManager = $entityManager;
-        $this->settingFactory = $settingFactory;
     }
 
     public function processData(SettingsInterface $settings, array $data): void
