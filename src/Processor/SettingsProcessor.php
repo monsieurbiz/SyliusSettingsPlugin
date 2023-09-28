@@ -81,7 +81,9 @@ final class SettingsProcessor implements SettingsProcessorInterface
 
         $actualSettings = $settings->getSettingsByChannelAndLocale(
             $channel,
-            $localeCode
+            $localeCode,
+            false,
+            false
         );
 
         $this->removeUnusedSettings($data, $actualSettings);

@@ -18,20 +18,18 @@ use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
 use MonsieurBiz\SyliusSettingsPlugin\Form\AbstractSettingsType;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use Sylius\Component\Channel\Model\ChannelInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 final class Settings implements SettingsInterface
 {
     public const DEFAULT_KEY = 'default';
 
-    private ?array $settingsByChannelAndLocale;
-
-    private ?array $settingsByChannelAndLocaleWithDefault;
-
-    /**
-     * Settings constructor.
-     */
-    public function __construct(private Metadata $metadata, private SettingRepositoryInterface $settingRepository)
-    {
+    public function __construct(
+        private Metadata $metadata,
+        private SettingRepositoryInterface $settingRepository,
+        private TagAwareCacheInterface $monsieurbizSettingsCache
+    ) {
     }
 
     public function getAlias(): string
@@ -91,36 +89,24 @@ final class Settings implements SettingsInterface
         return $className;
     }
 
-    private function getCachedSettingsByChannelAndLocale(string $channelIdentifier, string $localeIdentifier, bool $withDefault): ?array
-    {
-        // With default?
-        $varName = $withDefault ? 'settingsByChannelAndLocaleWithDefault' : 'settingsByChannelAndLocale';
-        if (!isset($this->{$varName}[$channelIdentifier])) {
-            $this->{$varName}[$channelIdentifier] = [];
-
-            return null;
-        }
-        if (!isset($this->{$varName}[$channelIdentifier][$localeIdentifier])) {
-            return null;
-        }
-
-        return $this->{$varName}[$channelIdentifier][$localeIdentifier];
-    }
-
     /**
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false): array
+    public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false, bool $useCache = true): array
     {
-        $channelIdentifier = null === $channel ? '___' . self::DEFAULT_KEY : (string) $channel->getCode();
-        $localeIdentifier = null === $localeCode ? '___' . self::DEFAULT_KEY : $localeCode;
-
-        if (null === $settings = $this->getCachedSettingsByChannelAndLocale($channelIdentifier, $localeIdentifier, $withDefault)) {
-            $settings = $this->getUncachedSettingsByChannelAndLocale($channel, $localeCode, $withDefault);
-            $this->addSettingsByChannelAndLocale($settings, $channelIdentifier, $localeIdentifier, $withDefault);
+        if (false === $useCache) {
+            return $this->getUncachedSettingsByChannelAndLocale($channel, $localeCode, $withDefault);
         }
 
-        return $settings;
+        /** @phpstan-ignore-next-line */
+        return $this->monsieurbizSettingsCache->get(
+            $this->getCacheKey($withDefault ? 'with_def' : 'no_def', $channel, $localeCode),
+            function (ItemInterface $item) use ($channel, $localeCode, $withDefault): array {
+                $item->tag($this->getCacheTags($channel, $localeCode));
+
+                return $this->getUncachedSettingsByChannelAndLocale($channel, $localeCode, $withDefault);
+            }
+        );
     }
 
     /**
@@ -150,19 +136,6 @@ final class Settings implements SettingsInterface
         );
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
-     */
-    private function addSettingsByChannelAndLocale(array $settings, string $channelIdentifier, string $localeIdentifier, bool $withDefault = false): void
-    {
-        if ($withDefault) {
-            $this->settingsByChannelAndLocaleWithDefault[$channelIdentifier][$localeIdentifier] = $settings;
-
-            return;
-        }
-        $this->settingsByChannelAndLocale[$channelIdentifier][$localeIdentifier] = $settings;
-    }
-
     private function stackSettings(array $allSettings): array
     {
         $settings = [];
@@ -179,9 +152,12 @@ final class Settings implements SettingsInterface
         return $settings;
     }
 
-    public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null): array
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
+    public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $useCache = true): array
     {
-        $allSettings = $this->getSettingsByChannelAndLocale($channel, $localeCode);
+        $allSettings = $this->getSettingsByChannelAndLocale($channel, $localeCode, false, $useCache);
         $settingsValues = [];
         /** @var SettingInterface $setting */
         foreach ($allSettings as $setting) {
@@ -193,12 +169,18 @@ final class Settings implements SettingsInterface
 
     public function getCurrentValue(?ChannelInterface $channel, ?string $localeCode, string $path): mixed
     {
-        $settings = $this->getSettingsByChannelAndLocale($channel, $localeCode, true);
-        if (isset($settings[$path])) {
-            return $settings[$path]->getValue();
-        }
+        return $this->monsieurbizSettingsCache->get(
+            $this->getCacheKey($path, $channel, $localeCode),
+            function (ItemInterface $item) use ($channel, $localeCode, $path) {
+                $item->tag($this->getCacheTags($channel, $localeCode));
+                $settings = $this->getSettingsByChannelAndLocale($channel, $localeCode, true);
+                if (isset($settings[$path])) {
+                    return $settings[$path]->getValue();
+                }
 
-        return $this->getDefaultValue($path);
+                return $this->getDefaultValue($path);
+            }
+        );
     }
 
     public function getDefaultValues(): array
@@ -222,5 +204,26 @@ final class Settings implements SettingsInterface
     public function showLocalesInForm(): bool
     {
         return $this->metadata->useLocales();
+    }
+
+    private function getCacheKey(string $key, ?ChannelInterface $channel, ?string $localeCode): string
+    {
+        return implode('_', [
+            $key,
+            $this->getAlias(),
+            $channel?->getCode() ?? self::DEFAULT_KEY,
+            $localeCode ?? self::DEFAULT_KEY,
+        ]);
+    }
+
+    private function getCacheTags(?ChannelInterface $channel, ?string $localeCode, array $extra = []): array
+    {
+        return array_merge([
+            $this->getAlias(),
+            sprintf('vendor.%s', $this->getAliasAsArray()['vendor']),
+            sprintf('plugin.%s', $this->getAliasAsArray()['plugin']),
+            sprintf('channel.%s', $channel?->getCode() ?? self::DEFAULT_KEY),
+            sprintf('locale.%s', $localeCode ?? self::DEFAULT_KEY),
+        ], $extra);
     }
 }

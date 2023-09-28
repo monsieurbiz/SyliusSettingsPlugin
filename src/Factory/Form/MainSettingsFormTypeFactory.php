@@ -46,13 +46,13 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
     private function getInitialFormData(SettingsInterface $settings): array
     {
         $data = [
-            Settings::DEFAULT_KEY . '-' . Settings::DEFAULT_KEY => $settings->getSettingsValuesByChannelAndLocale() + $settings->getDefaultValues(),
+            Settings::DEFAULT_KEY . '-' . Settings::DEFAULT_KEY => $settings->getSettingsValuesByChannelAndLocale(useCache: false) + $settings->getDefaultValues(),
         ];
 
         if ($settings->showLocalesInForm()) {
             /** @var LocaleInterface $locale */
             foreach ($this->localeRepository->findAll() as $locale) {
-                $data[Settings::DEFAULT_KEY . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale(null, $locale->getCode());
+                $data[Settings::DEFAULT_KEY . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale(null, $locale->getCode(), false);
             }
         }
 
@@ -64,11 +64,11 @@ final class MainSettingsFormTypeFactory implements MainSettingsFormTypeFactoryIn
         $data = [];
         /** @var ChannelInterface $channel */
         foreach ($this->channelRepository->findAll() as $channel) {
-            $data['channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY] = $settings->getSettingsValuesByChannelAndLocale($channel);
+            $data['channel-' . $channel->getId() . '-' . Settings::DEFAULT_KEY] = $settings->getSettingsValuesByChannelAndLocale($channel, useCache: false);
 
             if ($settings->showLocalesInForm()) {
                 foreach ($channel->getLocales() as $locale) {
-                    $data['channel-' . $channel->getId() . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale($channel, $locale->getCode());
+                    $data['channel-' . $channel->getId() . '-' . $locale->getCode()] = $settings->getSettingsValuesByChannelAndLocale($channel, $locale->getCode(), false);
                 }
             }
         }
