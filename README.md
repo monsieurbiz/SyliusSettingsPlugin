@@ -133,6 +133,19 @@ For a new value you need to specify the type.
 
 ⚠️ When specifying the type, be sure to know what you are doing as it should be coherent with the Form Type of the field.
 
+### Use cache
+
+Settings use `cache.adapter.array` adapter by default. If you want to increase performance, you can use 
+`cache.adapter.apcu`, `cache.adapter.redis` or any adapters instead.   
+
+
+You had to add the following lines to your config file:
+
+```yaml
+monsieurbiz_sylius_settings:
+    cache_adapter: cache.adapter.apcu
+```
+
 ## Contributing
 
 You can find a way to run the plugin without effort in the file [DEVELOPMENT.md](./DEVELOPMENT.md).

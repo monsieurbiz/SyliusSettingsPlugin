@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Controller;
 
+use MonsieurBiz\SyliusSettingsPlugin\CacheWarmer\SettingsCacheWarmerInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Factory\Form\MainSettingsFormTypeFactoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Form\MainSettingsType;
 use MonsieurBiz\SyliusSettingsPlugin\Processor\SettingsProcessorInterface;
@@ -22,15 +23,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 final class SettingsController extends AbstractController
 {
-    /**
-     * SettingsController constructor.
-     */
     public function __construct(
         private SettingsProcessorInterface $settingsProcessor,
-        private MainSettingsFormTypeFactoryInterface $formFactory
+        private MainSettingsFormTypeFactoryInterface $formFactory,
+        private TagAwareCacheInterface $monsieurbizSettingsCache,
+        private SettingsCacheWarmerInterface $cacheWarmer,
     ) {
     }
 
@@ -54,6 +55,8 @@ final class SettingsController extends AbstractController
             $data = (array) $form->getData();
             $this->settingsProcessor->processData($settings, $data);
             $this->addFlash('success', 'monsieurbiz.settings.settings_successfully_saved');
+            $this->monsieurbizSettingsCache->invalidateTags([$settings->getAlias()]);
+            $this->cacheWarmer->warmUp('');
 
             return $this->redirectToRoute('monsieurbiz_sylius_settings_admin_edit', [
                 'alias' => $settings->getAlias(),

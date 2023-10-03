@@ -16,10 +16,15 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use Sylius\Component\Channel\Model\ChannelInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 interface SettingsInterface
 {
-    public function __construct(Metadata $metadata, SettingRepositoryInterface $settingRepository);
+    public function __construct(
+        Metadata $metadata,
+        SettingRepositoryInterface $settingRepository,
+        TagAwareCacheInterface $monsieurbizSettingsCache
+    );
 
     public function getAlias(): string;
 
@@ -43,9 +48,12 @@ interface SettingsInterface
     /**
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false): array;
+    public function getSettingsByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $withDefault = false, bool $useCache = true): array;
 
-    public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null): array;
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
+    public function getSettingsValuesByChannelAndLocale(?ChannelInterface $channel = null, ?string $localeCode = null, bool $useCache = true): array;
 
     public function getCurrentValue(?ChannelInterface $channel, ?string $localeCode, string $path): mixed;
 

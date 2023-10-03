@@ -50,6 +50,7 @@ final class InstantiateSettingsPass implements CompilerPassInterface
             $container->setDefinition($id, new Definition($class, [
                 $this->getMetadataDefinition($metadata),
                 $container->findDefinition('monsieurbiz_settings.repository.setting'),
+                $container->findDefinition('monsieurbiz_settings.cache'),
             ]));
 
             $aliases = [

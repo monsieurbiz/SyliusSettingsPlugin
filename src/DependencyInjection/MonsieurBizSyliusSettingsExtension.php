@@ -59,5 +59,33 @@ final class MonsieurBizSyliusSettingsExtension extends Extension implements Prep
                 'MonsieurBiz\SyliusSettingsPlugin\Migrations' => '@MonsieurBizSyliusSettingsPlugin/Migrations',
             ]),
         ]);
+
+        $this->addCachePool($container);
+    }
+
+    private function addCachePool(ContainerBuilder $container): void
+    {
+        $settingConfigs = $container->getExtensionConfig($this->getAlias());
+        $configuration = $this->getConfiguration([], $container);
+        if (null === $configuration) {
+            return;
+        }
+
+        $cacheAdapter = $this->processConfiguration($configuration, $settingConfigs)['cache_adapter'] ?: null;
+        if (null === $cacheAdapter) {
+            return;
+        }
+
+        $container->prependExtensionConfig('framework', [
+            'cache' => [
+                'pools' => [
+                    'monsieurbiz_settings.cache' => [
+                        'adapter' => $cacheAdapter,
+                        'public' => false,
+                        'tags' => true,
+                    ],
+                ],
+            ],
+        ]);
     }
 }

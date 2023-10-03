@@ -38,6 +38,7 @@ final class Configuration implements ConfigurationInterface
         /** @phpstan-ignore-next-line */
         $rootNode
                 ->children()
+                ->scalarNode('cache_adapter')->defaultValue('cache.adapter.array')->end()
                 ->arrayNode('plugins')
                     ->useAttributeAsKey('name', false)
                     ->defaultValue([])
