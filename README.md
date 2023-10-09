@@ -114,6 +114,10 @@ It's also possible to run test fixtures with a local suite in development: `make
 By default, a fixture will replace the value of a setting if it already exists. 
 If you want to keep a value as it is in the database when running this fixture, you can use the flag `ignore_if_exists: true` for each element that you want to be kept.
 
+### Extends existing settings form
+
+If you want to add a field to an existing settings form (like in another plugin), you can check [the example in the test app](dist/src/Form/SettingsExtensionType.php)
+
 ### Use CLI
 
 You can use a CLI command to set a value for a setting directly from the console:

@@ -11,6 +11,7 @@ monsieurbiz_sylius_settings:
                 form: App\Form\SettingsType
             default_values:
                 demo_message: My amazing message
+                demo_title: My amazing title
                 enabled: true
 
 sylius_ui:
