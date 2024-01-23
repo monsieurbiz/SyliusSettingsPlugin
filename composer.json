@@ -9,7 +9,7 @@
         "ext-mbstring": "*",
         "ext-json": "*",
         "sylius/sylius": ">=1.10 <1.13",
-        "symfony/cache": "^5.4.28 || ^6.0"
+        "symfony/cache": "^5.4.28 || ^6.0 || ^7.0"
     },
     "require-dev": {
         "behat/behat": "^3.6.1",
