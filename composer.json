@@ -43,7 +43,8 @@
         "symfony/flex": "@stable",
         "symfony/web-profiler-bundle": "@stable",
         "phpmd/phpmd": "@stable",
-        "friendsofphp/php-cs-fixer": "@stable"
+        "friendsofphp/php-cs-fixer": "@stable",
+        "symfony/twig-bridge": "^5.4"
     },
     "prefer-stable": true,
     "autoload": {
