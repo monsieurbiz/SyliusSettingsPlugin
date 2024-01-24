@@ -30,36 +30,34 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          ini-values: date.timezone=UTC
+      -   name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+              php-version: ${{ matrix.php }}
+              ini-values: date.timezone=UTC
+              tools: symfony-cli
 
-      - name: Set project php-version
-        run: |
-          echo ${{ matrix.php }} > .php-version
+      -   name: Set project php-version
+          run: |
+              echo ${{ matrix.php }} > .php-version
 
-      - name: Install symfony CLI
-        run: |
-          curl https://get.symfony.com/cli/installer | bash
-          echo "${HOME}/.symfony5/bin" >> $GITHUB_PATH
+      -   name: Determine composer cache directory
+          id: composer-cache-directory
+          run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
-        id: cache-composer
-        with:
-          path: /home/runner/.composer/cache
-          key: composer2-php:${{ matrix.php }}-${{ github.sha }}
-          restore-keys: composer2-php:${{ matrix.php }}-
+      -   name: Cache dependencies installed with composer
+          uses: actions/cache@v3
+          id: cache-composer
+          with:
+              path: ${{ steps.composer-cache-directory.outputs.directory }}
+              key: composer2-php:${{ matrix.php }}-${{ hashFiles('**/composer.json') }}
+              restore-keys: composer2-php:${{ matrix.php }}-
 
-      - run: mkdir -p /home/runner/{.composer/cache,.config/composer}
-        if: steps.cache-composer.outputs.cache-hit != 'true'
+      -   name: Ensure that composer cache directory exists
+          run: mkdir -p ${{ steps.composer-cache-directory.outputs.directory }}
 
-      - name: Composer
-        run: sudo composer self-update
-
-      - name: Composer Github Auth
-        run: composer config -g github-oauth.github.com ${{ github.token }}
+      -   name: Composer Github Auth
+          run: composer config -g github-oauth.github.com ${{ github.token }}
 
       - run: make install
 

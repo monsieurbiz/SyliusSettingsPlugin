@@ -46,18 +46,24 @@ jobs:
 
       - run: mkdir -p /home/runner/{.composer/cache,.config/composer}
 
-      - uses: actions/cache@v3
-        id: cache-composer
-        with:
-          path: /home/runner/.composer/cache
-          key: composer2-php:${{ matrix.php }}-sylius:${{ matrix.sylius }}-${{ github.sha }}
-          restore-keys: composer2-php:${{ matrix.php }}-sylius:${{ matrix.sylius }}-
+      -   name: Determine composer cache directory
+          id: composer-cache-directory
+          working-directory: plugin
+          run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
 
-      - name: Composer
-        run: sudo composer self-update
+      -   name: Cache dependencies installed with composer
+          uses: actions/cache@v3
+          id: cache-composer
+          with:
+              path: ${{ steps.composer-cache-directory.outputs.directory }}
+              key: composer2-php:${{ matrix.php }}-sylius:${{ matrix.sylius }}-${{ hashFiles('**/composer.json') }}
+              restore-keys: composer2-php:${{ matrix.php }}-sylius:${{ matrix.sylius }}-
 
-      - name: Composer Github Auth
-        run: composer config -g github-oauth.github.com ${{ github.token }}
+      -   name: Ensure that composer cache directory exists
+          run: mkdir -p ${{ steps.composer-cache-directory.outputs.directory }}
+
+      -   name: Composer Github Auth
+          run: composer config -g github-oauth.github.com ${{ github.token }}
 
       - name: Create Sylius-Standard project without install
         run: |
