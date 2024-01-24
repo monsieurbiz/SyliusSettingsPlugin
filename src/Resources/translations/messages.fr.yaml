@@ -18,3 +18,13 @@ monsieurbiz:
                 title:
                     sylius_default_values: Valeurs par défaut de Sylius
                     channel_default_values: Valeurs par défaut de %channelName%
+sylius_plus:
+    rbac:
+        parent:
+            monsieurbiz:
+                settings_admin_edit_posts: 'Sauvegarde réglages' 
+                settings_admin_edits: 'Éditer réglages'
+                settings_admin_indices: 'Lister réglages'
+        monsieurbiz_sylius_settings_admin_edit_post: 'Sauvegarde'
+        monsieurbiz_sylius_settings_admin_edit: 'Update'
+        monsieurbiz_sylius_settings_admin_index: 'Index' 

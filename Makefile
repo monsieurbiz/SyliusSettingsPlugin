@@ -214,19 +214,6 @@ endif
 ${APP_DIR}/.env.local:
 	touch ${APP_DIR}/.env.local
 
-
-###
-### GITHUB CODESPACES
-### ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-
-codespace.hostname: ${APP_DIR}/.env.local ## Init the SYLIUS_FIXTURES_HOSTNAME variable in .env.local
-ifdef CODESPACES
-	echo SYLIUS_FIXTURES_HOSTNAME=${CODESPACE_NAME}-8000.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN} >> ${APP_DIR}/.env.local
-endif
-
-${APP_DIR}/.env.local:
-	touch ${APP_DIR}/.env.local
-
 ###
 ### HELP
 ### ¯¯¯¯

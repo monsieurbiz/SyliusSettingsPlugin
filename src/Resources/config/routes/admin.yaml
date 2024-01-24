@@ -2,13 +2,29 @@ monsieurbiz_sylius_settings_admin_index:
     path: settings
     controller: MonsieurBiz\SyliusSettingsPlugin\Controller\SettingsController::indexAction
     methods: ['GET']
+    defaults:
+        _sylius:
+            alias: monsieurbiz.settings_admin_index
+            section: admin
+            permission: true
+        
 
 monsieurbiz_sylius_settings_admin_edit:
     path: settings/edit/{alias}
     controller: MonsieurBiz\SyliusSettingsPlugin\Controller\SettingsController::formAction
     methods: ['GET']
+    defaults:
+        _sylius:
+            alias: monsieurbiz.settings_admin_edit
+            section: admin
+            permission: true
 
 monsieurbiz_sylius_settings_admin_edit_post:
     path: settings/edit/{alias}
     controller: MonsieurBiz\SyliusSettingsPlugin\Controller\SettingsController::formAction
     methods: ['PUT']
+    defaults:
+        _sylius:
+            alias: monsieurbiz.settings_admin_edit_post
+            section: admin
+            permission: true
