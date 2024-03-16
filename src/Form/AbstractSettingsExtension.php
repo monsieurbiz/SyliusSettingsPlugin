@@ -35,6 +35,16 @@ abstract class AbstractSettingsExtension extends AbstractTypeExtension implement
         return $this;
     }
 
+    public function removeWithDefaultCheckbox(FormBuilderInterface $builder, string $child): self
+    {
+        $builder->remove($child);
+        if (!$this->isDefaultForm($builder)) {
+            $builder->remove($child . '___' . Settings::DEFAULT_KEY);
+        }
+
+        return $this;
+    }
+
     protected function isDefaultForm(FormBuilderInterface $builder): bool
     {
         return !$builder->getOption('show_default_checkboxes', true);
