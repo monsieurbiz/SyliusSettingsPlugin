@@ -9,25 +9,29 @@ jobs:
 
   recipe:
 
-    name: Sylius ${{ matrix.sylius }}, PHP ${{ matrix.php }}
-
     runs-on: ubuntu-latest
-
-    env:
-      SYMFONY_ENDPOINT: http://127.0.0.1/
 
     strategy:
       fail-fast: false
       matrix:
         php: ['8.0', '8.1', '8.2']
-        sylius: ['~1.10.0', '~1.11.0', '~1.12.0']
+        sylius: ["~1.11.0", "~1.12.0", "~1.13.0"]
+        exclude:
+          - php: '8.2'
+            sylius: '~1.11.0'
+          - php: '8.0'
+            sylius: '~1.12.0'
+          - php: '8.0'
+            sylius: '~1.13.0'
 
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          extensions: gd, intl, json
           ini-values: date.timezone=UTC
+          tools: symfony-cli
 
       - name: Set project php-version
         run: |
@@ -37,33 +41,24 @@ jobs:
         with:
           path: plugin
 
-      # Run the server at the start so it can download the recipes!
-      - name: Run standalone symfony flex server
-        run: |
-          echo ${{ github.token }} | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-          docker run --rm --name flex -d -v $PWD/plugin/recipes:/var/www/flex/var/repo/private/monsieurbiz/sylius-settings-plugin -p 80:80 docker.pkg.github.com/monsieurbiz/docker/symfony-flex-server:latest contrib official
-          docker ps
+      - name: Determine composer cache directory
+        id: composer-cache-directory
+        working-directory: plugin
+        run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
 
-      - run: mkdir -p /home/runner/{.composer/cache,.config/composer}
+      - name: Cache dependencies installed with composer
+        uses: actions/cache@v3
+        id: cache-composer
+        with:
+          path: ${{ steps.composer-cache-directory.outputs.directory }}
+          key: composer2-php:${{ matrix.php }}-sylius:${{ matrix.sylius }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: composer2-php:${{ matrix.php }}-sylius:${{ matrix.sylius }}-
 
-      -   name: Determine composer cache directory
-          id: composer-cache-directory
-          working-directory: plugin
-          run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+      - name: Ensure that composer cache directory exists
+        run: mkdir -p ${{ steps.composer-cache-directory.outputs.directory }}
 
-      -   name: Cache dependencies installed with composer
-          uses: actions/cache@v3
-          id: cache-composer
-          with:
-              path: ${{ steps.composer-cache-directory.outputs.directory }}
-              key: composer2-php:${{ matrix.php }}-sylius:${{ matrix.sylius }}-${{ hashFiles('**/composer.json') }}
-              restore-keys: composer2-php:${{ matrix.php }}-sylius:${{ matrix.sylius }}-
-
-      -   name: Ensure that composer cache directory exists
-          run: mkdir -p ${{ steps.composer-cache-directory.outputs.directory }}
-
-      -   name: Composer Github Auth
-          run: composer config -g github-oauth.github.com ${{ github.token }}
+      - name: Composer Github Auth
+        run: composer config -g github-oauth.github.com ${{ github.token }}
 
       - name: Create Sylius-Standard project without install
         run: |
@@ -79,20 +74,14 @@ jobs:
         working-directory: ./sylius
         run: |
             composer config --no-plugins allow-plugins true
+            composer config --no-plugins extra.symfony.allow-contrib true
+            composer config --no-plugins secure-http false
+            composer config --no-plugins --unset platform.php
+            composer config --no-plugins extra.symfony.docker false
+            composer config --no-plugins --json extra.symfony.endpoint '["https://api.github.com/repos/monsieurbiz/symfony-recipes/contents/index.json?ref=flex/master","flex://defaults"]'
             composer config repositories.plugin '{"type": "path", "url": "../plugin/"}'
-            composer config extra.symfony.allow-contrib true
-            composer config secure-http false
-            composer config --unset platform.php
 
-      - name: Require plugin without install
+      - name: Require plugin & install all dependencies
         working-directory: ./sylius
         run: |
-          composer require --no-install --no-scripts monsieurbiz/sylius-settings-plugin="*@dev"
-
-      - name: Composer install
-        working-directory: ./sylius
-        run: |
-          composer install
-
-      - name: Show flex server logs
-        run: docker logs --tail 100 flex
+          composer require monsieurbiz/sylius-settings-plugin="*@dev"

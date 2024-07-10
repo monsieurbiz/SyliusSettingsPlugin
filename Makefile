@@ -1,11 +1,13 @@
 .DEFAULT_GOAL := help
 SHELL=/bin/bash
 APP_DIR=tests/Application
-SYLIUS_VERSION=1.12.0
+SYLIUS_VERSION=1.13.0
 SYMFONY=cd ${APP_DIR} && symfony
 COMPOSER=symfony composer
 CONSOLE=${SYMFONY} console
 export COMPOSE_PROJECT_NAME=settings
+export MIGRATIONS_NAMESPACE=MonsieurBiz\\SyliusSettingsPlugin\\Migrations
+export USER_UID=$(shell id -u)
 PLUGIN_NAME=sylius-${COMPOSE_PROJECT_NAME}-plugin
 COMPOSE=docker-compose
 YARN=yarn
@@ -70,18 +72,21 @@ setup_application:
 	(cd ${APP_DIR} && ${COMPOSER} config extra.symfony.allow-contrib true)
 	(cd ${APP_DIR} && ${COMPOSER} config minimum-stability dev)
 	(cd ${APP_DIR} && ${COMPOSER} config --no-plugins allow-plugins true)
+	(cd ${APP_DIR} && ${COMPOSER} config --no-plugins --json extra.symfony.endpoint '["https://api.github.com/repos/monsieurbiz/symfony-recipes/contents/index.json?ref=flex/master","flex://defaults"]')
 	(cd ${APP_DIR} && ${COMPOSER} require --no-install --no-scripts --no-progress sylius/sylius="~${SYLIUS_VERSION}") # Make sure to install the required version of sylius because the sylius-standard has a soft constraint
 	$(MAKE) ${APP_DIR}/.php-version
 	$(MAKE) ${APP_DIR}/php.ini
 	(cd ${APP_DIR} && ${COMPOSER} install --no-interaction)
 	$(MAKE) apply_dist
-	(cd ${APP_DIR} && ${COMPOSER} require --no-progress monsieurbiz/${PLUGIN_NAME}="*@dev")
+	(cd ${APP_DIR} && ${COMPOSER} require --no-progress --no-interaction monsieurbiz/${PLUGIN_NAME}="*@dev")
 	rm -rf ${APP_DIR}/var/cache
 
 
 ${APP_DIR}/docker-compose.yaml:
 	rm -f ${APP_DIR}/docker-compose.yml
 	rm -f ${APP_DIR}/docker-compose.yaml
+	rm -f ${APP_DIR}/compose.yml # Remove Sylius file about Docker
+	rm -f ${APP_DIR}/compose.override.dist.yml # Remove Sylius file about Docker
 	ln -s ../../docker-compose.yaml.dist ${APP_DIR}/docker-compose.yaml
 .PHONY: ${APP_DIR}/docker-compose.yaml
 
@@ -106,7 +111,7 @@ apply_dist:
 ### TESTS
 ### ¯¯¯¯¯
 
-test.all: test.composer test.phpstan test.phpmd test.phpspec test.phpcs test.yaml test.schema test.twig test.container ## Run all tests in once
+test.all: test.composer test.phpstan test.phpmd test.phpunit test.phpspec test.phpcs test.yaml test.schema test.twig test.container ## Run all tests in once
 
 test.composer: ## Validate composer.json
 	${COMPOSER} validate --strict
@@ -116,6 +121,9 @@ test.phpstan: ## Run PHPStan
 
 test.phpmd: ## Run PHPMD
 	${COMPOSER} phpmd
+
+test.phpunit: ## Run PHPUnit
+	${COMPOSER} phpunit
 
 test.phpspec: ## Run PHPSpec
 	${COMPOSER} phpspec
@@ -130,7 +138,7 @@ test.container: ## Lint the symfony container
 	${CONSOLE} lint:container
 
 test.yaml: ## Lint the symfony Yaml files
-	${CONSOLE} lint:yaml ../../recipes ../../src/Resources/config
+	${CONSOLE} lint:yaml ../../src/Resources/config --parse-tags
 
 test.schema: ## Validate MySQL Schema
 	${CONSOLE} doctrine:schema:validate
@@ -153,9 +161,6 @@ sylius.database: ## Setup the database
 sylius.fixtures: ## Run the fixtures
 	${CONSOLE} sylius:fixtures:load -n default
 
-sylius.fixtures.local: ## Run the local fixtures (for testing purpose)
-	${CONSOLE} sylius:fixtures:load -n local
-
 sylius.assets: ## Install all assets with symlinks
 	${CONSOLE} assets:install --symlink
 	${CONSOLE} sylius:install:assets
@@ -163,6 +168,9 @@ sylius.assets: ## Install all assets with symlinks
 
 messenger.setup: ## Setup Messenger transports
 	${CONSOLE} messenger:setup-transports
+
+doctrine.diff: ## Doctrine diff
+	${CONSOLE} doctrine:migration:diff --namespace="${MIGRATIONS_NAMESPACE}"
 
 ###
 ### PLATFORM
@@ -200,19 +208,6 @@ server.start: ## Run the local webserver using Symfony
 
 server.stop: ## Stop the local webserver
 	${SYMFONY} local:server:stop
-
-
-ifdef CODESPACES
-###
-### GITHUB CODESPACES
-### ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-
-codespace.hostname: ${APP_DIR}/.env.local ## Init the SYLIUS_FIXTURES_HOSTNAME variable in .env.local
-	echo SYLIUS_FIXTURES_HOSTNAME=${CODESPACE_NAME}-8000.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN} >> ${APP_DIR}/.env.local
-endif
-
-${APP_DIR}/.env.local:
-	touch ${APP_DIR}/.env.local
 
 ###
 ### HELP

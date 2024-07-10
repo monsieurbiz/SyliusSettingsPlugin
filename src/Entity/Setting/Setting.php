@@ -35,22 +35,22 @@ class Setting implements SettingInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
+    protected ?int $id;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    private ?string $vendor;
+    protected ?string $vendor;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    private ?string $plugin;
+    protected ?string $plugin;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    private ?string $path;
+    protected ?string $path;
 
     /**
      * @ORM\ManyToOne(targetEntity="\Sylius\Component\Core\Model\ChannelInterface")
@@ -58,52 +58,52 @@ class Setting implements SettingInterface
      *
      * @Assert\Type(type="\Sylius\Component\Core\Model\ChannelInterface")
      */
-    private ?ChannelInterface $channel;
+    protected ?ChannelInterface $channel;
 
     /**
      * @ORM\Column(name="locale_code", type="string", length=5, nullable=true)
      */
-    private ?string $localeCode;
+    protected ?string $localeCode;
 
     /**
      * @ORM\Column(name="storage_type", type="string", length=10, nullable=false)
      */
-    private ?string $storageType = null;
+    protected ?string $storageType = null;
 
     /**
      * @ORM\Column(name="text_value", type="text", length=65535, nullable=true)
      */
-    private ?string $textValue;
+    protected ?string $textValue;
 
     /**
      * @ORM\Column(name="boolean_value", type="boolean", nullable=true)
      */
-    private ?bool $booleanValue;
+    protected ?bool $booleanValue;
 
     /**
      * @ORM\Column(name="integer_value", type="integer", nullable=true)
      */
-    private ?int $integerValue;
+    protected ?int $integerValue;
 
     /**
      * @ORM\Column(name="float_value", type="float", nullable=true)
      */
-    private ?float $floatValue;
+    protected ?float $floatValue;
 
     /**
      * @ORM\Column(name="datetime_value", type="datetime", nullable=true)
      */
-    private ?DateTimeInterface $datetimeValue;
+    protected ?DateTimeInterface $datetimeValue;
 
     /**
      * @ORM\Column(name="date_value", type="date", nullable=true)
      */
-    private ?DateTimeInterface $dateValue;
+    protected ?DateTimeInterface $dateValue;
 
     /**
      * @ORM\Column(name="json_value", type="json", nullable=true)
      */
-    private ?array $jsonValue;
+    protected ?array $jsonValue;
 
     /**
      * @var DateTimeInterface|null
