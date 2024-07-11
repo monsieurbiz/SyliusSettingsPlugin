@@ -31,6 +31,17 @@ composer config --no-plugins --json extra.symfony.endpoint '["https://api.github
 composer require monsieurbiz/sylius-settings-plugin
 ```
 
+<details>
+<summary>⚠️ Warning: For Doctrine DBAL < 3.0</summary>
+<p>
+
+You have to ignore migration `Version20240710130300.php` if you are under Doctrine DBAL < 3.0.
+```
+console doctrine:migrations:version 'MonsieurBiz\SyliusSettingsPlugin\Migrations\Version20240710130300' --add
+```
+</p>
+</details>
+
 <details><summary>For the installation without flex, follow these additional steps</summary>
 <p>
 
