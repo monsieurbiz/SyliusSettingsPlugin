@@ -3,20 +3,44 @@
 <h1 align="center">Settings for Sylius</h1>
 
 [![Settings Plugin license](https://img.shields.io/github/license/monsieurbiz/SyliusSettingsPlugin?public)](https://github.com/monsieurbiz/SyliusSettingsPlugin/blob/master/LICENSE.txt)
-[![Tests](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/tests.yaml/badge.svg?branch=master&event=push)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/tests.yaml)
-[![Security](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/security.yaml/badge.svg?branch=master&event=push)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions/workflows/security.yaml)
+[![Tests Status](https://img.shields.io/github/actions/workflow/status/monsieurbiz/SyliusSettingsPlugin/tests.yaml?branch=master&logo=github)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions?query=workflow%3ATests)
+[![Recipe Status](https://img.shields.io/github/actions/workflow/status/monsieurbiz/SyliusSettingsPlugin/recipe.yaml?branch=master&label=recipes&logo=github)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions?query=workflow%3ASecurity)
+[![Security Status](https://img.shields.io/github/actions/workflow/status/monsieurbiz/SyliusSettingsPlugin/security.yaml?branch=master&label=security&logo=github)](https://github.com/monsieurbiz/SyliusSettingsPlugin/actions?query=workflow%3ASecurity)
 
 This plugin gives you the ability to have Plugins oriented settings in your favorite e-commerce platform, Sylius.
 
 ![Screenshot of the admin panel in Settings section](/docs/images/screenshot01.png)
 
+## Compatibility
+
+| Sylius Version | PHP Version |
+|---|---|
+| 1.11 | 8.0 - 8.1 |
+| 1.12 | 8.1 - 8.2 |
+| 1.13 | 8.1 - 8.2 |
+
 ## Installation
 
-Install the plugin via composer:
+If you want to use our recipes, you can configure your composer.json by running:
+
+```bash
+composer config --no-plugins --json extra.symfony.endpoint '["https://api.github.com/repos/monsieurbiz/symfony-recipes/contents/index.json?ref=flex/master","flex://defaults"]'
+```
 
 ```bash
 composer require monsieurbiz/sylius-settings-plugin
 ```
+
+<details>
+<summary>⚠️ Warning: For Doctrine DBAL < 3.0</summary>
+<p>
+
+You have to ignore migration `Version20240710130300.php` if you are under Doctrine DBAL < 3.0.
+```
+console doctrine:migrations:version 'MonsieurBiz\SyliusSettingsPlugin\Migrations\Version20240710130300' --add
+```
+</p>
+</details>
 
 <details><summary>For the installation without flex, follow these additional steps</summary>
 <p>
@@ -31,9 +55,19 @@ return [
 ];  
 ```
 
-Copy the plugin configuration files in your `config` folder: 
-```bash  
-cp -Rv vendor/monsieurbiz/sylius-settings-plugin/recipes/1.0-dev/config/ config
+Then create the config file in `config/packages/monsieurbiz_settings_plugin.yaml` :
+
+```yaml
+imports:
+    - { resource: "@MonsieurBizSyliusSettingsPlugin/Resources/config/config.yaml" }
+```
+
+Finally import the routes in `config/routes/monsieurbiz_settings_plugin.yaml` : 
+
+```yaml
+monsieurbiz_sylius_settings_admin:
+    resource: "@MonsieurBizSyliusSettingsPlugin/Resources/config/routes/admin.yaml"
+    prefix: /%sylius_admin.path_name%
 ```
 
 </p>

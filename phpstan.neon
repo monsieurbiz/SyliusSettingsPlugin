@@ -1,15 +1,7 @@
-includes:
-    - vendor/phpstan/phpstan-doctrine/extension.neon
-    - vendor/phpstan/phpstan-webmozart-assert/extension.neon
-
 parameters:
     level: max
     paths:
         - %rootDir%/src/
-
-    checkMissingIterableValueType: false
-
-    checkGenericClassInNonGenericObjectType: false
 
     excludePaths:
         # Makes PHPStan crash
@@ -18,3 +10,7 @@ parameters:
 
         # Test dependencies
         - 'tests/Application/**/*'
+
+    ignoreErrors:
+        - identifier: missingType.generics
+        - identifier: missingType.iterableValue
