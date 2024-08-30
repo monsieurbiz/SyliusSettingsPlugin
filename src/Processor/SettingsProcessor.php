@@ -55,16 +55,16 @@ final class SettingsProcessor implements SettingsProcessorInterface
     {
         switch (true) {
             // Default website + Default locale
-            case sprintf('%1$s-%1$s', Settings::DEFAULT_KEY) === $settingKey:
+            case \sprintf('%1$s-%1$s', Settings::DEFAULT_KEY) === $settingKey:
                 return [null, null];
                 // Default website + locale
-            case 1 === preg_match(sprintf('`^%1$s-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingKey, $matches):
+            case 1 === preg_match(\sprintf('`^%1$s-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingKey, $matches):
                 return [null, $matches['localeCode']];
                 // Website + default locale
-            case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-%1$s$`', Settings::DEFAULT_KEY), $settingKey, $matches):
+            case 1 === preg_match(\sprintf('`^channel-(?P<channelId>[0-9]+)-%1$s$`', Settings::DEFAULT_KEY), $settingKey, $matches):
                 return [(int) $matches['channelId'], null];
                 // Website + locale
-            case 1 === preg_match(sprintf('`^channel-(?P<channelId>[0-9]+)-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingKey, $matches):
+            case 1 === preg_match(\sprintf('`^channel-(?P<channelId>[0-9]+)-(?!%1$s)(?P<localeCode>.+)$`', Settings::DEFAULT_KEY), $settingKey, $matches):
                 return [(int) $matches['channelId'], $matches['localeCode']];
             default:
                 throw new LogicException("Format of the setting's key is incorrect.");
@@ -100,7 +100,7 @@ final class SettingsProcessor implements SettingsProcessorInterface
         // Manage defaults, and remove actual settings with "use default value" checked
         foreach ($data as $key => $value) {
             // Is the setting a "use default value"?
-            if (1 === preg_match(sprintf('`^(?P<key>.*)(?:___%1$s)$`', Settings::DEFAULT_KEY), $key, $matches)) {
+            if (1 === preg_match(\sprintf('`^(?P<key>.*)(?:___%1$s)$`', Settings::DEFAULT_KEY), $key, $matches)) {
                 if (true === $value) {
                     if (isset($settings[$matches['key']])) {
                         $this->entityManager->remove($settings[$matches['key']]);

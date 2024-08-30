@@ -62,7 +62,7 @@ class SettingProvider implements SettingProviderInterface
     {
         $types = Setting::getAllStorageTypes();
         if (!\in_array($type, $types, true)) {
-            throw new Exception(sprintf('The type "%s" is not valid. Valid types are: %s', $type, implode(', ', $types)));
+            throw new Exception(\sprintf('The type "%s" is not valid. Valid types are: %s', $type, implode(', ', $types)));
         }
     }
 

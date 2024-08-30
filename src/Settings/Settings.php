@@ -83,7 +83,7 @@ final class Settings implements SettingsInterface
         $className = $this->metadata->getClass('form');
         $parentClassNames = (array) (class_parents($className) ?: []);
         if (!\in_array(AbstractSettingsType::class, $parentClassNames, true)) {
-            throw new SettingsException(sprintf('Class %s should extend %s', $className, AbstractSettingsType::class));
+            throw new SettingsException(\sprintf('Class %s should extend %s', $className, AbstractSettingsType::class));
         }
 
         return $className;
@@ -220,10 +220,10 @@ final class Settings implements SettingsInterface
     {
         return array_merge([
             $this->getAlias(),
-            sprintf('vendor.%s', $this->getAliasAsArray()['vendor']),
-            sprintf('plugin.%s', $this->getAliasAsArray()['plugin']),
-            sprintf('channel.%s', $channel?->getCode() ?? self::DEFAULT_KEY),
-            sprintf('locale.%s', $localeCode ?? self::DEFAULT_KEY),
+            \sprintf('vendor.%s', $this->getAliasAsArray()['vendor']),
+            \sprintf('plugin.%s', $this->getAliasAsArray()['plugin']),
+            \sprintf('channel.%s', $channel?->getCode() ?? self::DEFAULT_KEY),
+            \sprintf('locale.%s', $localeCode ?? self::DEFAULT_KEY),
         ], $extra);
     }
 }

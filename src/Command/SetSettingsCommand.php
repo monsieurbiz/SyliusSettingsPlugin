@@ -94,7 +94,7 @@ class SetSettingsCommand extends Command
             $settings = $this->settingsRegistry->getByAlias($alias);
 
             if (null === $settings) {
-                throw new SettingsException(sprintf('The alias "%s" is not valid.', $alias));
+                throw new SettingsException(\sprintf('The alias "%s" is not valid.', $alias));
             }
 
             ['vendor' => $vendor, 'plugin' => $plugin] = $settings->getAliasAsArray();
@@ -114,12 +114,12 @@ class SetSettingsCommand extends Command
             $this->settingManager->persist($setting);
             $this->settingManager->flush();
         } catch (Exception $e) {
-            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            $output->writeln(\sprintf('<error>%s</error>', $e->getMessage()));
 
             return Command::FAILURE;
         }
 
-        $output->writeln(sprintf('<info>%s</info>', 'The setting has been saved'));
+        $output->writeln(\sprintf('<info>%s</info>', 'The setting has been saved'));
 
         return Command::SUCCESS;
     }
