@@ -54,6 +54,6 @@ class SettingsProvider implements SettingsProviderInterface
             return $settingsInstance->getCurrentValue($channel, $locale, $path);
         }
 
-        throw new SettingsException(sprintf('Cannot fetch setting %s - %s', $alias, $path));
+        throw new SettingsException(\sprintf('Cannot fetch setting %s - %s', $alias, $path));
     }
 }

@@ -30,7 +30,7 @@ final class Registry implements RegistryInterface
     public function get(string $alias): MetadataInterface
     {
         if (!\array_key_exists($alias, $this->metadata)) {
-            throw new InvalidArgumentException(sprintf('Resource "%s" does not exist.', $alias));
+            throw new InvalidArgumentException(\sprintf('Resource "%s" does not exist.', $alias));
         }
 
         return $this->metadata[$alias];

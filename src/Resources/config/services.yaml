@@ -38,3 +38,7 @@ services:
       class: MonsieurBiz\SyliusSettingsPlugin\Provider\SettingsProvider
 
     MonsieurBiz\SyliusSettingsPlugin\Provider\SettingsProviderInterface: '@monsieurbiz.settings.provider'
+
+    MonsieurBiz\SyliusSettingsPlugin\Factory\SettingFactory:
+        arguments: 
+            $className: 'MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\Setting'

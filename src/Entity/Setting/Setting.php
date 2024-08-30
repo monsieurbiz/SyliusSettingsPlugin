@@ -260,7 +260,7 @@ class Setting implements SettingInterface
 
         $type = \gettype($value);
         if (!isset($types[$type])) {
-            throw new LogicException(sprintf('Impossible to match the type of the value. (%s)', $type));
+            throw new LogicException(\sprintf('Impossible to match the type of the value. (%s)', $type));
         }
 
         return $types[$type]($value); /** @phpstan-ignore-line */

@@ -20,7 +20,7 @@ final class SettingsAlreadyExistsException extends SettingsException
     public function __construct(SettingsInterface $settings)
     {
         parent::__construct(
-            sprintf("Settings instance aliased '%s' already exists.", $settings->getAlias())
+            \sprintf("Settings instance aliased '%s' already exists.", $settings->getAlias())
         );
     }
 }

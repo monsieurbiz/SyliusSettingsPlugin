@@ -68,7 +68,7 @@ final class SettingsController extends AbstractController
             [
                 'settings' => $settings,
                 'form_event' => 'monsieurbiz.settings.form',
-                'form_event_dedicated' => sprintf('monsieurbiz.settings.form.%s', $settings->getAlias()),
+                'form_event_dedicated' => \sprintf('monsieurbiz.settings.form.%s', $settings->getAlias()),
                 'form' => $form->createView(),
             ]
         );

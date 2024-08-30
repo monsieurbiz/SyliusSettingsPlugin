@@ -9,7 +9,7 @@ export COMPOSE_PROJECT_NAME=settings
 export MIGRATIONS_NAMESPACE=MonsieurBiz\\SyliusSettingsPlugin\\Migrations
 export USER_UID=$(shell id -u)
 PLUGIN_NAME=sylius-${COMPOSE_PROJECT_NAME}-plugin
-COMPOSE=docker-compose
+COMPOSE=docker compose
 YARN=yarn
 
 ###

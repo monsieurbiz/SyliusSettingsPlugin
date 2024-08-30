@@ -71,7 +71,7 @@ final class Metadata implements MetadataInterface
     public function getParameter(string $name): mixed
     {
         if (!$this->hasParameter($name)) {
-            throw new InvalidArgumentException(sprintf('Parameter "%s" is not configured for resource "%s".', $name, $this->getAlias()));
+            throw new InvalidArgumentException(\sprintf('Parameter "%s" is not configured for resource "%s".', $name, $this->getAlias()));
         }
 
         return $this->parameters[$name];
@@ -95,7 +95,7 @@ final class Metadata implements MetadataInterface
     public function getClass(string $name): string
     {
         if (!$this->hasClass($name)) {
-            throw new InvalidArgumentException(sprintf('Class "%s" is not configured for resource "%s".', $name, $this->getAlias()));
+            throw new InvalidArgumentException(\sprintf('Class "%s" is not configured for resource "%s".', $name, $this->getAlias()));
         }
 
         return $this->parameters['classes'][$name];
@@ -108,13 +108,13 @@ final class Metadata implements MetadataInterface
 
     public function getServiceId(string $serviceName): string
     {
-        return sprintf('%s.%s.%s', $this->applicationName, $serviceName, $this->alias($this->name));
+        return \sprintf('%s.%s.%s', $this->applicationName, $serviceName, $this->alias($this->name));
     }
 
     private static function parseAlias(string $alias): array
     {
         if (!str_contains($alias, '.')) {
-            throw new InvalidArgumentException(sprintf('Invalid alias "%s" supplied, it should conform to the following format "<applicationName>.<name>".', $alias));
+            throw new InvalidArgumentException(\sprintf('Invalid alias "%s" supplied, it should conform to the following format "<applicationName>.<name>".', $alias));
         }
 
         return explode('.', $alias);
