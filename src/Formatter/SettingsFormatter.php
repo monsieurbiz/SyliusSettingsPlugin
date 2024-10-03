@@ -19,7 +19,7 @@ use MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\SettingInterface;
 class SettingsFormatter implements SettingsFormatterInterface
 {
     /**
-     * @param int|float|string|array $value
+     * @param int|float|string|array|bool $value
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */

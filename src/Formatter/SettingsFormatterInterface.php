@@ -16,7 +16,7 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Formatter;
 interface SettingsFormatterInterface
 {
     /**
-     * @param int|float|string|array $value
+     * @param int|float|string|array|bool $value
      */
     public function formatValue(mixed $type, $value): mixed;
 }
