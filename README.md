@@ -13,12 +13,11 @@ This plugin gives you the ability to have Plugins oriented settings in your favo
 
 ## Compatibility
 
-| Sylius Version | PHP Version |
-|----------------|-------------|
-| 1.11           | 8.0 - 8.1   |
-| 1.12           | 8.1 - 8.2   |
-| 1.13           | 8.1 - 8.2   |
-| 1.14           | 8.1 - 8.2   |
+| Sylius Version | PHP Version     |
+|----------------|-----------------|
+| 1.12           | 8.1 - 8.2 - 8.3 |
+| 1.13           | 8.1 - 8.2 - 8.3 |
+| 1.14           | 8.1 - 8.2 - 8.3 |
 
 ## Installation
 
