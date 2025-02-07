@@ -1,0 +1,21 @@
+{% import '@MonsieurBizSyliusSettingsPlugin/helper/form_accordion.html.twig' as form_accordion %}
+{% set locales = item.extra('locales') %}
+{% set channel = item.extra('channel') %}
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="card-title">
+            {{ 'monsieurbiz.settings.ui.by_default'|trans }}
+        </div>
+    </div>
+    {% set items = {
+        'default': {label : ("monsieurbiz.settings.ui.form.title.channel_default_values"|trans({"%channelName%": channel.name})), form: form['channel-' ~ channel.id ~ '-' ~ constant('MonsieurBiz\\SyliusSettingsPlugin\\Settings\\Settings::DEFAULT_KEY')]}
+    } %}
+    {%  if item.extra('settings').showLocalesInForm %}
+        {% for locale in locales %}
+            {% set locale_code = locale.code %}
+            {% set items = items|merge({(locale_code): {label: locale_code|sylius_locale_name, form: form['channel-' ~ channel.id ~ '-' ~ locale.code]}}) %}
+        {% endfor %}
+    {% endif %}
+    {{ form_accordion.default(items, { accordion_flush: true, accordion_id: 'form_accordion_' ~ channel.id }) }}
+</div>
+

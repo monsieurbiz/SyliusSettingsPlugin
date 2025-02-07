@@ -1,0 +1,7 @@
+{% extends '@SyliusAdmin/shared/layout/base.html.twig' %}
+
+{% block title %}{{ 'monsieurbiz.settings.ui.settings.title'|trans }} {{ parent() }}{% endblock %}
+
+{% block body %}
+    {% hook ['monsieurbiz_admin.setting.edit', 'sylius_admin.common.update'] with { settings: settings } %}
+{% endblock %}

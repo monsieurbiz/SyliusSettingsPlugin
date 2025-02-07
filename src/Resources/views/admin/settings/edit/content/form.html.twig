@@ -1,0 +1,20 @@
+{% if form is not defined %}
+    {% set form = hookable_metadata.context.form %}
+{% endif %}
+{% set settings = hookable_metadata.context.settings %}
+
+{% form_theme form '@MonsieurBizSyliusSettingsPlugin/form/theme.html.twig' %}
+
+<div class="container-xl" {% if attributes is defined %} {{ attributes }} {% endif %}>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': form.vars.id}}) }}
+    <div class="row">
+        <input type="hidden" name="_method" value="PUT"/>
+        {{ form_errors(form) }}
+        {{ form_widget(form._token) }}
+
+        {% set menu = knp_menu_get('monsieurbiz.settings.admin.update.form', [], {'settings': settings}) %}
+
+        {% hook 'form' with { form, menu } %}
+    </div>
+    {{ form_end(form, {render_rest: hookable_metadata.configuration.render_rest|default(false)}) }}
+</div>

@@ -26,6 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="mbiz_settings_setting")
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'mbiz_settings_setting')]
 class Setting implements SettingInterface
 {
     use TimestampableTrait;
@@ -35,21 +37,27 @@ class Setting implements SettingInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     protected ?int $id;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
+    #[ORM\Column(type: 'string', nullable: false)]
     protected ?string $vendor;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
+    #[ORM\Column(type: 'string', nullable: false)]
     protected ?string $plugin;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
+    #[ORM\Column(type: 'string', nullable: false)]
     protected ?string $path;
 
     /**
@@ -58,51 +66,63 @@ class Setting implements SettingInterface
      *
      * @Assert\Type(type="\Sylius\Component\Core\Model\ChannelInterface")
      */
+    #[ORM\ManyToOne(targetEntity: ChannelInterface::class)]
+    #[ORM\JoinColumn(name: 'channel_id', referencedColumnName: 'id')]
+    #[Assert\Type(type: ChannelInterface::class)]
     protected ?ChannelInterface $channel;
 
     /**
      * @ORM\Column(name="locale_code", type="string", length=5, nullable=true)
      */
+    #[ORM\Column(name: 'locale_code', type: 'string', length: 5, nullable: true)]
     protected ?string $localeCode;
 
     /**
      * @ORM\Column(name="storage_type", type="string", length=10, nullable=false)
      */
+    #[ORM\Column(name: 'storage_type', type: 'string', length: 10, nullable: false)]
     protected ?string $storageType = null;
 
     /**
      * @ORM\Column(name="text_value", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'text_value', type: 'text', length: 65535, nullable: true)]
     protected ?string $textValue;
 
     /**
      * @ORM\Column(name="boolean_value", type="boolean", nullable=true)
      */
+    #[ORM\Column(name: 'boolean_value', type: 'boolean', nullable: true)]
     protected ?bool $booleanValue;
 
     /**
      * @ORM\Column(name="integer_value", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'integer_value', type: 'integer', nullable: true)]
     protected ?int $integerValue;
 
     /**
      * @ORM\Column(name="float_value", type="float", nullable=true)
      */
+    #[ORM\Column(name: 'float_value', type: 'float', nullable: true)]
     protected ?float $floatValue;
 
     /**
      * @ORM\Column(name="datetime_value", type="datetime", nullable=true)
      */
+    #[ORM\Column(name: 'datetime_value', type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $datetimeValue;
 
     /**
      * @ORM\Column(name="date_value", type="date", nullable=true)
      */
+    #[ORM\Column(name: 'date_value', type: 'date', nullable: true)]
     protected ?DateTimeInterface $dateValue;
 
     /**
      * @ORM\Column(name="json_value", type="json", nullable=true)
      */
+    #[ORM\Column(name: 'json_value', type: 'json', nullable: true)]
     protected ?array $jsonValue;
 
     /**
@@ -112,6 +132,8 @@ class Setting implements SettingInterface
      *
      * @Gedmo\Timestampable(on="create")
      */
+    #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
+    #[Gedmo\Timestampable(on: 'create')]
     protected $createdAt;
 
     /**
@@ -121,6 +143,8 @@ class Setting implements SettingInterface
      *
      * @Gedmo\Timestampable(on="update")
      */
+    #[ORM\Column(name: 'updated_at', type: 'datetime')]
+    #[Gedmo\Timestampable(on: 'update')]
     protected $updatedAt;
 
     public function getId(): ?int

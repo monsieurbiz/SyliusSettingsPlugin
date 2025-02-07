@@ -1,0 +1,13 @@
+{% import '@SyliusAdmin/shared/helper/header.html.twig' as header %}
+
+{% set settings = hookable_metadata.context.settings %}
+
+<div class="col-12 col-md">
+    <div class="d-md-flex gap-2 align-items-center">
+        {{ header.h1(
+            'monsieurbiz.settings.ui.settings_of.title'|trans({'%pluginName%': (settings.pluginName|trans)}),
+            settings.icon,
+            settings.description|trans
+        ) }}
+    </div>
+</div>

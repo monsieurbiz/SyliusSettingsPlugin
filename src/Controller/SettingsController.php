@@ -37,7 +37,7 @@ final class SettingsController extends AbstractController
 
     public function indexAction(RegistryInterface $registry): Response
     {
-        return $this->render('@MonsieurBizSyliusSettingsPlugin/Crud/index.html.twig', [
+        return $this->render('@MonsieurBizSyliusSettingsPlugin/admin/settings/index.html.twig', [
             'settings' => $registry->getAllSettings(),
         ]);
     }
@@ -64,7 +64,7 @@ final class SettingsController extends AbstractController
         }
 
         return $this->render(
-            '@MonsieurBizSyliusSettingsPlugin/Crud/edit.html.twig',
+            '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit.html.twig',
             [
                 'settings' => $settings,
                 'form_event' => 'monsieurbiz.settings.form',

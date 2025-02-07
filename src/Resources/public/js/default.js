@@ -15,10 +15,10 @@ const DefaultFieldManager = {
   // Constants for CSS classes
   CLASSES: {
     DISABLED_INPUT: 'disabled-input',
-    FIELD: 'field',
-    GRID: 'ui grid',
-    TWELVE_WIDE: 'field twelve wide column',
-    FOUR_WIDE: 'field four wide column'
+    FIELD: 'mb-3 field',
+    GRID: 'row mt-3 row-gap-2',
+    TWELVE_WIDE: 'col-12 col-md',
+    FOUR_WIDE: 'col-12 col-md-auto'
   },
 
   FOCUS_DELAY: 100,

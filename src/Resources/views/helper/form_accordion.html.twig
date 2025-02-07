@@ -1,0 +1,36 @@
+{% macro default(fields, options = {}) %}
+    {% from _self import accordion_header %}
+
+    {% set accordion_id = options.accordion_id|default('form_accordion') %}
+    {% set accordion_flush = options.accordion_flush|default(false) %}
+    <div class="accordion {{ accordion_flush ? 'accordion-flush' : null }}" id="{{ accordion_id }}">
+        {% for key, form_data in fields %}
+            <div class="accordion-item">
+                {{ accordion_header(key, form_data.label, accordion_id, loop.first) }}
+                <div id="translation-{{ accordion_id }}-{{ key }}" class="accordion-collapse collapse {% if loop.first %}show{% endif %}" data-bs-parent="#{{ accordion_id }}">
+                    <div class="accordion-body">
+                        {% for field in form_data.form %}
+                            {{ form_row(field) }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro accordion_header(key, label, accordion_id, is_first = false) %}
+    <h2 class="accordion-header">
+        <button
+                class="accordion-button {% if is_first == false %}collapsed{% endif %}"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#translation-{{ accordion_id }}-{{ key }}"
+                aria-expanded="{% if is_first %}true{% else %}false{% endif %}"
+                aria-controls="translation-{{ accordion_id }}-{{ key }}"
+                {{ sylius_test_html_attribute( accordion_id ~ '-accordion', key) }}
+        >
+            {{ label }}
+        </button>
+    </h2>
+{% endmacro %}

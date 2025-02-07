@@ -1,0 +1,6 @@
+{% set menu = hookable_metadata.context.menu %}
+{% set settings = hookable_metadata.context.settings %}
+{% set form = hookable_metadata.context.form %}
+
+{{ knp_menu_render(menu, {'template': '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/form/side_navigation/menu.html.twig', 'form': form, 'settings': settings}) }}
+

@@ -1,0 +1,24 @@
+sylius_twig_hooks:
+    hooks:
+        'monsieurbiz_admin.setting.index.content.header':
+            breadcrumbs:
+                template: '@SyliusAdmin/shared/crud/index/content/header/breadcrumbs.html.twig'
+                configuration:
+                    title: 'monsieurbiz.settings.ui.settings.title'
+                priority: 0
+
+        'monsieurbiz_admin.setting.index.content.header.title_block':
+            title:
+                template: '@SyliusAdmin/shared/crud/common/content/header/title_block/title.html.twig'
+                configuration:
+                    title: monsieurbiz.settings.ui.settings.title
+                priority: 100
+            actions:
+                enabled: false
+
+        'monsieurbiz_admin.setting.index.content':
+            grid:
+                enabled: false
+            settings_cards:
+                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/index/content/cards.html.twig'
+                priority: 0
