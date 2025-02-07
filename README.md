@@ -13,11 +13,9 @@ This plugin gives you the ability to have Plugins oriented settings in your favo
 
 ## Compatibility
 
-| Sylius Version | PHP Version     |
-|----------------|-----------------|
-| 1.12           | 8.1 - 8.2 - 8.3 |
-| 1.13           | 8.1 - 8.2 - 8.3 |
-| 1.14           | 8.1 - 8.2 - 8.3 |
+| Sylius Version | PHP Version |
+|----------------|-------------|
+| 2.0            | 8.2 - 8.3   |
 
 ## Installation
 
@@ -30,17 +28,6 @@ composer config --no-plugins --json extra.symfony.endpoint '["https://api.github
 ```bash
 composer require monsieurbiz/sylius-settings-plugin
 ```
-
-<details>
-<summary>⚠️ Warning: For Doctrine DBAL < 3.0</summary>
-<p>
-
-You have to ignore migration `Version20240710130300.php` if you are under Doctrine DBAL < 3.0.
-```
-console doctrine:migrations:version 'MonsieurBiz\SyliusSettingsPlugin\Migrations\Version20240710130300' --add
-```
-</p>
-</details>
 
 <details><summary>For the installation without flex, follow these additional steps</summary>
 <p>
