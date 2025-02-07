@@ -42,7 +42,7 @@ final class SettingsFormMenuBuilder
 
         $menu
             ->addChild('default')
-            ->setAttribute('template', '@MonsieurBizSyliusSettingsPlugin/Crud/Edit/Tab/_default.html.twig')
+            ->setAttribute('template', '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/form/sections/default.html.twig')
             ->setLabel('monsieurbiz.settings.ui.by_default')
             ->setCurrent(true)
             ->setExtra('settings', $options['settings'])
@@ -53,7 +53,7 @@ final class SettingsFormMenuBuilder
         foreach ($this->channelRepository->findAll() as $channel) {
             $menu
                 ->addChild('channel_' . $channel->getCode())
-                ->setAttribute('template', '@MonsieurBizSyliusSettingsPlugin/Crud/Edit/Tab/_store.html.twig')
+                ->setAttribute('template', '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/form/sections/store.html.twig')
                 ->setLabel($channel->getName())
                 ->setExtra('settings', $options['settings'])
                 ->setExtra('channel', $channel)

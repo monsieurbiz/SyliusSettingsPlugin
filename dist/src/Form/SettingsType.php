@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use MonsieurBiz\SyliusSettingsPlugin\Attribute\AsSetting;
 use MonsieurBiz\SyliusSettingsPlugin\Form\AbstractSettingsType;
 use MonsieurBiz\SyliusSettingsPlugin\Form\SettingsTypeInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -20,6 +21,19 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[AsSetting(
+    alias: 'app.default',
+    vendorName: 'Monsieur Biz',
+    pluginName: 'Current App',
+    description: 'Platform\'s settings',
+    icon: 'bi:bullseye',
+    useLocales: true,
+    defaultValues: [
+        'demo_message' => 'My amazing message',
+        'demo_title' => 'My amazing title',
+        'enabled' => true,
+    ],
+)]
 class SettingsType extends AbstractSettingsType implements SettingsTypeInterface
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

@@ -13,11 +13,9 @@ This plugin gives you the ability to have Plugins oriented settings in your favo
 
 ## Compatibility
 
-| Sylius Version | PHP Version     |
-|----------------|-----------------|
-| 1.12           | 8.1 - 8.2 - 8.3 |
-| 1.13           | 8.1 - 8.2 - 8.3 |
-| 1.14           | 8.1 - 8.2 - 8.3 |
+| Sylius Version | PHP Version |
+|----------------|-------------|
+| 2.0            | 8.2 - 8.3   |
 
 ## Installation
 
@@ -30,17 +28,6 @@ composer config --no-plugins --json extra.symfony.endpoint '["https://api.github
 ```bash
 composer require monsieurbiz/sylius-settings-plugin
 ```
-
-<details>
-<summary>⚠️ Warning: For Doctrine DBAL < 3.0</summary>
-<p>
-
-You have to ignore migration `Version20240710130300.php` if you are under Doctrine DBAL < 3.0.
-```
-console doctrine:migrations:version 'MonsieurBiz\SyliusSettingsPlugin\Migrations\Version20240710130300' --add
-```
-</p>
-</details>
 
 <details><summary>For the installation without flex, follow these additional steps</summary>
 <p>
@@ -89,8 +76,7 @@ The configuration is then required to run any console command.
 
 As a good start you can have a look at:
 
-- The [configuration file](dist/config/packages/monsieurbiz_settings_plugin_custom.yaml) to add your own settings.
-- The [form with your own fields](dist/src/Form/SettingsType.php).
+- The [form with your own fields](dist/src/Form/SettingsType.php) and with the `#[AsSettings]` annotation to define the settings.
 
 Then you can get your settings using a twig function: `setting()`.  
 Have a look at [this example](dist/templates/views/message.html.twig).
@@ -140,7 +126,16 @@ If you want to keep a value as it is in the database when running this fixture, 
 
 ### Extends existing settings form
 
-If you want to add a field to an existing settings form (like in another plugin), you can check [the example in the test app](dist/src/Form/SettingsExtensionType.php)
+If you want to add a field to an existing settings form (like in another plugin), you can check [the example in the test app](dist/src/Form/SettingsExtensionType.php).
+
+In this case, you need to declare parameters in YAML to enable developers to add default values for the new fields.
+
+```yaml
+monsieurbiz_sylius_settings:
+    settings:
+        app.default:
+            …
+```
 
 ### Use CLI
 

@@ -13,9 +13,12 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\DependencyInjection;
 
+use MonsieurBiz\SyliusSettingsPlugin\Attribute\AsSetting;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Metadata;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Settings;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
+use ReflectionAttribute;
+use ReflectionClass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -38,32 +41,72 @@ final class InstantiateSettingsPass implements CompilerPassInterface
             return;
         }
 
+        $this->processConfiguration($plugins, $container, $registry, $metadataRegistry);
+        $this->processAttribute($container, $registry, $metadataRegistry);
+    }
+
+    private function processConfiguration(array $plugins, ContainerBuilder $container, Definition $registry, Definition $metadataRegistry): void
+    {
         foreach ($plugins as $alias => $configuration) {
-            $metadataRegistry->addMethodCall('addFromAliasAndConfiguration', [$alias, $configuration]);
-            $metadata = Metadata::fromAliasAndConfiguration($alias, $configuration);
-
-            $id = $metadata->getServiceId('settings');
-
-            $class = $metadata->getClass('settings');
-            $this->validateSettingsResource($class);
-
-            $container->setDefinition($id, new Definition($class, [
-                $this->getMetadataDefinition($metadata),
-                $container->findDefinition('monsieurbiz_settings.repository.setting'),
-                $container->findDefinition('monsieurbiz_settings.cache'),
-            ]));
-
-            $aliases = [
-                SettingsInterface::class . ' $' . $metadata->getName() . 'Settings' => $id,
-                Settings::class . ' $' . $metadata->getName() . 'Settings' => $id,
-            ];
-            if (Settings::class !== $class) {
-                $aliases[$class . ' $' . $metadata->getName() . 'Settings'] = $id;
-            }
-            $container->addAliases($aliases);
-
-            $registry->addMethodCall('addSettingsInstance', [new Reference($id)]);
+            $this->registerSetting($alias, $configuration, $container, $registry, $metadataRegistry);
         }
+    }
+
+    private function processAttribute(ContainerBuilder $container, Definition $registry, Definition $metadataRegistry): void
+    {
+        foreach ($container->getDefinitions() as $definition) {
+            if ($this->accept($definition) && $reflectionClass = $container->getReflectionClass($definition->getClass(), false)) {
+                $this->processClass($definition, $reflectionClass, $container, $registry, $metadataRegistry);
+            }
+        }
+    }
+
+    private function accept(Definition $definition): bool
+    {
+        return !$definition->isAbstract();
+    }
+
+    /**
+     * @param ReflectionClass<object> $reflectionClass
+     */
+    private function processClass(Definition $definition, ReflectionClass $reflectionClass, ContainerBuilder $container, Definition $registry, Definition $metadataRegistry): void
+    {
+        foreach ($reflectionClass->getAttributes(AsSetting::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
+            $attribute = $attribute->newInstance();
+            /** @var AsSetting $attribute */
+            $configuration = $attribute->getConfiguration();
+            $configuration['classes']['form'] = $definition->getClass(); // Add the form class to the configuration
+
+            $this->registerSetting($attribute->alias, $configuration, $container, $registry, $metadataRegistry);
+        }
+    }
+
+    private function registerSetting(string $alias, array $configuration, ContainerBuilder $container, Definition $registry, Definition $metadataRegistry): void
+    {
+        $metadataRegistry->addMethodCall('addFromAliasAndConfiguration', [$alias, $configuration]);
+        $metadata = Metadata::fromAliasAndConfiguration($alias, $configuration);
+
+        $id = $metadata->getServiceId('settings');
+
+        $class = $metadata->getClass('settings');
+        $this->validateSettingsResource($class);
+
+        $container->setDefinition($id, new Definition($class, [
+            $this->getMetadataDefinition($metadata),
+            $container->findDefinition('monsieurbiz_settings.repository.setting'),
+            $container->findDefinition('monsieurbiz_settings.cache'),
+        ]));
+
+        $aliases = [
+            SettingsInterface::class . ' $' . $metadata->getName() . 'Settings' => $id,
+            Settings::class . ' $' . $metadata->getName() . 'Settings' => $id,
+        ];
+        if (Settings::class !== $class) {
+            $aliases[$class . ' $' . $metadata->getName() . 'Settings'] = $id;
+        }
+        $container->addAliases($aliases);
+
+        $registry->addMethodCall('addSettingsInstance', [new Reference($id)]);
     }
 
     private function validateSettingsResource(string $class): void

@@ -1,0 +1,43 @@
+sylius_twig_hooks:
+    hooks:
+        'monsieurbiz_admin.setting.edit.content.header':
+            breadcrumbs:
+                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/header/breadcrumbs.html.twig'
+                priority: 0
+
+        'monsieurbiz_admin.setting.edit.content.header.title_block':
+            title:
+                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/header/title_block/title.html.twig'
+                priority: 100
+
+        'sylius_admin.common.update.content.header.title_block.actions':
+            show:
+                enabled: false
+            cancel:
+                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/header/title_block/actions/cancel.html.twig'
+                priority: 100
+
+        'monsieurbiz_admin.setting.edit.content':
+            form:
+                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/form.html.twig'
+                configuration:
+                    render_rest: false
+                priority: 100
+
+        'monsieurbiz_admin.setting.edit.content.form':
+            side_navigation:
+                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/form/side_navigation.html.twig'
+                priority: 100
+            sections:
+                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/form/sections.html.twig'
+                priority: 0
+
+        'monsieurbiz_admin.setting.edit.content.form.sections':
+            general:
+                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/form/sections/general.html.twig'
+                priority: 0
+
+        'sylius_admin.base#javascripts':
+            monsieurbiz_settings:
+                template: '@MonsieurBizSyliusSettingsPlugin/layout/_javascripts.html.twig'
+                priority: 0

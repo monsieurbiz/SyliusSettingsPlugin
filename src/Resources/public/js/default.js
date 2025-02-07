@@ -33,10 +33,10 @@
               grid.appendChild(valueField);
               grid.appendChild(defaultField);
 
-              fieldsContainer.className = 'field';
-              grid.className = 'ui grid';
-              valueField.className = 'field twelve wide column';
-              defaultField.className = 'field four wide column';
+              fieldsContainer.className = 'mb-3 field';
+              grid.className = 'row mt-3 row-gap-2';
+              valueField.className = 'col-12 col-md';
+              defaultField.className = 'col-12 col-md-auto ';
             }
           })(component);
           break;

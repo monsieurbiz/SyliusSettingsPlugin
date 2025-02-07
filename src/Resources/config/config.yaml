@@ -1,4 +1,4 @@
 imports:
     - { resource: 'sylius_labs_doctrine_migrations_extra.yaml' }
     - { resource: "sylius/resources.yaml" }
-    - { resource: "sylius/ui_events.yaml" }
+    - { resource: "sylius/twig_hooks/**/*.yaml" }

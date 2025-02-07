@@ -1,0 +1,9 @@
+{% from '@SyliusAdmin/shared/helper/breadcrumbs.html.twig' import breadcrumbs %}
+
+{% set settings = hookable_metadata.context.settings %}
+
+{{ breadcrumbs([
+    { name: 'sylius.ui.dashboard'|trans, url: path('sylius_admin_dashboard'), active: false },
+    { name: 'monsieurbiz.settings.ui.settings.title'|trans, url: path('monsieurbiz_sylius_settings_admin_index'), active: false },
+    { name: 'monsieurbiz.settings.ui.settings_of.title'|trans({'%pluginName%': (settings.pluginName|trans)}), active: true },
+]) }}

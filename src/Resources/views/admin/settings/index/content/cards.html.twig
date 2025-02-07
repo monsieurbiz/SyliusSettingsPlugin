@@ -1,0 +1,23 @@
+{% set settings = hookable_metadata.context.settings %}
+
+<div class="container-xl">
+    <div class="row mt-3">
+        {% for card in settings %}
+            <div class="col-sm-6 col-lg-3 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-0">{{ ux_icon(card.icon) }} {{ card.pluginName|trans }}</h5>
+                        <p class="card-text fs-5 text-secondary">
+                            {{ 'monsieurbiz.settings.ui.card.by'|trans({'%vendorName%': card.vendorName}) }}
+                        </p>
+                        <p class="card-text">
+                            {{ card.description|trans }}
+                        </p>
+                        <a href="{{ path('monsieurbiz_sylius_settings_admin_edit', {'alias': card.alias}) }}" class="stretched-link" title=""></a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
