@@ -2,10 +2,10 @@ monsieurbiz_sylius_settings:
     plugins:
         app.default:
             vendor_name: Monsieur Biz
-            vendor_url: 
+            vendor_url:
             plugin_name: Current App
             description: Platform's settings
-            icon: bullseye
+            icon: bi:bullseye
             use_locales: true
             classes:
                 form: App\Form\SettingsType
@@ -14,12 +14,12 @@ monsieurbiz_sylius_settings:
                 demo_title: My amazing title
                 enabled: true
 
-sylius_ui:
-    events:
-        sylius.shop.layout.before_body:
-            blocks:
-                demo_message:
-                    template: '/views/message.html.twig'
+sylius_twig_hooks:
+    hooks:
+        'sylius_shop.base.header':
+            demo_message:
+                template: 'views/message.html.twig'
+                priority: 900
 
 sylius_fixtures:
     suites:
@@ -99,4 +99,4 @@ sylius_fixtures:
                                 path: test_datetime
                                 type: datetime
                                 value: 2023-07-24 01:02:03
-                                
+
