@@ -6,6 +6,11 @@
 
 {% form_theme form '@MonsieurBizSyliusSettingsPlugin/Form/theme.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/monsieurbizsyliussettingsplugin/css/settings.css') }}">
+{% endblock %}
+
 {% block content %}
 
     <div class="ui stackable two column grid">
