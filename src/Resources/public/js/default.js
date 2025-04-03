@@ -9,7 +9,8 @@ const DefaultFieldManager = {
   SELECTORS: {
     COMPONENTS: '[data-component]',
     FILE_MANAGER_FIELD: '.monsieurbiz-sylius-file-manager__field',
-    DEFAULT_COMPONENT: 'mbiz-default'
+    DEFAULT_COMPONENT: 'mbiz-default',
+    FIELD: '.field',
   },
 
   // Constants for CSS classes
@@ -85,8 +86,8 @@ const DefaultFieldManager = {
       return;
     }
 
-    const valueField = relatedInput.closest(`.${this.CLASSES.FIELD}`);
-    const defaultField = component.closest(`.${this.CLASSES.FIELD}`);
+    const valueField = relatedInput.closest(this.SELECTORS.FIELD);
+    const defaultField = component.closest(this.SELECTORS.FIELD);
 
     const fieldsContainer = document.createElement('div');
     const grid = document.createElement('div');
