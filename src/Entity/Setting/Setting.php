@@ -18,30 +18,37 @@ use JsonSerializable;
 use LogicException;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 
 class Setting implements SettingInterface
 {
     use TimestampableTrait;
 
     protected ?int $id;
+
     protected ?string $vendor;
+
     protected ?string $plugin;
+
     protected ?string $path;
 
-    /**
-     * @Assert\Type(type="\Sylius\Component\Core\Model\ChannelInterface")
-     */
-    #[Assert\Type(type: ChannelInterface::class)]
     protected ?ChannelInterface $channel;
+
     protected ?string $localeCode;
+
     protected ?string $storageType = null;
+
     protected ?string $textValue;
+
     protected ?bool $booleanValue;
+
     protected ?int $integerValue;
+
     protected ?float $floatValue;
+
     protected ?DateTimeInterface $datetimeValue;
+
     protected ?DateTimeInterface $dateValue;
+
     protected ?array $jsonValue;
 
     /** @var DateTimeInterface|null */
