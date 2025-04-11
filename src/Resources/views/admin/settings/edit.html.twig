@@ -8,5 +8,5 @@
 {% endblock %}
 
 {% block body %}
-    {% hook ['monsieurbiz_admin.setting.edit', 'sylius_admin.common.update'] with { settings: settings } %}
+    {% hook ['sylius_admin.monsieurbiz_settings.edit', 'sylius_admin.common.update'] with { settings: settings } %}
 {% endblock %}

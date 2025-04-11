@@ -3,5 +3,5 @@
 {% block title %}{{ 'monsieurbiz.settings.ui.settings.title'|trans }} {{ parent() }}{% endblock %}
 
 {% block body %}
-    {% hook ['monsieurbiz_admin.setting.index', 'sylius_admin.common.index'] with { settings: settings } %}
+    {% hook ['sylius_admin.monsieurbiz_settings.index', 'sylius_admin.common.index'] with { settings: settings } %}
 {% endblock %}
