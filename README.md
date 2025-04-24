@@ -17,6 +17,8 @@ This plugin gives you the ability to have Plugins oriented settings in your favo
 |----------------|-------------|
 | 2.0            | 8.2 - 8.3   |
 
+ℹ️ For Sylius 1.x, see our [1.x branch](/tree/1.x) and all 1.x releases.
+
 ## Installation
 
 If you want to use our recipes, you can configure your composer.json by running:
