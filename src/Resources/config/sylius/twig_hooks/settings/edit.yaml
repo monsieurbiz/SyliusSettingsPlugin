@@ -10,7 +10,7 @@ sylius_twig_hooks:
                 template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/header/title_block/title.html.twig'
                 priority: 100
 
-        'sylius_admin.common.update.content.header.title_block.actions':
+        'sylius_admin.monsieurbiz_settings.edit.content.header.title_block.actions':
             show:
                 enabled: false
             cancel:
