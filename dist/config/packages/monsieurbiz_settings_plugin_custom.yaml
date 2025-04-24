@@ -13,6 +13,15 @@ monsieurbiz_sylius_settings:
                 demo_message: My amazing message
                 demo_title: My amazing title
                 enabled: true
+        app.other:
+            vendor_name: Monsieur Biz
+            vendor_url:
+            plugin_name: Other Config
+            description: Other settings
+            icon: lucide:test-tube
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
 
 sylius_twig_hooks:
     hooks:
@@ -20,6 +29,12 @@ sylius_twig_hooks:
             demo_message:
                 template: 'views/message.html.twig'
                 priority: 900
+        # Add a custom action to the other settings page (not for all settings)
+        'sylius_admin.app_other_settings.edit.content.header.title_block.actions':
+            download_fmt:
+                template: 'admin/settings/actions/button.html.twig'
+                priority: 200
+
 
 sylius_fixtures:
     suites:
