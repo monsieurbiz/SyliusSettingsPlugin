@@ -9,6 +9,9 @@ sylius_twig_hooks:
             title:
                 template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/header/title_block/title.html.twig'
                 priority: 100
+            actions:
+                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/header/title_block/actions.html.twig'
+                priority: 0
 
         'sylius_admin.monsieurbiz_settings.edit.content.header.title_block.actions':
             show:

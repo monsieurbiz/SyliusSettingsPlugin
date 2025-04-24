@@ -1,0 +1,14 @@
+{% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
+
+{% set settings = hookable_metadata.context.settings %}
+{% set prefixes = hookable_metadata.prefixes|merge([
+    'sylius_admin.' ~ settings.alias|replace({'.': '_'}) ~ '_settings.edit.content.header.title_block'
+]) %}
+
+<div class="col-12 col-md-auto ms-auto d-print-none">
+    <div class="btn-list">
+        {% hook 'actions' with {
+            _prefixes: prefixes
+        } %}
+    </div>
+</div>
