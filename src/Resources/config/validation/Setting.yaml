@@ -1,0 +1,5 @@
+MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\Setting:
+    properties:
+        channel:
+            -   Type:
+                    type: Sylius\Component\Core\Model\ChannelInterface

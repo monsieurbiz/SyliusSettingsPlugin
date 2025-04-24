@@ -38,7 +38,7 @@ final class SettingsCacheWarmer implements SettingsCacheWarmerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameters)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function warmUp(string $cacheDir): array
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         if (
             false === $this->entityManager->getConnection()->isConnected()

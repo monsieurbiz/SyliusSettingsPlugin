@@ -1,8 +1,8 @@
-<p>
-{% if setting('app.default', 'enabled') %}
-    {{ setting('app.default', 'demo_title') }}
-    {{ setting('app.default', 'demo_message') }}
-{% else %}
-    {{ 'Message is disabled'|trans }}
-{% endif %}
-</p>
+<div class="alert mb-0" role="alert">
+    {% if setting('app.default', 'enabled') %}
+        <div class="h5">{{ setting('app.default', 'demo_title') }}</div>
+        <div>{{ setting('app.default', 'demo_message') }}</div>
+    {% else %}
+        <div>{{ 'Message is disabled'|trans }}</div>
+    {% endif %}
+</div>

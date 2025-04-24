@@ -9,16 +9,17 @@ const DefaultFieldManager = {
   SELECTORS: {
     COMPONENTS: '[data-component]',
     FILE_MANAGER_FIELD: '.monsieurbiz-sylius-file-manager__field',
-    DEFAULT_COMPONENT: 'mbiz-default'
+    DEFAULT_COMPONENT: 'mbiz-default',
+    FIELD: '.field',
   },
 
   // Constants for CSS classes
   CLASSES: {
     DISABLED_INPUT: 'disabled-input',
-    FIELD: 'field',
-    GRID: 'ui grid',
-    TWELVE_WIDE: 'field twelve wide column',
-    FOUR_WIDE: 'field four wide column'
+    FIELD: 'mb-3 field',
+    GRID: 'row mt-3 row-gap-2',
+    TWELVE_WIDE: 'col-12 col-md',
+    FOUR_WIDE: 'col-12 col-md-auto'
   },
 
   FOCUS_DELAY: 100,
@@ -85,8 +86,8 @@ const DefaultFieldManager = {
       return;
     }
 
-    const valueField = relatedInput.closest(`.${this.CLASSES.FIELD}`);
-    const defaultField = component.closest(`.${this.CLASSES.FIELD}`);
+    const valueField = relatedInput.closest(this.SELECTORS.FIELD);
+    const defaultField = component.closest(this.SELECTORS.FIELD);
 
     const fieldsContainer = document.createElement('div');
     const grid = document.createElement('div');

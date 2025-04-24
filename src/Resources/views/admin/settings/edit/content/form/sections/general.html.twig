@@ -1,0 +1,11 @@
+{% set form = hookable_metadata.context.form %}
+{% set settings = hookable_metadata.context.settings %}
+{% set menu = hookable_metadata.context.menu %}
+
+{% form_theme form '@MonsieurBizSyliusSettingsPlugin/form/theme.html.twig' %}
+
+{% for item in menu.children %}
+    <div class="tab-pane show{% if loop.first %} active{% endif %}" id="{{ item.name }}" role="tabpanel" tabindex="0">
+        {% include item.attribute('template') with {'form': form, 'settings': settings} %}
+    </div>
+{% endfor %}

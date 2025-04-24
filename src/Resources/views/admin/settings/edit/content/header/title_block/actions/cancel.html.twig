@@ -1,0 +1,4 @@
+{% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
+
+{% set index_url = path('monsieurbiz_sylius_settings_admin_index') %}
+{{ button.cancel({ text: 'sylius.ui.cancel'|trans, url: index_url, class: 'btn' }) }}

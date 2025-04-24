@@ -98,7 +98,6 @@ final class Settings implements SettingsInterface
             return $this->getUncachedSettingsByChannelAndLocale($channel, $localeCode, $withDefault);
         }
 
-        /** @phpstan-ignore-next-line */
         return $this->monsieurbizSettingsCache->get(
             $this->getCacheKey($withDefault ? 'with_def' : 'no_def', $channel, $localeCode),
             function (ItemInterface $item) use ($channel, $localeCode, $withDefault): array {
