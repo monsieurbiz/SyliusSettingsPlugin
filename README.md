@@ -17,6 +17,8 @@ This plugin gives you the ability to have Plugins oriented settings in your favo
 |----------------|-------------|
 | 2.0            | 8.2 - 8.3   |
 
+ℹ️ For Sylius 1.x, see our [1.x branch](/tree/1.x) and all 1.x releases.
+
 ## Installation
 
 If you want to use our recipes, you can configure your composer.json by running:
@@ -128,6 +130,13 @@ If you want to keep a value as it is in the database when running this fixture, 
 ### Extends existing settings form
 
 If you want to add a field to an existing settings form (like in another plugin), you can check [the example in the test app](dist/src/Form/SettingsExtensionType.php)
+
+### Add custom action on a setting form
+
+With the twig hook `sylius_admin.{setting_alias}_settings.edit.content.header.title_block`, you can add a custom action on our setting form.
+
+The `setting_alias` is the alias defined in our setting configuration file and the `.` is replaced by the `_`.
+Example, for the setting `app.default` the hook will be `sylius_admin.app_default_settings.edit.content.header.title_block`.
 
 ### Use CLI
 
