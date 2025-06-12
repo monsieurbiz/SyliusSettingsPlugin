@@ -15,7 +15,7 @@ This plugin gives you the ability to have Plugins oriented settings in your favo
 
 | Sylius Version | PHP Version |
 |----------------|-------------|
-| 2.0            | 8.2 - 8.3   |
+| 2.0, 2.1       | 8.2 - 8.3   |
 
 ℹ️ For Sylius 1.x, see our [1.x branch](/tree/1.x) and all 1.x releases.
 
