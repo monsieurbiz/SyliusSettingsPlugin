@@ -22,7 +22,10 @@ sylius_twig_hooks:
 
         'sylius_admin.monsieurbiz_settings.edit.content':
             form:
-                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/form.html.twig'
+                component: 'sylius_admin:monsieurbiz_settings:setting:main_form'
+                props:
+                    template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/edit/content/form.html.twig'
+                    settings: '@=_context.settings'
                 configuration:
                     render_rest: false
                 priority: 100
