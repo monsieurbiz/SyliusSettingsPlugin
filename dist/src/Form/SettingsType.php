@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\UX\LiveComponent\Form\Type\LiveCollectionType;
 
 class SettingsType extends AbstractSettingsType implements SettingsTypeInterface
 {
@@ -52,6 +53,26 @@ class SettingsType extends AbstractSettingsType implements SettingsTypeInterface
             CheckboxType::class,
             [
                 'required' => false,
+            ]
+        );
+
+        $this->addWithDefaultCheckbox(
+            $builder,
+            'demo_string_collection',
+            LiveCollectionType::class,
+            [
+                'entry_type' => TextType::class,
+                'label' => 'Demo String Collection',
+                'required' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'delete_empty' => true,
+                'button_delete_options' => [
+                    'attr' => [
+                        'class' => 'btn-outline-danger',
+                    ],
+                ],
             ]
         );
     }
