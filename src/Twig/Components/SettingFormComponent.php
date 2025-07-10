@@ -37,9 +37,6 @@ final class SettingFormComponent
     #[LiveProp(hydrateWith: 'hydrateSettings', dehydrateWith: 'dehydrateSettings')]
     public SettingsInterface $settings;
 
-    #[LiveProp]
-    public array $disabledInputs = [];
-
     public function __construct(
         private MainSettingsFormTypeFactoryInterface $formFactory,
         private RouterInterface $router,
@@ -74,7 +71,6 @@ final class SettingFormComponent
                 'action' => $this->router->generate('monsieurbiz_sylius_settings_admin_edit_post', ['alias' => $this->settings->getAlias()]),
                 'method' => 'POST',
                 'settings' => $this->settings,
-                'disabled_inputs' => $this->disabledInputs,
             ],
         );
     }
