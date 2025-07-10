@@ -145,6 +145,6 @@ final class MainSettingsType extends AbstractType implements MainSettingsTypeInt
      */
     public function getBlockPrefix(): string
     {
-        return 'settings';
+        return 'mbiz_settings';
     }
 }

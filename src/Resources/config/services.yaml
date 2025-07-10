@@ -42,3 +42,9 @@ services:
     MonsieurBiz\SyliusSettingsPlugin\Factory\SettingFactory:
         arguments: 
             $className: 'MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\Setting'
+
+    # Live components
+    sylius_admin.monsieurbiz_settings.twig.component.settings.main_form:
+        class: MonsieurBiz\SyliusSettingsPlugin\Twig\Components\SettingFormComponent
+        tags:
+            - { name: 'sylius.live_component.admin', key: 'sylius_admin:monsieurbiz_settings:setting:main_form' }

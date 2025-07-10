@@ -1,7 +1,9 @@
 {% if form is not defined %}
     {% set form = hookable_metadata.context.form %}
 {% endif %}
-{% set settings = hookable_metadata.context.settings %}
+{% if settings is not defined %}
+    {% set settings = hookable_metadata.context.settings %}
+{% endif %}
 
 {% form_theme form '@MonsieurBizSyliusSettingsPlugin/form/theme.html.twig' %}
 
