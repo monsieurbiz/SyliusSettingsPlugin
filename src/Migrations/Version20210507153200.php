@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace MonsieurBiz\SyliusSettingsPlugin\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\Migrations\AbstractMigration;
+use Sylius\Bundle\CoreBundle\Doctrine\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
