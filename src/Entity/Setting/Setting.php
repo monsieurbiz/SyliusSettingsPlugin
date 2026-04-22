@@ -162,13 +162,13 @@ class Setting implements SettingInterface
     private function getTypeFromValue($value): string
     {
         $types = [
-            'double' => function (): string {
+            'double' => static function (): string {
                 return SettingInterface::STORAGE_TYPE_FLOAT;
             },
-            'array' => function (): string {
+            'array' => static function (): string {
                 return SettingInterface::STORAGE_TYPE_JSON;
             },
-            'object' => function (object $value): string {
+            'object' => static function (object $value): string {
                 if ($value instanceof DateTimeInterface) {
                     return SettingInterface::STORAGE_TYPE_DATETIME;
                 }
@@ -178,16 +178,16 @@ class Setting implements SettingInterface
 
                 throw new LogicException('Impossible to match the type of the value.');
             },
-            'string' => function (): string {
+            'string' => static function (): string {
                 return SettingInterface::STORAGE_TYPE_TEXT;
             },
-            'boolean' => function (): string {
+            'boolean' => static function (): string {
                 return SettingInterface::STORAGE_TYPE_BOOLEAN;
             },
-            'integer' => function (): string {
+            'integer' => static function (): string {
                 return SettingInterface::STORAGE_TYPE_INTEGER;
             },
-            'NULL' => function (): string {
+            'NULL' => static function (): string {
                 return SettingInterface::STORAGE_TYPE_TEXT;
             },
         ];
