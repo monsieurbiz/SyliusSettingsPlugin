@@ -33,7 +33,7 @@ final class AdminMenuListener
             if (null !== ($configurationMenu = $menu->getChild('configuration'))) {
                 $settings = $configurationMenu
                     ->addChild('monsieurbiz_settings', ['route' => 'monsieurbiz_sylius_settings_admin_index', 'extras' => ['routes' => [
-                        'monsieurbiz_sylius_settings_admin_edit',
+                        ['route' => 'monsieurbiz_sylius_settings_admin_edit'],
                     ]]])
                     ->setLabel('monsieurbiz.settings.menu.admin.configuration.settings')
                     ->setLabelAttribute('icon', 'cog')
