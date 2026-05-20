@@ -16,6 +16,7 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Form;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Settings;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractSettingsType extends AbstractType implements SettingsTypeInterface
@@ -35,6 +36,9 @@ abstract class AbstractSettingsType extends AbstractType implements SettingsType
         ]);
     }
 
+    /**
+     * @param class-string<FormTypeInterface>|null $type
+     */
     public function addWithDefaultCheckbox(FormBuilderInterface $builder, string $child, string $type = null, array $options = []): self
     {
         $data = (array) $builder->getData();
