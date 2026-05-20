@@ -34,7 +34,6 @@ final class SettingsFixture extends AbstractResourceFixture
 
     protected function configureResourceNode(ArrayNodeDefinition $resourceNode): void
     {
-        /** @phpstan-ignore-next-line */
         $resourceNode
             ->children()
                 ->scalarNode('alias')->cannotBeEmpty()->end()

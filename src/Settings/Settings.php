@@ -18,6 +18,7 @@ use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
 use MonsieurBiz\SyliusSettingsPlugin\Form\AbstractSettingsType;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use Sylius\Component\Channel\Model\ChannelInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
@@ -77,6 +78,8 @@ final class Settings implements SettingsInterface
 
     /**
      * @throws SettingsException
+     *
+     * @return class-string<FormTypeInterface>
      */
     public function getFormClass(): string
     {
@@ -86,6 +89,7 @@ final class Settings implements SettingsInterface
             throw new SettingsException(\sprintf('Class %s should extend %s', $className, AbstractSettingsType::class));
         }
 
+        /** @var class-string<FormTypeInterface> $className */
         return $className;
     }
 

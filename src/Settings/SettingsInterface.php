@@ -16,6 +16,7 @@ namespace MonsieurBiz\SyliusSettingsPlugin\Settings;
 use MonsieurBiz\SyliusSettingsPlugin\Exception\SettingsException;
 use MonsieurBiz\SyliusSettingsPlugin\Repository\SettingRepositoryInterface;
 use Sylius\Component\Channel\Model\ChannelInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 interface SettingsInterface
@@ -42,6 +43,8 @@ interface SettingsInterface
 
     /**
      * @throws SettingsException
+     *
+     * @return class-string<FormTypeInterface>
      */
     public function getFormClass(): string;
 
