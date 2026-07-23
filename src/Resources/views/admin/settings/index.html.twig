@@ -8,5 +8,5 @@
 {% endblock %}
 
 {% block body %}
-    {% hook ['sylius_admin.monsieurbiz_settings.index', 'sylius_admin.common.index'] with { settings: settings } %}
+    {% hook ['sylius_admin.monsieurbiz_settings.index', 'sylius_admin.common.index'] with { settings: settings, settings_search_index: settings_search_index } %}
 {% endblock %}

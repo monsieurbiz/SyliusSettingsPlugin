@@ -17,6 +17,7 @@ use MonsieurBiz\SyliusSettingsPlugin\CacheWarmer\SettingsCacheWarmerInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Factory\Form\MainSettingsFormTypeFactoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Form\MainSettingsType;
 use MonsieurBiz\SyliusSettingsPlugin\Processor\SettingsProcessorInterface;
+use MonsieurBiz\SyliusSettingsPlugin\Search\SettingsSearchIndexBuilder;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,13 +33,17 @@ final class SettingsController extends AbstractController
         private MainSettingsFormTypeFactoryInterface $formFactory,
         private TagAwareCacheInterface $monsieurbizSettingsCache,
         private SettingsCacheWarmerInterface $cacheWarmer,
+        private SettingsSearchIndexBuilder $settingsSearchIndexBuilder,
     ) {
     }
 
     public function indexAction(RegistryInterface $registry): Response
     {
+        $settings = $registry->getAllSettings();
+
         return $this->render('@MonsieurBizSyliusSettingsPlugin/admin/settings/index.html.twig', [
-            'settings' => $registry->getAllSettings(),
+            'settings' => $settings,
+            'settings_search_index' => $this->settingsSearchIndexBuilder->build($settings),
         ]);
     }
 

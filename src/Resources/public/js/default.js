@@ -110,6 +110,7 @@ const SettingsCardSearch = {
     CARD: '[data-mbiz-settings-card]',
     GROUP: '[data-mbiz-settings-group]',
     EMPTY: '[data-mbiz-settings-search-empty]',
+    FIELD_MATCH_INDICATOR: '[data-mbiz-settings-field-match-indicator]',
   },
 
   CLASSES: {
@@ -123,15 +124,45 @@ const SettingsCardSearch = {
       .replace(/[\u0300-\u036f]/g, '');
   },
 
+  getCardMatches(card, query) {
+    if (!query) {
+      return {
+        metadata: false,
+        fields: false,
+      };
+    }
+
+    const metadataText = this.normalize(card.dataset.searchMetadata || '');
+    const fieldsText = this.normalize(card.dataset.searchFields || '');
+    const fallbackText = this.normalize(card.dataset.searchText || '');
+
+    return {
+      metadata: metadataText ? metadataText.includes(query) : fallbackText.includes(query),
+      fields: fieldsText ? fieldsText.includes(query) : false,
+    };
+  },
+
+  toggleFieldMatchIndicator(card, isVisible) {
+    const indicator = card.querySelector(this.SELECTORS.FIELD_MATCH_INDICATOR);
+
+    if (!indicator) {
+      return;
+    }
+
+    indicator.classList.toggle(this.CLASSES.HIDDEN, !isVisible);
+    indicator.setAttribute('aria-hidden', String(!isVisible));
+  },
+
   filterCards(input, cards, groups, emptyMessage) {
     const query = this.normalize(input.value.trim());
     let visibleCardsCount = 0;
 
     cards.forEach((card) => {
-      const searchText = this.normalize(card.dataset.searchText || '');
-      const isVisible = !query || searchText.includes(query);
+      const matches = this.getCardMatches(card, query);
+      const isVisible = !query || matches.metadata || matches.fields;
 
       card.classList.toggle(this.CLASSES.HIDDEN, !isVisible);
+      this.toggleFieldMatchIndicator(card, Boolean(query && matches.fields));
 
       if (isVisible) {
         visibleCardsCount += 1;

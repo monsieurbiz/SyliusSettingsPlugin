@@ -9,11 +9,9 @@ monsieurbiz_sylius_settings:
             icon: tabler:article
             use_locales: true
             classes:
-                form: App\Form\SettingsType
+                form: App\Form\FakeSettingsType
             default_values:
-                demo_message: Lorem ipsum blog demo message
-                demo_title: Blog lorem fixture
-                enabled: true
+                blog_headline: Lorem ipsum blog headline
         app.fake_checkout:
             vendor_name: Fake Fixtures
             vendor_url:
@@ -23,11 +21,9 @@ monsieurbiz_sylius_settings:
             icon: tabler:shopping-cart
             use_locales: true
             classes:
-                form: App\Form\SettingsType
+                form: App\Form\FakeSettingsType
             default_values:
-                demo_message: Checkout lorem ipsum confirmation text
-                demo_title: Checkout demo fixture
-                enabled: true
+                checkout_notice: Checkout lorem ipsum confirmation text
         app.fake_catalog:
             vendor_name: Fake Fixtures
             vendor_url:
@@ -37,11 +33,9 @@ monsieurbiz_sylius_settings:
             icon: tabler:category
             use_locales: true
             classes:
-                form: App\Form\SettingsType
+                form: App\Form\FakeSettingsType
             default_values:
-                demo_message: Catalog demo lorem merchandising message
-                demo_title: Catalog fake setting
-                enabled: false
+                catalog_page_size: 24
         app.fake_marketing:
             vendor_name: Fake Fixtures
             vendor_url:
@@ -51,11 +45,9 @@ monsieurbiz_sylius_settings:
             icon: tabler:speakerphone
             use_locales: true
             classes:
-                form: App\Form\SettingsType
+                form: App\Form\FakeSettingsType
             default_values:
-                demo_message: Marketing lorem demo banner
-                demo_title: Campaign fake fixture
-                enabled: true
+                marketing_sender_email: newsletter@example.com
         app.fake_shipping:
             vendor_name: Fake Fixtures
             vendor_url:
@@ -65,11 +57,9 @@ monsieurbiz_sylius_settings:
             icon: tabler:truck-delivery
             use_locales: true
             classes:
-                form: App\Form\SettingsType
+                form: App\Form\FakeSettingsType
             default_values:
-                demo_message: Shipping lorem ipsum tracking message
-                demo_title: Delivery demo fixture
-                enabled: true
+                shipping_tracking_url: https://carrier.example/track/{number}
         app.fake_payment:
             vendor_name: Fake Fixtures
             vendor_url:
@@ -79,11 +69,9 @@ monsieurbiz_sylius_settings:
             icon: tabler:credit-card
             use_locales: true
             classes:
-                form: App\Form\SettingsType
+                form: App\Form\FakeSettingsType
             default_values:
-                demo_message: Payment demo lorem notification
-                demo_title: Payment fake setting
-                enabled: false
+                payment_retry_limit: 3
         app.fake_reviews:
             vendor_name: Fake Fixtures
             vendor_url:
@@ -93,11 +81,9 @@ monsieurbiz_sylius_settings:
             icon: tabler:stars
             use_locales: true
             classes:
-                form: App\Form\SettingsType
+                form: App\Form\FakeSettingsType
             default_values:
-                demo_message: Reviews lorem demo moderation message
-                demo_title: Reviews fixture title
-                enabled: true
+                reviews_moderation_note: Reviews lorem demo moderation note
         app.fake_loyalty:
             vendor_name: Fake Fixtures
             vendor_url:
@@ -107,11 +93,9 @@ monsieurbiz_sylius_settings:
             icon: tabler:gift
             use_locales: true
             classes:
-                form: App\Form\SettingsType
+                form: App\Form\FakeSettingsType
             default_values:
-                demo_message: Loyalty ipsum demo points message
-                demo_title: Loyalty fake fixture
-                enabled: true
+                loyalty_points_ratio: 2_per_euro
         app.fake_seo:
             vendor_name: Fake Fixtures
             vendor_url:
@@ -120,11 +104,9 @@ monsieurbiz_sylius_settings:
             icon: tabler:world-search
             use_locales: true
             classes:
-                form: App\Form\SettingsType
+                form: App\Form\FakeSettingsType
             default_values:
-                demo_message: SEO lorem demo meta description
-                demo_title: Search engine fake setting
-                enabled: false
+                seo_meta_description: SEO lorem demo meta description
         app.fake_analytics:
             vendor_name: Fake Fixtures
             vendor_url:
@@ -134,8 +116,6 @@ monsieurbiz_sylius_settings:
             icon: tabler:chart-bar
             use_locales: true
             classes:
-                form: App\Form\SettingsType
+                form: App\Form\FakeSettingsType
             default_values:
-                demo_message: Analytics lorem ipsum dashboard message
-                demo_title: Analytics demo fixture
-                enabled: true
+                analytics_tracking_id: G-LOREMIPSUM

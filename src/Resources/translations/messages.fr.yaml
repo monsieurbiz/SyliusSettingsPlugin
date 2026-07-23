@@ -18,6 +18,7 @@ monsieurbiz:
             search:
                 placeholder: Rechercher un réglage
                 no_results: Aucun réglage ne correspond à votre recherche.
+                field_match: Correspondance trouvée dans un champ
             use_default_value: Utiliser la valeur par défaut
             form:
                 title:

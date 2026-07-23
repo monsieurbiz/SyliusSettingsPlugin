@@ -14,7 +14,21 @@
 }
 
 [data-mbiz-settings-list] .mbiz-settings-card {
+    position: relative;
     transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+[data-mbiz-settings-list] .mbiz-settings-card__field-match-indicator {
+    position: absolute;
+    top: var(--tblr-spacer-2, 0.5rem);
+    right: var(--tblr-spacer-2, 0.5rem);
+    z-index: 2;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    background-color: var(--tblr-primary, var(--bs-primary));
+    box-shadow: 0 0 0 0.1875rem rgba(var(--tblr-primary-rgb, var(--bs-primary-rgb)), 0.16);
+    pointer-events: none;
 }
 
 [data-mbiz-settings-list] .mbiz-settings-card:hover,
