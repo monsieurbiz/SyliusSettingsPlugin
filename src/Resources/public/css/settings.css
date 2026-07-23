@@ -12,3 +12,18 @@
     background-color:rgba(255,255,255,0.6);
     z-index:100;
 }
+
+[data-mbiz-settings-list] .mbiz-settings-card {
+    transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+[data-mbiz-settings-list] .mbiz-settings-card:hover,
+[data-mbiz-settings-list] .mbiz-settings-card:focus-within {
+    background-color: rgba(var(--tblr-primary-rgb, var(--bs-primary-rgb)), 0.03);
+    border-color: rgba(var(--tblr-primary-rgb, var(--bs-primary-rgb)), 0.35);
+    box-shadow: 0 0.125rem 0.5rem rgba(var(--tblr-primary-rgb, var(--bs-primary-rgb)), 0.12);
+}
+
+[data-mbiz-settings-list] .mbiz-settings-card .stretched-link:focus-visible {
+    outline: 0;
+}

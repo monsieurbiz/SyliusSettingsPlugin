@@ -2,6 +2,11 @@
 
 {% block title %}{{ 'monsieurbiz.settings.ui.settings.title'|trans }} {{ parent() }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/monsieurbizsyliussettingsplugin/css/settings.css') }}">
+{% endblock %}
+
 {% block body %}
     {% hook ['sylius_admin.monsieurbiz_settings.index', 'sylius_admin.common.index'] with { settings: settings } %}
 {% endblock %}
