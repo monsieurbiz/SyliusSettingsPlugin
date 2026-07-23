@@ -1,9 +1,27 @@
 {% set settings = hookable_metadata.context.settings %}
 
-<div class="container-xl">
+<div class="container-xl" data-mbiz-settings-list>
+    <div class="alert alert-info mt-3 d-none" data-mbiz-settings-search-empty>
+        {{ 'monsieurbiz.settings.ui.search.no_results'|trans }}
+    </div>
+
     <div class="row mt-3">
         {% for card in settings %}
-            <div class="col-sm-6 col-lg-3 mb-3">
+            {% set search_terms = [
+                card.alias,
+                card.pluginName|trans,
+                card.vendorName,
+                card.description|trans,
+            ] %}
+
+            {% for path, value in card.defaultValues %}
+                {% set search_terms = search_terms|merge([
+                    path,
+                    value is iterable ? value|json_encode : value,
+                ]) %}
+            {% endfor %}
+
+            <div class="col-sm-6 col-lg-3 mb-3" data-mbiz-settings-card data-search-text="{{ search_terms|join(' ')|lower|e('html_attr') }}">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title mb-0">{{ ux_icon(card.icon) }} {{ card.pluginName|trans }}</h5>
@@ -18,6 +36,5 @@
                 </div>
             </div>
         {% endfor %}
-
     </div>
 </div>

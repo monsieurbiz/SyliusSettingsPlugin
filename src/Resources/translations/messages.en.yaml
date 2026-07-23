@@ -13,6 +13,9 @@ monsieurbiz:
                 title: Settings of %pluginName%
             card:
                 by: by %vendorName%
+            search:
+                placeholder: Search for a setting
+                no_results: No setting matches your search.
             use_default_value: Use default value
             form:
                 title:

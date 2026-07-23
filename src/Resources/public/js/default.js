@@ -104,4 +104,89 @@ const DefaultFieldManager = {
   }
 };
 
+const SettingsCardSearch = {
+  SELECTORS: {
+    INPUT: '[data-mbiz-settings-search]',
+    CARD: '[data-mbiz-settings-card]',
+    GROUP: '[data-mbiz-settings-group]',
+    EMPTY: '[data-mbiz-settings-search-empty]',
+  },
+
+  CLASSES: {
+    HIDDEN: 'd-none',
+  },
+
+  normalize(value) {
+    return value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  },
+
+  filterCards(input, cards, groups, emptyMessage) {
+    const query = this.normalize(input.value.trim());
+    let visibleCardsCount = 0;
+
+    cards.forEach((card) => {
+      const searchText = this.normalize(card.dataset.searchText || '');
+      const isVisible = !query || searchText.includes(query);
+
+      card.classList.toggle(this.CLASSES.HIDDEN, !isVisible);
+
+      if (isVisible) {
+        visibleCardsCount += 1;
+      }
+    });
+
+    groups.forEach((group) => {
+      const hasVisibleCard = Array.from(group.querySelectorAll(this.SELECTORS.CARD))
+        .some((card) => !card.classList.contains(this.CLASSES.HIDDEN));
+
+      group.classList.toggle(this.CLASSES.HIDDEN, !hasVisibleCard);
+    });
+
+    emptyMessage?.classList.toggle(this.CLASSES.HIDDEN, visibleCardsCount > 0);
+  },
+
+  autofocus(input) {
+    window.requestAnimationFrame(() => {
+      if (document.activeElement && document.body !== document.activeElement) {
+        return;
+      }
+
+      input.focus({ preventScroll: true });
+    });
+  },
+
+  init() {
+    const initialize = () => {
+      const input = document.querySelector(this.SELECTORS.INPUT);
+      const cards = document.querySelectorAll(this.SELECTORS.CARD);
+
+      if (!input || 0 === cards.length) {
+        return;
+      }
+
+      const emptyMessage = document.querySelector(this.SELECTORS.EMPTY);
+      const groups = document.querySelectorAll(this.SELECTORS.GROUP);
+
+      input.addEventListener('input', () => {
+        this.filterCards(input, cards, groups, emptyMessage);
+      });
+
+      this.filterCards(input, cards, groups, emptyMessage);
+      this.autofocus(input);
+    };
+
+    if ('loading' === document.readyState) {
+      document.addEventListener('DOMContentLoaded', initialize);
+
+      return;
+    }
+
+    initialize();
+  }
+};
+
 DefaultFieldManager.init();
+SettingsCardSearch.init();
