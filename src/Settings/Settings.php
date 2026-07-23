@@ -64,6 +64,21 @@ final class Settings implements SettingsInterface
         return (string) $this->metadata->getParameter('plugin_name');
     }
 
+    public function getCategory(): ?string
+    {
+        if (!$this->metadata->hasParameter('category')) {
+            return null;
+        }
+
+        $category = $this->metadata->getParameter('category');
+
+        if (null === $category) {
+            return null;
+        }
+
+        return \is_scalar($category) ? (string) $category : null;
+    }
+
     public function getDescription(): ?string
     {
         /** @phpstan-ignore-next-line */

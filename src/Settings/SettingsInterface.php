@@ -37,6 +37,8 @@ interface SettingsInterface
 
     public function getPluginName(): ?string;
 
+    public function getCategory(): ?string;
+
     public function getDescription(): ?string;
 
     public function getIcon(): ?string;

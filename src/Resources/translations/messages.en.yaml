@@ -13,6 +13,8 @@ monsieurbiz:
                 title: Settings of %pluginName%
             card:
                 by: by %vendorName%
+            category:
+                other: Other
             search:
                 placeholder: Search for a setting
                 no_results: No setting matches your search.

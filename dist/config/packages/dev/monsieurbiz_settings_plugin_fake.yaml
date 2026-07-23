@@ -1,0 +1,141 @@
+monsieurbiz_sylius_settings:
+    plugins:
+        app.fake_blog:
+            vendor_name: Fake Fixtures
+            vendor_url:
+            plugin_name: Fake Blog Settings
+            category: Content
+            description: Lorem ipsum dolor sit amet, blog configuration for testing search results.
+            icon: tabler:article
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
+            default_values:
+                demo_message: Lorem ipsum blog demo message
+                demo_title: Blog lorem fixture
+                enabled: true
+        app.fake_checkout:
+            vendor_name: Fake Fixtures
+            vendor_url:
+            plugin_name: Fake Checkout Settings
+            category: Sales
+            description: Consectetur adipiscing elit checkout options for testing many settings.
+            icon: tabler:shopping-cart
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
+            default_values:
+                demo_message: Checkout lorem ipsum confirmation text
+                demo_title: Checkout demo fixture
+                enabled: true
+        app.fake_catalog:
+            vendor_name: Fake Fixtures
+            vendor_url:
+            plugin_name: Fake Catalog Settings
+            category: Content
+            description: Sed do eiusmod tempor catalog parameters with searchable lorem content.
+            icon: tabler:category
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
+            default_values:
+                demo_message: Catalog demo lorem merchandising message
+                demo_title: Catalog fake setting
+                enabled: false
+        app.fake_marketing:
+            vendor_name: Fake Fixtures
+            vendor_url:
+            plugin_name: Fake Marketing Settings
+            category: Marketing
+            description: Incididunt ut labore marketing configuration used to test card filtering.
+            icon: tabler:speakerphone
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
+            default_values:
+                demo_message: Marketing lorem demo banner
+                demo_title: Campaign fake fixture
+                enabled: true
+        app.fake_shipping:
+            vendor_name: Fake Fixtures
+            vendor_url:
+            plugin_name: Fake Shipping Settings
+            category: Content
+            description: Et dolore magna aliqua shipping preferences with ipsum search content.
+            icon: tabler:truck-delivery
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
+            default_values:
+                demo_message: Shipping lorem ipsum tracking message
+                demo_title: Delivery demo fixture
+                enabled: true
+        app.fake_payment:
+            vendor_name: Fake Fixtures
+            vendor_url:
+            plugin_name: Fake Payment Settings
+            category: Sales
+            description: Ut enim ad minim veniam payment options generated for local testing.
+            icon: tabler:credit-card
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
+            default_values:
+                demo_message: Payment demo lorem notification
+                demo_title: Payment fake setting
+                enabled: false
+        app.fake_reviews:
+            vendor_name: Fake Fixtures
+            vendor_url:
+            plugin_name: Fake Reviews Settings
+            category: Content
+            description: Quis nostrud exercitation review settings with dummy searchable text.
+            icon: tabler:stars
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
+            default_values:
+                demo_message: Reviews lorem demo moderation message
+                demo_title: Reviews fixture title
+                enabled: true
+        app.fake_loyalty:
+            vendor_name: Fake Fixtures
+            vendor_url:
+            plugin_name: Fake Loyalty Settings
+            category: Marketing
+            description: Ullamco laboris loyalty configuration for search and display testing.
+            icon: tabler:gift
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
+            default_values:
+                demo_message: Loyalty ipsum demo points message
+                demo_title: Loyalty fake fixture
+                enabled: true
+        app.fake_seo:
+            vendor_name: Fake Fixtures
+            vendor_url:
+            plugin_name: Fake SEO Settings
+            description: Nisi ut aliquip SEO metadata settings full of lorem fixture values.
+            icon: tabler:world-search
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
+            default_values:
+                demo_message: SEO lorem demo meta description
+                demo_title: Search engine fake setting
+                enabled: false
+        app.fake_analytics:
+            vendor_name: Fake Fixtures
+            vendor_url:
+            plugin_name: Fake Analytics Settings
+            category: Content
+            description: Ex ea commodo consequat analytics configuration for local-only tests.
+            icon: tabler:chart-bar
+            use_locales: true
+            classes:
+                form: App\Form\SettingsType
+            default_values:
+                demo_message: Analytics lorem ipsum dashboard message
+                demo_title: Analytics demo fixture
+                enabled: true
