@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace MonsieurBiz\SyliusSettingsPlugin\Search;
 
+use MonsieurBiz\SyliusSettingsPlugin\Settings\CategorizedSettingsInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\Settings;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -28,6 +30,7 @@ final class SettingsSearchIndexBuilder
     public function __construct(
         private FormFactoryInterface $formFactory,
         private TranslatorInterface $translator,
+        private CacheItemPoolInterface $settingsSearchCache,
         private ?LoggerInterface $logger = null,
     ) {
     }
@@ -42,9 +45,11 @@ final class SettingsSearchIndexBuilder
         $index = [];
 
         foreach ($settingsCollection as $settings) {
+            $fields = $this->extractFieldTerms($settings);
+
             $index[$settings->getAlias()] = [
                 'metadata' => $this->normalizeTerms($this->extractMetadataTerms($settings)),
-                'fields' => $this->normalizeTerms($this->extractFieldTerms($settings)),
+                'fields' => $fields,
             ];
         }
 
@@ -56,14 +61,16 @@ final class SettingsSearchIndexBuilder
      */
     private function extractMetadataTerms(SettingsInterface $settings): array
     {
+        $category = $settings instanceof CategorizedSettingsInterface ? $settings->getCategory() : null;
+
         return [
             $settings->getAlias(),
             $settings->getVendorName(),
             $settings->getPluginName(),
-            $settings->getCategory(),
+            $category,
             $settings->getDescription(),
             $this->translate($settings->getPluginName()),
-            $this->translate($settings->getCategory()),
+            $this->translate($category),
             $this->translate($settings->getDescription()),
         ];
     }
@@ -73,14 +80,30 @@ final class SettingsSearchIndexBuilder
      */
     private function extractFieldTerms(SettingsInterface $settings): array
     {
-        try {
-            $form = $this->createIntrospectionForm($settings);
+        $formClass = null;
 
-            return $this->extractFormViewTerms($form->createView());
+        try {
+            $formClass = $settings->getFormClass();
+            $cacheKey = $this->getFieldTermsCacheKey($settings, $formClass);
+            $cacheItem = $this->settingsSearchCache->getItem($cacheKey);
+            if ($cacheItem->isHit()) {
+                $fields = $cacheItem->get();
+
+                return \is_array($fields) ? $fields : [];
+            }
+
+            $form = $this->createIntrospectionForm($settings, $formClass);
+
+            $fields = $this->normalizeTerms($this->extractFormViewTerms($form->createView()));
+
+            $cacheItem->set($fields);
+            $this->settingsSearchCache->save($cacheItem);
+
+            return $fields;
         } catch (Throwable $throwable) {
-            $this->logger?->debug('Unable to build settings search field index.', [
+            $this->logger?->warning('Unable to build settings search field index.', [
                 'settings_alias' => $settings->getAlias(),
-                'form_class' => $settings->getFormClass(),
+                'form_class' => $formClass,
                 'throwable_class' => $throwable::class,
             ]);
 
@@ -88,7 +111,22 @@ final class SettingsSearchIndexBuilder
         }
     }
 
-    private function createIntrospectionForm(SettingsInterface $settings): FormInterface
+    /**
+     * @param class-string $formClass
+     */
+    private function getFieldTermsCacheKey(SettingsInterface $settings, string $formClass): string
+    {
+        return 'settings_search_fields_' . hash('sha256', implode('|', [
+            $settings->getAlias(),
+            $formClass,
+            $this->translator->getLocale(),
+        ]));
+    }
+
+    /**
+     * @param class-string $formClass
+     */
+    private function createIntrospectionForm(SettingsInterface $settings, string $formClass): FormInterface
     {
         $options = [
             'settings' => $settings,
@@ -98,12 +136,12 @@ final class SettingsSearchIndexBuilder
         ];
 
         try {
-            return $this->formFactory->create($settings->getFormClass(), [], $options);
+            return $this->formFactory->create($formClass, [], $options);
             // @phpstan-ignore-next-line FormFactoryInterface does not expose configured type extensions/options.
         } catch (UndefinedOptionsException) {
             unset($options['csrf_protection']);
 
-            return $this->formFactory->create($settings->getFormClass(), [], $options);
+            return $this->formFactory->create($formClass, [], $options);
         }
     }
 

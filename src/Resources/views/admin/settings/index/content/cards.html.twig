@@ -1,4 +1,5 @@
 {% set settings = hookable_metadata.context.settings %}
+{% set settings_categories = hookable_metadata.context.settings_categories|default({}) %}
 {% set settings_search_index = hookable_metadata.context.settings_search_index|default({}) %}
 {% set fallback_category = 'monsieurbiz.settings.ui.category.other' %}
 {% set field_match_label = 'monsieurbiz.settings.ui.search.field_match'|trans %}
@@ -6,7 +7,7 @@
 {% set fallback_settings = [] %}
 
 {% for card in settings %}
-    {% set category = card.category|default(null) %}
+    {% set category = settings_categories[card.alias]|default(null) %}
     {% if category is empty or category == fallback_category %}
         {% set fallback_settings = fallback_settings|merge([card]) %}
     {% else %}
@@ -36,9 +37,8 @@
                     {% set search_index = settings_search_index[card.alias]|default({metadata: [], fields: []}) %}
                     {% set metadata_search_terms = search_index.metadata|default([])|merge([displayed_category_label]) %}
                     {% set field_search_terms = search_index.fields|default([]) %}
-                    {% set search_terms = metadata_search_terms|merge(field_search_terms) %}
 
-                    <div class="col-sm-6 col-lg-3 mb-3" data-mbiz-settings-card data-search-text="{{ search_terms|join(' ')|lower|e('html_attr') }}" data-search-metadata="{{ metadata_search_terms|join(' ')|lower|e('html_attr') }}" data-search-fields="{{ field_search_terms|join(' ')|lower|e('html_attr') }}">
+                    <div class="col-sm-6 col-lg-3 mb-3" data-mbiz-settings-card data-search-metadata="{{ metadata_search_terms|join(' ')|lower|e('html_attr') }}" data-search-fields="{{ field_search_terms|join(' ')|lower|e('html_attr') }}">
                         <div class="card mbiz-settings-card h-100">
                             <div class="card-body">
                                 <span class="mbiz-settings-card__field-match-indicator d-none" data-mbiz-settings-field-match-indicator aria-hidden="true" title="{{ field_match_label|e('html_attr') }}">

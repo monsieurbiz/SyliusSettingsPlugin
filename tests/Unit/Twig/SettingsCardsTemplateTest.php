@@ -35,7 +35,6 @@ final class SettingsCardsTemplateTest extends TestCase
                     'settings' => [
                         [
                             'alias' => 'app.explicit',
-                            'category' => 'app.category.content',
                             'icon' => null,
                             'pluginName' => 'Explicit settings',
                             'vendorName' => 'Acme',
@@ -43,12 +42,15 @@ final class SettingsCardsTemplateTest extends TestCase
                         ],
                         [
                             'alias' => 'app.fallback',
-                            'category' => null,
                             'icon' => null,
                             'pluginName' => 'Fallback settings',
                             'vendorName' => 'Acme',
                             'description' => 'Fallback description',
                         ],
+                    ],
+                    'settings_categories' => [
+                        'app.explicit' => 'app.category.content',
+                        'app.fallback' => null,
                     ],
                     'settings_search_index' => [
                         'app.explicit' => ['metadata' => ['explicit metadata'], 'fields' => []],
@@ -60,8 +62,8 @@ final class SettingsCardsTemplateTest extends TestCase
 
         self::assertStringContainsString('data-search-metadata="explicit&#x20;metadata&#x20;content&#x20;label"', $html);
         self::assertStringContainsString('data-search-metadata="fallback&#x20;metadata&#x20;other"', $html);
-        self::assertStringContainsString('data-search-text="explicit&#x20;metadata&#x20;content&#x20;label"', $html);
-        self::assertStringContainsString('data-search-text="fallback&#x20;metadata&#x20;other"', $html);
+        self::assertStringContainsString('data-search-fields=""', $html);
+        self::assertStringNotContainsString('data-search-text=', $html);
     }
 
     private function createTranslator(): TranslatorInterface

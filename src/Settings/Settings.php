@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
-final class Settings implements SettingsInterface
+final class Settings implements CategorizedSettingsInterface
 {
     public const DEFAULT_KEY = 'default';
 

@@ -18,11 +18,13 @@ require_once __DIR__ . '/../../../dist/src/Form/FakeSettingsType.php';
 use Error;
 use MonsieurBiz\SyliusSettingsPlugin\Form\AbstractSettingsType;
 use MonsieurBiz\SyliusSettingsPlugin\Search\SettingsSearchIndexBuilder;
+use MonsieurBiz\SyliusSettingsPlugin\Settings\CategorizedSettingsInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\AbstractLogger;
 use Psr\Log\NullLogger;
 use Stringable;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\CoreExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -43,6 +45,7 @@ final class SettingsSearchIndexBuilderTest extends TestCase
                 ->addTypeExtension(new SearchSettingsTypeExtension())
                 ->getFormFactory(),
             $this->createTranslator(),
+            new ArrayAdapter(),
             new NullLogger(),
         );
 
@@ -72,6 +75,7 @@ final class SettingsSearchIndexBuilderTest extends TestCase
         $builder = new SettingsSearchIndexBuilder(
             Forms::createFormFactoryBuilder()->addExtension(new CoreExtension())->getFormFactory(),
             $this->createTranslator(),
+            new ArrayAdapter(),
             new NullLogger(),
         );
 
@@ -102,6 +106,7 @@ final class SettingsSearchIndexBuilderTest extends TestCase
                 ->addType(new \App\Form\FakeSettingsType())
                 ->getFormFactory(),
             $this->createTranslator(),
+            new ArrayAdapter(),
             new NullLogger(),
         );
 
@@ -131,6 +136,7 @@ final class SettingsSearchIndexBuilderTest extends TestCase
                 ->addType(new ThrowingSearchSettingsType())
                 ->getFormFactory(),
             $this->createTranslator(),
+            new ArrayAdapter(),
             new NullLogger(),
         );
 
@@ -148,6 +154,7 @@ final class SettingsSearchIndexBuilderTest extends TestCase
                 ->addType(new ThrowingSearchSettingsType())
                 ->getFormFactory(),
             $this->createTranslator(),
+            new ArrayAdapter(),
             $logger,
         );
 
@@ -155,6 +162,7 @@ final class SettingsSearchIndexBuilderTest extends TestCase
 
         self::assertCount(1, $logger->logs);
         self::assertSame('Unable to build settings search field index.', $logger->logs[0]['message']);
+        self::assertSame('warning', $logger->logs[0]['level']);
         self::assertSame([
             'settings_alias' => 'app.blog',
             'form_class' => ThrowingSearchSettingsType::class,
@@ -164,12 +172,145 @@ final class SettingsSearchIndexBuilderTest extends TestCase
         self::assertStringNotContainsString('sensitive-token', json_encode($logger->logs[0]['context'], \JSON_THROW_ON_ERROR));
     }
 
+    public function testItKeepsSettingsWithoutCategoryUsable(): void
+    {
+        $builder = new SettingsSearchIndexBuilder(
+            Forms::createFormFactoryBuilder()
+                ->addExtension(new CoreExtension())
+                ->addType(new SearchSettingsType())
+                ->getFormFactory(),
+            $this->createTranslator(),
+            new ArrayAdapter(),
+            new NullLogger(),
+        );
+
+        $settings = $this->createMock(SettingsInterface::class);
+        $settings->method('getAlias')->willReturn('app.custom');
+        $settings->method('getVendorName')->willReturn('Acme');
+        $settings->method('getPluginName')->willReturn('Custom settings');
+        $settings->method('getDescription')->willReturn('Custom description');
+        $settings->method('getFormClass')->willReturn(SearchSettingsType::class);
+
+        $index = $builder->build([$settings]);
+
+        self::assertArrayHasKey('app.custom', $index);
+        self::assertSame([
+            'app.custom',
+            'Acme',
+            'Custom settings',
+            'Custom description',
+        ], $index['app.custom']['metadata']);
+        self::assertContains('title', $index['app.custom']['fields']);
+    }
+
+    public function testItCachesFieldTermsForSameAliasFormClassAndLocale(): void
+    {
+        CountingSearchSettingsType::$builds = 0;
+        $builder = new SettingsSearchIndexBuilder(
+            Forms::createFormFactoryBuilder()
+                ->addExtension(new CoreExtension())
+                ->addType(new CountingSearchSettingsType())
+                ->getFormFactory(),
+            $this->createTranslator(),
+            new ArrayAdapter(),
+            new NullLogger(),
+        );
+
+        $settings = $this->createSettings(CountingSearchSettingsType::class);
+
+        $builder->build([$settings]);
+        $builder->build([$settings]);
+
+        self::assertSame(1, CountingSearchSettingsType::$builds);
+    }
+
+    public function testItUsesSeparateFieldCacheEntriesForDifferentLocales(): void
+    {
+        CountingSearchSettingsType::$builds = 0;
+        $translator = new MutableTranslator('en');
+        $builder = new SettingsSearchIndexBuilder(
+            Forms::createFormFactoryBuilder()
+                ->addExtension(new CoreExtension())
+                ->addType(new CountingSearchSettingsType())
+                ->getFormFactory(),
+            $translator,
+            new ArrayAdapter(),
+            new NullLogger(),
+        );
+
+        $settings = $this->createSettings(CountingSearchSettingsType::class);
+
+        $builder->build([$settings]);
+        $translator->locale = 'fr';
+        $builder->build([$settings]);
+
+        self::assertSame(2, CountingSearchSettingsType::$builds);
+    }
+
+    public function testItUsesSeparateFieldCacheEntriesForDifferentAliasesAndFormClasses(): void
+    {
+        CountingSearchSettingsType::$builds = 0;
+        AlternateCountingSearchSettingsType::$builds = 0;
+        $builder = new SettingsSearchIndexBuilder(
+            Forms::createFormFactoryBuilder()
+                ->addExtension(new CoreExtension())
+                ->addType(new CountingSearchSettingsType())
+                ->addType(new AlternateCountingSearchSettingsType())
+                ->getFormFactory(),
+            $this->createTranslator(),
+            new ArrayAdapter(),
+            new NullLogger(),
+        );
+
+        $builder->build([
+            $this->createSettings(CountingSearchSettingsType::class, 'app.first'),
+            $this->createSettings(CountingSearchSettingsType::class, 'app.second'),
+            $this->createSettings(AlternateCountingSearchSettingsType::class, 'app.first'),
+        ]);
+
+        self::assertSame(2, CountingSearchSettingsType::$builds);
+        self::assertSame(1, AlternateCountingSearchSettingsType::$builds);
+    }
+
+    public function testItDoesNotCacheMetadataTerms(): void
+    {
+        $builder = new SettingsSearchIndexBuilder(
+            Forms::createFormFactoryBuilder()
+                ->addExtension(new CoreExtension())
+                ->addType(new CountingSearchSettingsType())
+                ->getFormFactory(),
+            $this->createTranslator(),
+            new ArrayAdapter(),
+            new NullLogger(),
+        );
+
+        $settings = $this->createMock(CategorizedSettingsInterface::class);
+        $settings->method('getAlias')->willReturn('app.blog');
+        $settings->method('getVendorName')->willReturn('Acme');
+        $settings->method('getCategory')->willReturn('Content');
+        $settings->method('getDescription')->willReturn('Description');
+        $settings->method('getFormClass')->willReturn(CountingSearchSettingsType::class);
+        $pluginName = 'First name';
+        $settings->method('getPluginName')->willReturnCallback(static function () use (&$pluginName): string {
+            return $pluginName;
+        });
+
+        $index = $builder->build([$settings]);
+        self::assertContains('First name', $index['app.blog']['metadata']);
+
+        $pluginName = 'Second name';
+        $index = $builder->build([$settings]);
+
+        self::assertContains('Second name', $index['app.blog']['metadata']);
+        self::assertNotContains('First name', $index['app.blog']['metadata']);
+    }
+
     /**
      * @param class-string $formClass
      */
     private function createSettings(string $formClass = SearchSettingsType::class, string $alias = 'app.blog'): SettingsInterface
     {
-        $settings = $this->createMock(SettingsInterface::class);
+        $settings = $this->createMock(CategorizedSettingsInterface::class);
         $settings->method('getAlias')->willReturn($alias);
         $settings->method('getVendorName')->willReturn('Acme');
         $settings->method('getPluginName')->willReturn('Blog settings');
@@ -182,17 +323,24 @@ final class SettingsSearchIndexBuilderTest extends TestCase
 
     private function createTranslator(): TranslatorInterface
     {
-        return new class() implements TranslatorInterface {
-            public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
-            {
-                return strtr($id, $parameters);
-            }
+        return new MutableTranslator('en');
+    }
+}
 
-            public function getLocale(): string
-            {
-                return 'en';
-            }
-        };
+final class MutableTranslator implements TranslatorInterface
+{
+    public function __construct(public string $locale)
+    {
+    }
+
+    public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
+    {
+        return strtr($id, $parameters);
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 }
 
@@ -248,6 +396,28 @@ final class ThrowingSearchSettingsType extends AbstractSettingsType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         throw new Error('sensitive-token must not be logged');
+    }
+}
+
+final class CountingSearchSettingsType extends AbstractSettingsType
+{
+    public static int $builds = 0;
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        ++self::$builds;
+        $builder->add('counted_field', TextType::class, ['label' => 'Counted field']);
+    }
+}
+
+final class AlternateCountingSearchSettingsType extends AbstractSettingsType
+{
+    public static int $builds = 0;
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        ++self::$builds;
+        $builder->add('alternate_counted_field', TextType::class, ['label' => 'Alternate counted field']);
     }
 }
 

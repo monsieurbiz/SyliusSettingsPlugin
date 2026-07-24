@@ -43,6 +43,14 @@ services:
         arguments: 
             $className: 'MonsieurBiz\SyliusSettingsPlugin\Entity\Setting\Setting'
 
+    MonsieurBiz\SyliusSettingsPlugin\Search\SettingsSearchIndexBuilder:
+        arguments:
+            $settingsSearchCache: '@monsieurbiz_settings.search_cache'
+
+    MonsieurBiz\SyliusSettingsPlugin\Command\ClearSettingsSearchCacheCommand:
+        arguments:
+            $settingsSearchCache: '@monsieurbiz_settings.search_cache'
+
     # Live components
     sylius_admin.monsieurbiz_settings.twig.component.settings.main_form:
         class: MonsieurBiz\SyliusSettingsPlugin\Twig\Components\SettingFormComponent

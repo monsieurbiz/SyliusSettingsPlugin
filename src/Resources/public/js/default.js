@@ -134,11 +134,10 @@ const SettingsCardSearch = {
 
     const metadataText = this.normalize(card.dataset.searchMetadata || '');
     const fieldsText = this.normalize(card.dataset.searchFields || '');
-    const fallbackText = this.normalize(card.dataset.searchText || '');
 
     return {
-      metadata: metadataText ? metadataText.includes(query) : fallbackText.includes(query),
-      fields: fieldsText ? fieldsText.includes(query) : false,
+      metadata: metadataText.includes(query),
+      fields: fieldsText.includes(query),
     };
   },
 
