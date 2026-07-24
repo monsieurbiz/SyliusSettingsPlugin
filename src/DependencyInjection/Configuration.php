@@ -47,6 +47,7 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('vendor_name')->isRequired()->cannotBeEmpty()->end()
                             ->scalarNode('vendor_url')->defaultNull()->end()
                             ->scalarNode('plugin_name')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('category')->defaultNull()->end()
                             ->scalarNode('description')->isRequired()->cannotBeEmpty()->end()
                             ->scalarNode('icon')->isRequired()->cannotBeEmpty()->end()
                             ->booleanNode('use_locales')->end()

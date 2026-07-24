@@ -13,6 +13,9 @@ sylius_twig_hooks:
                 configuration:
                     title: monsieurbiz.settings.ui.settings.title
                 priority: 100
+            search:
+                template: '@MonsieurBizSyliusSettingsPlugin/admin/settings/index/content/header/title_block/search.html.twig'
+                priority: 0
             actions:
                 enabled: false
 

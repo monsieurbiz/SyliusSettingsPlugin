@@ -17,6 +17,8 @@ use MonsieurBiz\SyliusSettingsPlugin\CacheWarmer\SettingsCacheWarmerInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Factory\Form\MainSettingsFormTypeFactoryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Form\MainSettingsType;
 use MonsieurBiz\SyliusSettingsPlugin\Processor\SettingsProcessorInterface;
+use MonsieurBiz\SyliusSettingsPlugin\Search\SettingsSearchIndexBuilder;
+use MonsieurBiz\SyliusSettingsPlugin\Settings\CategorizedSettingsInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\RegistryInterface;
 use MonsieurBiz\SyliusSettingsPlugin\Settings\SettingsInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,14 +34,35 @@ final class SettingsController extends AbstractController
         private MainSettingsFormTypeFactoryInterface $formFactory,
         private TagAwareCacheInterface $monsieurbizSettingsCache,
         private SettingsCacheWarmerInterface $cacheWarmer,
+        private SettingsSearchIndexBuilder $settingsSearchIndexBuilder,
     ) {
     }
 
     public function indexAction(RegistryInterface $registry): Response
     {
+        $settings = $registry->getAllSettings();
+
         return $this->render('@MonsieurBizSyliusSettingsPlugin/admin/settings/index.html.twig', [
-            'settings' => $registry->getAllSettings(),
+            'settings' => $settings,
+            'settings_categories' => $this->getSettingsCategories($settings),
+            'settings_search_index' => $this->settingsSearchIndexBuilder->build($settings),
         ]);
+    }
+
+    /**
+     * @param array<SettingsInterface> $settingsCollection
+     *
+     * @return array<string, string|null>
+     */
+    private function getSettingsCategories(array $settingsCollection): array
+    {
+        $categories = [];
+
+        foreach ($settingsCollection as $settings) {
+            $categories[$settings->getAlias()] = $settings instanceof CategorizedSettingsInterface ? $settings->getCategory() : null;
+        }
+
+        return $categories;
     }
 
     public function formAction(Request $request, RegistryInterface $registry, string $alias): Response

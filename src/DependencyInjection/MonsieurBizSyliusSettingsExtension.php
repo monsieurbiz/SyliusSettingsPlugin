@@ -46,6 +46,8 @@ final class MonsieurBizSyliusSettingsExtension extends Extension implements Prep
      */
     public function prepend(ContainerBuilder $container): void
     {
+        $this->addCachePools($container);
+
         if (
             $container->hasParameter('sylius_core.prepend_doctrine_migrations')
             && !$container->getParameter('sylius_core.prepend_doctrine_migrations')
@@ -59,11 +61,9 @@ final class MonsieurBizSyliusSettingsExtension extends Extension implements Prep
                 'MonsieurBiz\SyliusSettingsPlugin\Migrations' => '@MonsieurBizSyliusSettingsPlugin/Migrations',
             ]),
         ]);
-
-        $this->addCachePool($container);
     }
 
-    private function addCachePool(ContainerBuilder $container): void
+    private function addCachePools(ContainerBuilder $container): void
     {
         $settingConfigs = $container->getExtensionConfig($this->getAlias());
         $configuration = $this->getConfiguration([], $container);
@@ -83,6 +83,10 @@ final class MonsieurBizSyliusSettingsExtension extends Extension implements Prep
                         'adapter' => $cacheAdapter,
                         'public' => false,
                         'tags' => true,
+                    ],
+                    'monsieurbiz_settings.search_cache' => [
+                        'adapter' => $cacheAdapter,
+                        'public' => false,
                     ],
                 ],
             ],

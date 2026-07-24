@@ -1,23 +1,62 @@
 {% set settings = hookable_metadata.context.settings %}
+{% set settings_categories = hookable_metadata.context.settings_categories|default({}) %}
+{% set settings_search_index = hookable_metadata.context.settings_search_index|default({}) %}
+{% set fallback_category = 'monsieurbiz.settings.ui.category.other' %}
+{% set field_match_label = 'monsieurbiz.settings.ui.search.field_match'|trans %}
+{% set grouped_settings = {} %}
+{% set fallback_settings = [] %}
 
-<div class="container-xl">
-    <div class="row mt-3">
-        {% for card in settings %}
-            <div class="col-sm-6 col-lg-3 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title mb-0">{{ ux_icon(card.icon) }} {{ card.pluginName|trans }}</h5>
-                        <p class="card-text fs-5 text-secondary">
-                            {{ 'monsieurbiz.settings.ui.card.by'|trans({'%vendorName%': card.vendorName}) }}
-                        </p>
-                        <p class="card-text">
-                            {{ card.description|trans }}
-                        </p>
-                        <a href="{{ path('monsieurbiz_sylius_settings_admin_edit', {'alias': card.alias}) }}" class="stretched-link" title=""></a>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
+{% for card in settings %}
+    {% set category = settings_categories[card.alias]|default(null) %}
+    {% if category is empty or category == fallback_category %}
+        {% set fallback_settings = fallback_settings|merge([card]) %}
+    {% else %}
+        {% set grouped_settings = grouped_settings|merge({ (category): (grouped_settings[category]|default([]))|merge([card]) }) %}
+    {% endif %}
+{% endfor %}
 
+{% if fallback_settings is not empty %}
+    {% set grouped_settings = grouped_settings|merge({ (fallback_category): fallback_settings }) %}
+{% endif %}
+
+<div class="container-xl" data-mbiz-settings-list>
+    <div class="alert alert-info mt-3 d-none" data-mbiz-settings-search-empty>
+        {{ 'monsieurbiz.settings.ui.search.no_results'|trans }}
     </div>
+
+    {% for category_label, category_settings in grouped_settings %}
+        {% set displayed_category_label = category_label|trans %}
+        <section class="mt-3" data-mbiz-settings-group>
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <h2 class="h4 mb-0 text-secondary" data-mbiz-settings-group-title>{{ displayed_category_label }}</h2>
+                <div class="border-top flex-grow-1" aria-hidden="true"></div>
+            </div>
+
+            <div class="row">
+                {% for card in category_settings %}
+                    {% set search_index = settings_search_index[card.alias]|default({metadata: [], fields: []}) %}
+                    {% set metadata_search_terms = search_index.metadata|default([])|merge([displayed_category_label]) %}
+                    {% set field_search_terms = search_index.fields|default([]) %}
+
+                    <div class="col-sm-6 col-lg-3 mb-3" data-mbiz-settings-card data-search-metadata="{{ metadata_search_terms|join(' ')|lower|e('html_attr') }}" data-search-fields="{{ field_search_terms|join(' ')|lower|e('html_attr') }}">
+                        <div class="card mbiz-settings-card h-100">
+                            <div class="card-body">
+                                <span class="mbiz-settings-card__field-match-indicator d-none" data-mbiz-settings-field-match-indicator aria-hidden="true" title="{{ field_match_label|e('html_attr') }}">
+                                    <span class="visually-hidden">{{ field_match_label }}</span>
+                                </span>
+                                <h5 class="card-title mb-0">{{ ux_icon(card.icon) }} {{ card.pluginName|trans }}</h5>
+                                <p class="card-text fs-5 text-secondary">
+                                    {{ 'monsieurbiz.settings.ui.card.by'|trans({'%vendorName%': card.vendorName}) }}
+                                </p>
+                                <p class="card-text">
+                                    {{ card.description|trans }}
+                                </p>
+                                <a href="{{ path('monsieurbiz_sylius_settings_admin_edit', {'alias': card.alias}) }}" class="stretched-link" aria-label="{{ card.pluginName|trans|e('html_attr') }}"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endfor %}
 </div>

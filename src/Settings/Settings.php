@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
-final class Settings implements SettingsInterface
+final class Settings implements CategorizedSettingsInterface
 {
     public const DEFAULT_KEY = 'default';
 
@@ -62,6 +62,21 @@ final class Settings implements SettingsInterface
     {
         /** @phpstan-ignore-next-line */
         return (string) $this->metadata->getParameter('plugin_name');
+    }
+
+    public function getCategory(): ?string
+    {
+        if (!$this->metadata->hasParameter('category')) {
+            return null;
+        }
+
+        $category = $this->metadata->getParameter('category');
+
+        if (null === $category) {
+            return null;
+        }
+
+        return \is_scalar($category) ? (string) $category : null;
     }
 
     public function getDescription(): ?string
