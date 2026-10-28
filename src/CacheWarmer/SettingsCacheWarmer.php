@@ -42,7 +42,7 @@ final class SettingsCacheWarmer implements SettingsCacheWarmerInterface
     {
         if (
             false === $this->entityManager->getConnection()->isConnected()
-            || false === $this->entityManager->getConnection()->getSchemaManager()->tablesExist('mbiz_settings_setting')
+            || false === $this->entityManager->getConnection()->createSchemaManager()->tablesExist(['mbiz_settings_setting'])
         ) {
             return [];
         }

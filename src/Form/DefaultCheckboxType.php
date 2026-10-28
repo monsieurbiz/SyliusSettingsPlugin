@@ -37,7 +37,7 @@ final class DefaultCheckboxType extends AbstractType
         ])->setAllowedTypes('related_form_child', [FormBuilder::class]);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'default_checkbox';
     }
